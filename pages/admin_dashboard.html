@@ -22,289 +22,295 @@
     ></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      /* Base styles from the original files */
       .bg-background {
         background-color: #0d1117;
       }
-      .bg-card {
-        background-color: #161b22;
-      }
       .text-primary {
-        color: #f7931a;
+        color: #007bff;
+      }
+      .border-border-subtle {
+        border-color: #21262d;
       }
       .text-text-primary {
-        color: #ffffff;
+        color: #f0f6fc;
       }
       .text-text-secondary {
         color: #8b949e;
       }
-      .border-border-subtle {
-        border-color: #30363d;
+      .bg-card {
+        background-color: #161b22;
       }
+      .shadow-md {
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      }
+      .border-primary {
+        border-color: #007bff;
+      }
+      .nav-tab {
+        @apply flex items-center px-6 py-4 text-sm font-medium text-text-secondary border-b-2 border-transparent hover:text-text-primary hover:border-border-subtle transition-all duration-200;
+      }
+
       .nav-tab.active {
-        border-bottom: 2px solid #f7931a;
-        color: #ffffff;
+        @apply text-primary border-primary;
+      }
+
+      .tab-content {
+        @apply hidden;
+      }
+
+      .tab-content.active {
+        @apply block;
       }
       .status-pending {
-        background-color: #fce303; /* Yellow */
-        color: #0d1117;
+        @apply text-yellow-400 bg-yellow-900/50;
+      }
+      .status-complete {
+        @apply text-green-400 bg-green-900/50;
       }
       .status-approved {
-        background-color: #238636; /* Green */
-        color: #ffffff;
+        @apply text-green-400 bg-green-900/50;
+      }
+      .status-failed {
+        @apply text-red-400 bg-red-900/50;
       }
     </style>
   </head>
   <body class="bg-background min-h-screen">
-    <header class="w-full py-6 px-4 border-b border-border-subtle bg-card">
-      <div class="max-w-7xl mx-auto flex items-center justify-between">
-        <div class="flex items-center space-x-2">
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12 2L2 7V17L12 22L22 17V7L12 2ZM12 17L7 14.5L12 12L17 14.5L12 17ZM12 12L7 9.5L12 7L17 9.5L12 12Z"
-              fill="#F7931A"
-            />
-          </svg>
-          <span class="text-text-primary text-xl font-bold"
-            >Admin Dashboard</span
-          >
-        </div>
-
-        <div class="flex items-center space-x-4">
-          <span id="adminName" class="text-text-primary font-medium"
-            >Admin User</span
-          >
+    <!-- Header Section -->
+    <header class="w-full py-6 px-4 border-b border-border-subtle">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-text-primary">
+          <span class="text-primary">Admin</span> Dashboard
+        </h1>
+        <nav class="space-x-4">
+          <span id="userNameDisplay" class="text-text-secondary"></span>
           <button
             id="logoutButton"
-            class="text-text-secondary hover:text-red-400 transition-colors"
+            class="text-red-400 hover:text-red-500 transition duration-150"
           >
             Logout
           </button>
-        </div>
+        </nav>
       </div>
     </header>
 
-    <main class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
-      <h1 class="text-3xl font-bold text-text-primary mb-8">
-        System Overview
-      </h1>
-
-      <nav class="flex space-x-8 border-b border-border-subtle mb-8">
-        <button
-          class="nav-tab active text-text-secondary py-3 font-medium transition-colors focus:outline-none"
-          data-tab="transactions-tab"
-        >
-          Pending Transactions
-        </button>
-        <button
-          class="nav-tab text-text-secondary py-3 font-medium transition-colors focus:outline-none"
-          data-tab="users-tab"
-        >
-          User Management
-        </button>
-      </nav>
-
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto p-4 md:p-8">
+      <!-- Tabs Navigation -->
       <div
-        id="transactions-tab"
-        class="tab-content active bg-card p-6 rounded-xl shadow-lg border border-border-subtle"
+        class="border-b border-border-subtle mb-6 flex space-x-4 overflow-x-auto"
       >
-        <h2 class="text-2xl font-semibold text-text-primary mb-6">
+        <button class="nav-tab active" data-tab="users">User Management</button>
+        <button class="nav-tab" data-tab="transactions">
           Transaction Review
-        </h2>
-
-        <div class="flex space-x-4 mb-4">
-          <button
-            onclick="switchTransactionFilter('pending')"
-            id="filter-pending"
-            class="px-4 py-2 text-sm font-medium rounded-lg bg-primary text-white"
-          >
-            Pending (
-            <span id="pendingCount">0</span>
-            )
-          </button>
-          <button
-            onclick="switchTransactionFilter('complete')"
-            id="filter-complete"
-            class="px-4 py-2 text-sm font-medium rounded-lg bg-background text-text-secondary hover:bg-border-subtle"
-          >
-            Completed
-          </button>
-        </div>
-
-        <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-border-subtle">
-            <thead class="bg-background">
-              <tr>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
-                >
-                  Date / ID
-                </th>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
-                >
-                  User
-                </th>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
-                >
-                  Type
-                </th>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
-                >
-                  Amount / Details
-                </th>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
-                >
-                  Status
-                </th>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
-                >
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody id="transactionTableBody" class="divide-y divide-border-subtle">
-              </tbody>
-          </table>
-          <div
-            id="noPendingTransactions"
-            class="hidden text-center py-6 text-text-secondary"
-          >
-            No pending transactions found for the selected filter.
-          </div>
-        </div>
+        </button>
       </div>
 
-      <div
-        id="users-tab"
-        class="tab-content hidden bg-card p-6 rounded-xl shadow-lg border border-border-subtle"
-      >
-        <h2 class="text-2xl font-semibold text-text-primary mb-6">
+      <!-- Tab Content: User Management -->
+      <div id="users" class="tab-content active">
+        <h2 class="text-2xl font-bold text-text-primary mb-6">
           User Management
         </h2>
 
-        <div class="flex justify-between items-center mb-6">
-          <input
-            type="text"
-            id="userSearch"
-            placeholder="Search users by name or email..."
-            class="input-field w-full md:w-1/2"
-          />
-        </div>
+        <div
+          id="userNotification"
+          class="hidden p-3 rounded-lg text-sm mb-4"
+        ></div>
 
-        <div class="overflow-x-auto">
+        <!-- Search Bar -->
+        <input
+          type="text"
+          id="userSearch"
+          placeholder="Search users by name or email..."
+          class="w-full bg-card border border-border-subtle rounded-lg text-text-primary p-2 mb-6 focus:ring-2 focus:ring-primary focus:border-primary"
+        />
+
+        <div
+          class="overflow-x-auto bg-card rounded-xl shadow-lg border border-border-subtle"
+        >
           <table class="min-w-full divide-y divide-border-subtle">
-            <thead class="bg-background">
+            <thead>
               <tr>
                 <th
-                  scope="col"
                   class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
                 >
-                  User
+                  Name (ID)
                 </th>
                 <th
-                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  Email
+                </th>
+                <th
                   class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
                 >
                   Status
                 </th>
                 <th
-                  scope="col"
                   class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
                 >
                   Balance
                 </th>
                 <th
-                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody
+              id="userTableBody"
+              class="divide-y divide-border-subtle text-text-primary"
+            >
+              <!-- User rows will be injected here -->
+            </tbody>
+          </table>
+          <div id="noUsers" class="p-4 text-center text-text-secondary hidden">
+            No users found.
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content: Transaction Review -->
+      <div id="transactions" class="tab-content">
+        <h2 class="text-2xl font-bold text-text-primary mb-6">
+          Transaction Review
+        </h2>
+
+        <div
+          id="transactionNotification"
+          class="hidden p-3 rounded-lg text-sm mb-4"
+        ></div>
+
+        <div
+          class="overflow-x-auto bg-card rounded-xl shadow-lg border border-border-subtle"
+        >
+          <table class="min-w-full divide-y divide-border-subtle">
+            <thead>
+              <tr>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  Date (ID)
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  User
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  Type
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  Amount
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  Status
+                </th>
+                <th
                   class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
                 >
                   Action
                 </th>
               </tr>
             </thead>
-            <tbody id="userTableBody" class="divide-y divide-border-subtle">
-              </tbody>
+            <tbody
+              id="transactionTableBody"
+              class="divide-y divide-border-subtle text-text-primary"
+            >
+              <!-- Transaction rows will be injected here -->
+            </tbody>
           </table>
           <div
-            id="noUsers"
-            class="hidden text-center py-6 text-text-secondary"
+            id="noPendingTransactions"
+            class="p-4 text-center text-text-secondary hidden"
           >
-            No users match the search criteria.
+            No pending transactions found.
           </div>
+        </div>
+      </div>
+
+      <!-- Modal for Balance Update -->
+      <div
+        id="balanceModal"
+        class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center p-4"
+      >
+        <div
+          class="bg-card rounded-xl p-6 w-full max-w-sm shadow-2xl border border-border-subtle"
+        >
+          <h3 class="text-xl font-bold text-text-primary mb-4">
+            Update User Balance
+          </h3>
+          <p class="text-text-secondary mb-4">
+            Editing balance for:
+            <span
+              id="modalUsername"
+              class="font-medium text-text-primary"
+            ></span>
+          </p>
+          <form id="updateBalanceForm" data-user-id="">
+            <label
+              for="newBalance"
+              class="block text-sm font-medium text-text-secondary mb-1"
+              >New Available Balance (USD)</label
+            >
+            <input
+              type="number"
+              id="newBalance"
+              step="0.01"
+              min="0"
+              required
+              class="w-full bg-background border border-border-subtle rounded-lg text-text-primary p-2 mb-4 focus:ring-2 focus:ring-primary focus:border-primary"
+              placeholder="e.g., 5000.00"
+            />
+            <div class="flex justify-end space-x-3">
+              <button
+                type="button"
+                id="cancelBalanceUpdate"
+                class="px-4 py-2 text-text-secondary bg-gray-700 rounded-lg hover:bg-gray-600"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="px-4 py-2 bg-primary text-white font-semibold rounded-lg hover:bg-opacity-90"
+                id="modalUpdateButton"
+              >
+                Update Balance
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </main>
 
-    <div id="notification-container" class="fixed top-4 right-4 space-y-2 z-50">
-      </div>
-
     <script>
       const API_BASE_URL = "https://spacex-tkks.onrender.com/api";
+      const token = localStorage.getItem("token");
+      const userType = localStorage.getItem("userType");
+      const username = localStorage.getItem("username");
+
       let allUsers = [];
       let allTransactions = [];
-      let currentTransactionFilter = "pending";
 
       // --- UTILITY FUNCTIONS ---
-
       function checkAuth() {
-        const token = localStorage.getItem("token");
-        const userType = localStorage.getItem("userType");
         if (!token || userType !== "admin") {
-          window.location.href = "user_login.html"; // Redirect to login
+          // Changed relative path to root-relative path
+          window.location.href = "/user_login.html";
           return false;
         }
+        document.getElementById(
+          "userNameDisplay"
+        ).textContent = `Hello, Admin (${username})`;
         return true;
-      }
-
-      function logout() {
-        localStorage.removeItem("token");
-        localStorage.removeItem("userId");
-        localStorage.removeItem("userType");
-        localStorage.removeItem("username");
-        window.location.href = "user_login.html";
-      }
-
-      function showNotification(message, type = "success") {
-        const container = document.getElementById("notification-container");
-        if (!container) return;
-
-        const bgColor = {
-          success: "bg-green-600",
-          error: "bg-red-600",
-          warning: "bg-yellow-600",
-          info: "bg-blue-600",
-        }[type];
-
-        const notification = document.createElement("div");
-        notification.className = `p-4 rounded-lg shadow-xl text-white ${bgColor} max-w-xs transition-opacity duration-300 ease-out opacity-100`;
-        notification.textContent = message;
-
-        container.prepend(notification); // Show newest at the top
-
-        // Automatically remove after 5 seconds
-        setTimeout(() => {
-          notification.classList.remove("opacity-100");
-          notification.classList.add("opacity-0");
-          notification.addEventListener("transitionend", () =>
-            notification.remove()
-          );
-        }, 5000);
       }
 
       const formatter = new Intl.NumberFormat("en-US", {
@@ -312,94 +318,140 @@
         currency: "USD",
       });
 
-      // --- DATA FETCHING ---
+      function showNotification(
+        message,
+        type = "success",
+        containerId = "userNotification"
+      ) {
+        const box = document.getElementById(containerId);
 
+        box.classList.remove(
+          "hidden",
+          "bg-red-900",
+          "text-red-300",
+          "bg-green-900",
+          "text-green-300",
+          "bg-yellow-900",
+          "text-yellow-300"
+        );
+
+        if (type === "success") {
+          box.classList.add("bg-green-900", "text-green-300");
+        } else if (type === "error") {
+          box.classList.add("bg-red-900", "text-red-300");
+        } else if (type === "warning") {
+          box.classList.add("bg-yellow-900", "text-yellow-300");
+        }
+
+        box.textContent = message;
+
+        setTimeout(() => {
+          box.classList.add("hidden");
+        }, 5000);
+      }
+
+      // --- DATA FETCHING ---
       async function fetchAdminData() {
         if (!checkAuth()) return;
-        const token = localStorage.getItem("token");
 
         try {
           const response = await fetch(`${API_BASE_URL}/admin/data`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           });
 
-          if (response.status === 401 || response.status === 403) {
-            logout(); // Force logout if not authorized/admin
-            return;
-          }
-
           if (!response.ok) {
+            if (response.status === 401 || response.status === 403) {
+              logout();
+              return;
+            }
             throw new Error("Failed to fetch admin data");
           }
 
           const data = await response.json();
-          allUsers = data.users;
+          allUsers = data.users.filter((u) => u.userType !== "admin"); // Hide admins from the user list
           allTransactions = data.transactions;
 
-          renderDashboard();
+          renderUserTable();
+          renderTransactionTable();
         } catch (error) {
           console.error("Error fetching admin data:", error);
           showNotification(
-            "Error connecting to server. Data may be outdated.",
-            "error"
+            "Error connecting to the server. Data refresh failed.",
+            "error",
+            "userNotification"
           );
         }
       }
 
-      function renderDashboard() {
-        // Update pending count
-        const pendingCount = allTransactions.filter(
-          (t) => t.status === "pending"
-        ).length;
-        document.getElementById("pendingCount").textContent = pendingCount;
+      // --- RENDERING FUNCTIONS ---
+      function renderUserTable(searchTerm = "") {
+        const tableBody = document.getElementById("userTableBody");
+        const noUsers = document.getElementById("noUsers");
+        tableBody.innerHTML = "";
+        const searchLower = searchTerm.toLowerCase();
 
-        // Render tables
-        renderTransactionTable(currentTransactionFilter);
-        renderUserTable(document.getElementById("userSearch").value);
+        const filteredUsers = allUsers.filter(
+          (u) =>
+            u.username.toLowerCase().includes(searchLower) ||
+            u.email.toLowerCase().includes(searchLower) ||
+            u.id.includes(searchLower)
+        );
 
-        // Add event listeners for new approve buttons
-        document
-          .getElementById("transactionTableBody")
-          .querySelectorAll(".approve-btn")
-          .forEach((btn) => {
-            btn.addEventListener("click", handleTransactionApproval);
+        if (filteredUsers.length === 0) {
+          noUsers.classList.remove("hidden");
+        } else {
+          noUsers.classList.add("hidden");
+          filteredUsers.forEach((user) => {
+            const row = tableBody.insertRow();
+            row.className = "hover:bg-gray-800 transition duration-150";
+
+            let statusClass =
+              user.status === "approved" ? "status-approved" : "status-pending";
+
+            row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">${
+                      user.username
+                    } <span class="text-xs text-text-secondary">(${user.id.substring(
+              0,
+              8
+            )}...)</span></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">${
+                      user.email
+                    }</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusClass} capitalize">
+                            ${user.status}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">${formatter.format(
+                      user.balance
+                    )}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm flex space-x-2">
+                        ${
+                          user.status !== "approved"
+                            ? `<button onclick="approveUser('${user.id}')" class="text-green-400 hover:text-green-500 font-medium">Approve</button>`
+                            : ""
+                        }
+                        <button onclick="openBalanceModal('${user.id}', '${
+              user.username
+            }', ${
+              user.balance
+            })" class="text-primary hover:text-opacity-80 font-medium">Edit Balance</button>
+                    </td>
+                `;
           });
+        }
       }
 
-      // --- TRANSACTION RENDERING (UPDATED) ---
-      
-      function renderTransactionTable(filter = "pending") {
+      function renderTransactionTable() {
         const tableBody = document.getElementById("transactionTableBody");
         const noPending = document.getElementById("noPendingTransactions");
         tableBody.innerHTML = "";
 
+        // Filter for pending transactions only
         const pendingTransactions = allTransactions.filter(
-          (t) => t.status === filter
+          (t) => t.status === "pending"
         );
-
-        // Update filter button styling
-        document
-          .querySelectorAll("#transactions-tab button")
-          .forEach((btn) => {
-            btn.classList.remove("bg-primary", "text-white");
-            btn.classList.add(
-              "bg-background",
-              "text-text-secondary",
-              "hover:bg-border-subtle"
-            );
-          });
-        document
-          .getElementById(`filter-${filter}`)
-          .classList.add("bg-primary", "text-white");
-        document
-          .getElementById(`filter-${filter}`)
-          .classList.remove(
-            "bg-background",
-            "text-text-secondary",
-            "hover:bg-border-subtle"
-          );
 
         if (pendingTransactions.length === 0) {
           noPending.classList.remove("hidden");
@@ -411,72 +463,84 @@
 
             const user = allUsers.find((u) => u.id === t.userId);
             const userName = user ? user.username : "Unknown User";
-            let amountText = formatter.format(t.amount);
-            let amountClass = t.type === "deposit" ? "text-green-400" : "text-red-400";
-            
-            // *** NEW: Add Wallet Address for Withdrawal Requests ***
-            let detailsHtml = '';
-            if (t.type === 'withdraw' && t.walletAddress) {
-                detailsHtml = `<p class="text-xs text-red-400 mt-1 break-all">Wallet: ${t.walletAddress}</p>`;
-            }
 
+            let amountText = formatter.format(t.amount);
+            let amountClass =
+              t.type === "deposit" ? "text-green-400" : "text-red-400";
 
             row.innerHTML = `
-                        <td class="px-6 py-4 whitespace-nowrap text-sm">${new Date(
-                          t.date
-                        ).toLocaleDateString()} <span class="text-xs text-text-secondary">(${t.id.substring(
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">${new Date(
+                      t.date
+                    ).toLocaleDateString()} <span class="text-xs text-text-secondary">(${t.id.substring(
               0,
               8
             )}...)</span></td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm">${userName} <span class="text-xs text-text-secondary">(${t.userId.substring(
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">${userName} <span class="text-xs text-text-secondary">(${t.userId.substring(
               0,
               8
             )}...)</span></td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm capitalize">${
-                          t.type
-                        }</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${amountClass}">${amountText} ${detailsHtml}</td> 
-                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium status-${t.status}">
-                                ${t.status}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                           ${
-                             filter === "pending"
-                               ? `<button 
-                                        data-transaction-id="${t.id}"
-                                        data-transaction-type="${t.type}"
-                                        class="approve-btn btn-primary text-xs"
-                                    >
-                                        Approve
-                                    </button>`
-                               : `<span class="text-text-secondary">Complete</span>`
-                           }
-                        </td>
-                    `;
+                    <td class="px-6 py-4 whitespace-nowrap text-sm capitalize">${
+                      t.type
+                    }</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${amountClass}">${amountText}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium status-pending">
+                            Pending
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <button onclick="approveTransaction('${
+                          t.id
+                        }')" class="text-green-400 hover:text-green-500 font-medium">Approve</button>
+                    </td>
+                `;
           });
         }
       }
 
-      function switchTransactionFilter(filter) {
-        currentTransactionFilter = filter;
-        renderTransactionTable(filter);
+      // --- ACTION HANDLERS ---
+
+      async function approveUser(userId) {
+        if (!checkAuth()) return;
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/admin/approve-user`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ userId }),
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            showNotification(
+              `User ${result.user.username} has been approved.`,
+              "success",
+              "userNotification"
+            );
+            fetchAdminData(); // Refresh data
+          } else {
+            showNotification(
+              result.message || "Failed to approve user.",
+              "error",
+              "userNotification"
+            );
+          }
+        } catch (error) {
+          console.error("Approve User API Error:", error);
+          showNotification(
+            "Could not connect to the server.",
+            "error",
+            "userNotification"
+          );
+        }
       }
 
-      async function handleTransactionApproval(e) {
-        const button = e.target;
-        const transactionId = button.dataset.transactionId;
-        const transactionType = button.dataset.transactionType;
-        const originalText = button.textContent;
-
-        const isConfirm = confirm(
-          `Are you sure you want to APPROVE this ${transactionType} transaction?`
-        );
-        if (!isConfirm) return;
-
-        button.textContent = "Processing...";
-        button.disabled = true;
+      async function approveTransaction(transactionId) {
+        if (!checkAuth()) return;
 
         try {
           const response = await fetch(
@@ -485,7 +549,7 @@
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                Authorization: `Bearer ${token}`,
               },
               body: JSON.stringify({ transactionId }),
             }
@@ -495,194 +559,108 @@
 
           if (response.ok) {
             showNotification(
-              `${transactionType} transaction approved successfully!`,
-              "success"
+              `Transaction approved. User balance updated to ${formatter.format(
+                result.user.balance
+              )}.`,
+              "success",
+              "transactionNotification"
             );
-            fetchAdminData(); // Reload data
+            fetchAdminData(); // Refresh data
           } else {
             showNotification(
               result.message || "Failed to approve transaction.",
-              "error"
+              "error",
+              "transactionNotification"
             );
           }
         } catch (error) {
-          showNotification("Error communicating with the server.", "error");
-        } finally {
-          button.textContent = originalText;
-          button.disabled = false;
-        }
-      }
-      
-      // --- USER RENDERING (Unchanged) ---
-
-      function renderUserTable(searchTerm = "") {
-        const tableBody = document.getElementById("userTableBody");
-        const noUsers = document.getElementById("noUsers");
-        tableBody.innerHTML = "";
-
-        const filteredUsers = allUsers.filter(
-          (u) =>
-            u.userType === "user" &&
-            (u.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              u.email.toLowerCase().includes(searchTerm.toLowerCase()))
-        );
-
-        if (filteredUsers.length === 0) {
-          noUsers.classList.remove("hidden");
-        } else {
-          noUsers.classList.add("hidden");
-          filteredUsers.forEach((user) => {
-            const row = tableBody.insertRow();
-            row.className = "hover:bg-gray-800 transition duration-150";
-
-            // Status styling
-            let statusClass =
-              user.status === "approved"
-                ? "status-approved"
-                : "status-pending";
-
-            row.innerHTML = `
-                        <td class="px-6 py-4 text-sm font-medium text-text-primary">
-                            ${user.username}
-                            <p class="text-xs text-text-secondary">${user.email}</p>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusClass}">
-                                ${user.status}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-text-primary">
-                            ${formatter.format(user.balance)}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                            ${
-                              user.status !== "approved"
-                                ? `<button data-user-id="${user.id}" class="approve-user-btn btn-primary text-xs mr-2">Approve</button>`
-                                : ""
-                            }
-                            <button data-user-id="${user.id}" data-current-balance="${
-              user.balance
-            }" class="edit-balance-btn btn-primary bg-indigo-600 hover:bg-indigo-700 text-xs">Edit Balance</button>
-                        </td>
-                    `;
-          });
-
-          // Add event listeners for new user buttons
-          document
-            .getElementById("userTableBody")
-            .querySelectorAll(".approve-user-btn")
-            .forEach((btn) => {
-              btn.addEventListener("click", handleUserApproval);
-            });
-          document
-            .getElementById("userTableBody")
-            .querySelectorAll(".edit-balance-btn")
-            .forEach((btn) => {
-              btn.addEventListener("click", handleBalanceEdit);
-            });
-        }
-      }
-
-      async function handleUserApproval(e) {
-        const button = e.target;
-        const userId = button.dataset.userId;
-        const originalText = button.textContent;
-
-        const isConfirm = confirm("Are you sure you want to APPROVE this user?");
-        if (!isConfirm) return;
-
-        button.textContent = "Approving...";
-        button.disabled = true;
-
-        try {
-          const response = await fetch(
-            `${API_BASE_URL}/admin/approve-user`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-              body: JSON.stringify({ userId }),
-            }
+          console.error("Approve Transaction API Error:", error);
+          showNotification(
+            "Could not connect to the server.",
+            "error",
+            "transactionNotification"
           );
-
-          const result = await response.json();
-
-          if (response.ok) {
-            showNotification(`User ${result.user.username} approved.`, "success");
-            fetchAdminData();
-          } else {
-            showNotification(
-              result.message || "Failed to approve user.",
-              "error"
-            );
-          }
-        } catch (error) {
-          showNotification("Error communicating with the server.", "error");
-        } finally {
-          button.textContent = originalText;
-          button.disabled = false;
         }
       }
 
-      async function handleBalanceEdit(e) {
-        const button = e.target;
-        const userId = button.dataset.userId;
-        const currentBalance = button.dataset.currentBalance;
+      // --- BALANCE MODAL LOGIC ---
 
-        const newBalance = prompt(
-          `Enter new balance for user (Current: ${formatter.format(
-            currentBalance
-          )}):`
-        );
+      function openBalanceModal(userId, username, currentBalance) {
+        document.getElementById("modalUsername").textContent = username;
+        document.getElementById("updateBalanceForm").dataset.userId = userId;
+        document.getElementById("newBalance").value = currentBalance.toFixed(2);
+        document.getElementById("balanceModal").classList.remove("hidden");
+        document.getElementById("balanceModal").classList.add("flex");
+      }
 
-        if (newBalance === null) return; // Cancelled
-        const balanceValue = parseFloat(newBalance);
+      function closeBalanceModal() {
+        document.getElementById("balanceModal").classList.add("hidden");
+        document.getElementById("balanceModal").classList.remove("flex");
+      }
 
-        if (isNaN(balanceValue) || balanceValue < 0) {
-          showNotification("Invalid balance entered.", "error");
-          return;
-        }
+      document
+        .getElementById("cancelBalanceUpdate")
+        .addEventListener("click", closeBalanceModal);
 
-        const originalText = button.textContent;
-        button.textContent = "Saving...";
-        button.disabled = true;
+      document
+        .getElementById("updateBalanceForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
 
-        try {
-          const response = await fetch(
-            `${API_BASE_URL}/admin/update-balance`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-              body: JSON.stringify({ userId, newBalance: balanceValue }),
+          const userId = e.target.dataset.userId;
+          const newBalance = document.getElementById("newBalance").value;
+          const updateButton = document.getElementById("modalUpdateButton");
+          const originalText = updateButton.textContent;
+          updateButton.textContent = "Saving...";
+          updateButton.disabled = true;
+
+          try {
+            const response = await fetch(
+              `${API_BASE_URL}/admin/update-balance`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                  userId,
+                  newBalance: parseFloat(newBalance),
+                }),
+              }
+            );
+
+            const result = await response.json();
+
+            if (response.ok) {
+              showNotification(
+                `Balance for ${
+                  result.user.username
+                } updated to ${formatter.format(result.user.balance)}.`,
+                "success",
+                "userNotification"
+              );
+              closeBalanceModal();
+              fetchAdminData(); // Refresh data
+            } else {
+              showNotification(
+                result.message || "Failed to update balance.",
+                "error",
+                "userNotification"
+              );
             }
-          );
-
-          const result = await response.json();
-
-          if (response.ok) {
+          } catch (error) {
+            console.error("Update Balance API Error:", error);
             showNotification(
-              `Balance updated to ${formatter.format(balanceValue)}.`,
-              "success"
+              "Could not connect to the server.",
+              "error",
+              "userNotification"
             );
-            fetchAdminData();
-          } else {
-            showNotification(
-              result.message || "Failed to update balance.",
-              "error"
-            );
+          } finally {
+            updateButton.textContent = originalText;
+            updateButton.disabled = false;
           }
-        } catch (error) {
-          showNotification("Error communicating with the server.", "error");
-        } finally {
-          button.textContent = originalText;
-          button.disabled = false;
-        }
-      }
+        });
 
       // --- EVENT LISTENERS & INITIALIZATION ---
 
@@ -704,18 +682,23 @@
         logout();
       });
 
+      function logout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("userType");
+        localStorage.removeItem("username");
+        // Changed relative path to root-relative path
+        window.location.href = "./user_login.html";
+      }
+
       document.getElementById("userSearch").addEventListener("input", (e) => {
         renderUserTable(e.target.value);
       });
 
       window.onload = () => {
-        if (checkAuth()) {
-          document.getElementById("adminName").textContent =
-            localStorage.getItem("username") || "Admin";
-          fetchAdminData();
-          // Since we are polling for real-time updates, refresh data every 10 seconds
-          setInterval(fetchAdminData, 10000);
-        }
+        fetchAdminData();
+        // Since we are polling for real-time updates, refresh data every 10 seconds
+        setInterval(fetchAdminData, 10000);
       };
     </script>
   </body>
