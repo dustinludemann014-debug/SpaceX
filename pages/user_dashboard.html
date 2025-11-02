@@ -21,485 +21,860 @@
       src="https://static.rocket.new/rocket-shot.js?v=0.0.1"
     ></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      /* Custom style for the active quick action button in the center circle */
-      .quick-action-btn:hover .icon-circle {
-        transform: scale(1.05);
-      }
-      .quick-action-btn:hover p {
-        color: var(--color-primary);
-      }
-    </style>
   </head>
   <body class="bg-background min-h-screen">
     <header class="w-full py-6 px-4 border-b border-border-subtle">
       <div class="max-w-7xl mx-auto flex items-center justify-between">
-        <div class="flex items-center space-x-2">
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+        <!-- Logo -->
+        <div class="flex items-center space-x-3">
+          <div
+            class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center"
           >
-            <path
-              d="M12 2L2 7V17L12 22L22 17V7L12 2ZM12 17L7 14.5L12 12L17 14.5L12 17ZM12 12L7 9.5L12 7L17 9.5L12 12Z"
-              fill="#F7931A"
-            />
-          </svg>
-          <span class="text-text-primary text-xl font-bold"
-            >SpaceX Crypto</span
-          >
+            <svg
+              class="w-6 h-6 text-white"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+              />
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold text-gradient-primary">SpaceX</h1>
+            <p class="text-xs text-text-secondary">SpaceX Crypto</p>
+          </div>
         </div>
 
-        <nav class="hidden md:flex space-x-8">
-          <a
-            href="#"
-            class="text-primary font-medium transition-colors"
-            >Dashboard</a
-          >
-          <a
-            href="investment_plans.html"
-            class="text-text-secondary hover:text-primary transition-colors"
-            >Investments</a
-          >
-          <a
-            href="user_profile_settings.html"
-            class="text-text-secondary hover:text-primary transition-colors"
-            >Settings</a
-          >
-        </nav>
+        <!-- User Profile & Language Selector -->
+        <div class="flex items-center space-x-4">
+          <!-- Language Selector -->
+          <div class="relative">
+            <select
+              class="bg-surface border border-border-subtle rounded-lg px-3 py-2 text-text-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option value="en">🇺🇸 English</option>
+              <option value="es">🇪🇸 Español</option>
+              <option value="fr">🇫🇷 Français</option>
+            </select>
+          </div>
 
-        <div class="relative">
-          <button
-            id="profileDropdown"
-            class="flex items-center space-x-2 text-text-primary hover:text-primary transition-colors focus:outline-none"
-          >
-            <svg
-              class="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 3a9 9 0 11-18 0 9 9 0 0118 0z"
-              ></path>
-            </svg>
-            <span id="usernameDisplay" class="font-medium">User</span>
-            <svg
-              class="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M19 9l-7 7-7-7"
-              ></path>
-            </svg>
-          </button>
-
-          <div
-            id="profileMenu"
-            class="absolute right-0 mt-3 w-48 bg-surface rounded-md shadow-xl z-20 hidden border border-border-subtle"
-          >
-            <a
-              href="user_profile_settings.html"
-              class="block px-4 py-2 text-sm text-text-primary hover:bg-border-subtle"
-              >Settings</a
-            >
+          <!-- User Profile Dropdown -->
+          <div class="relative">
             <button
-              id="logoutButton"
-              class="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-border-subtle"
+              id="profileDropdown"
+              class="flex items-center space-x-2 bg-surface border border-border-subtle rounded-lg px-3 py-2 hover:bg-surface-700 transition-colors"
             >
-              Logout
-            </button>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <div
-        id="actionNotification"
-        class="fixed top-0 left-1/2 -translate-x-1/2 mt-4 p-4 rounded-lg text-sm z-50 transition-all duration-500 opacity-0 min-w-[300px] max-w-md text-center shadow-lg"
-        role="alert"
-    >
-        </div>
-
-
-    <main class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
-      <h1 class="text-3xl font-bold text-text-primary mb-8">
-        Your Dashboard
-      </h1>
-
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div class="lg:col-span-1">
-          <div
-            class="bg-card p-6 rounded-xl shadow-lg border border-border-subtle mb-8"
-          >
-            <div class="flex items-center justify-between mb-4">
-              <span class="text-text-secondary font-medium"
-                >Available Balance</span
-              >
-              <svg
-                class="w-6 h-6 text-primary"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m0 0l-1 1-1-1m1 1v2a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2z"
-                ></path>
-              </svg>
-            </div>
-            <p
-              id="availableBalance"
-              class="text-4xl font-bold text-text-primary mb-2"
-            >
-              $0.00
-            </p>
-            <p class="text-text-secondary">USD</p>
-          </div>
-
-          <div
-            class="bg-card p-6 rounded-xl shadow-lg border border-border-subtle mb-8"
-          >
-            <div class="flex items-center justify-between mb-4">
-              <span class="text-text-secondary font-medium">Total Assets</span>
-              <svg
-                class="w-6 h-6 text-indigo-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 8c-1.657 0-3 .895-3 2v4c0 1.105 1.343 2 3 2m0 0a2 2 0 100 4 2 2 0 000-4zm0 0c-1.657 0-3-.895-3-2V8c0-1.105 1.343-2 3-2m0 0a2 2 0 100-4 2 2 0 000 4z"
-                ></path>
-              </svg>
-            </div>
-            <p
-              id="totalAssets"
-              class="text-2xl font-bold text-text-primary mb-2"
-            >
-              $0.00
-            </p>
-            <p class="text-text-secondary">Value in Crypto and Funds</p>
-          </div>
-
-          <div
-            class="bg-card p-6 rounded-xl shadow-lg border border-border-subtle"
-          >
-            <h3 class="text-xl font-semibold text-text-primary mb-6">
-              Quick Actions
-            </h3>
-            <div class="grid grid-cols-3 gap-4">
-              <button
-                onclick="handleAction('deposit')"
-                class="card quick-action-btn hover:bg-surface-700 transition-all duration-200 hover:scale-105 text-center"
-              >
-                <div
-                  class="icon-circle w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-3"
-                >
-                  <svg
-                    class="w-8 h-8 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 4v16m8-8H4"
-                    />
-                  </svg>
-                </div>
-                <p class="text-text-primary font-medium">Deposit</p>
-              </button>
-
-              <button
-                onclick="openWithdrawalForm()"
-                class="card quick-action-btn hover:bg-surface-700 transition-all duration-200 hover:scale-105 text-center"
-              >
-                <div
-                  class="icon-circle w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-3"
-                >
-                  <svg
-                    class="w-8 h-8 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M20 12H4m16 0l-4-4m4 4l-4 4"
-                    />
-                  </svg>
-                </div>
-                <p class="text-text-primary font-medium">Withdraw</p>
-              </button>
-
-              <button
-                onclick="handleAction('transaction')"
-                class="card quick-action-btn hover:bg-surface-700 transition-all duration-200 hover:scale-105 text-center"
-              >
-                <div
-                  class="icon-circle w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-3"
-                >
-                  <svg
-                    class="w-8 h-8 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M3 10h18M3 14h18m-9-4v8m-7 0v-8m14 0v8"
-                    />
-                  </svg>
-                </div>
-                <p class="text-text-primary font-medium">History</p>
-              </button>
-
-              <button
-                onclick="handleAction('pledge')"
-                class="card quick-action-btn hover:bg-surface-700 transition-all duration-200 hover:scale-105 text-center"
-              >
-                <div
-                  class="icon-circle w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-3"
-                >
-                  <svg
-                    class="w-8 h-8 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 4h4"
-                    ></path>
-                  </svg>
-                </div>
-                <p class="text-text-primary font-medium">Invest</p>
-              </button>
-
-              <button
-                onclick="handleAction('transfer')"
-                class="card quick-action-btn hover:bg-surface-700 transition-all duration-200 hover:scale-105 text-center"
-              >
-                <div
-                  class="icon-circle w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-3"
-                >
-                  <svg
-                    class="w-8 h-8 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M8 7h12m0 0l-4-4m4 4l-4 4m-4 6h4m-4 0l-4 4m4-4l-4-4"
-                    ></path>
-                  </svg>
-                </div>
-                <p class="text-text-primary font-medium">Transfer</p>
-              </button>
-
-              <button
-                onclick="handleAction('defi')"
-                class="card quick-action-btn hover:bg-surface-700 transition-all duration-200 hover:scale-105 text-center"
-              >
-                <div
-                  class="icon-circle w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-3"
-                >
-                  <svg
-                    class="w-8 h-8 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M13 10V3L4 14h7v7l9-11h-7z"
-                    ></path>
-                  </svg>
-                </div>
-                <p class="text-text-primary font-medium">DeFi</p>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="lg:col-span-2">
-          <div class="bg-card p-6 rounded-xl shadow-lg border border-border-subtle mb-8">
-            <h3 class="text-xl font-semibold text-text-primary mb-6">
-                Quick Transactions
-            </h3>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                    <h4 class="text-xl font-semibold text-text-primary mb-2">
-                        Deposit Funds
-                    </h4>
-                    <form id="depositForm" class="flex flex-col space-y-2">
-                        <input
-                            type="number"
-                            id="depositAmount"
-                            min="0.01"
-                            step="0.01"
-                            placeholder="Amount to Deposit"
-                            required
-                            class="w-full bg-background border border-border-subtle rounded-lg text-text-primary p-2 focus:ring-2 focus:ring-primary focus:border-primary"
-                        />
-                        <button type="submit" class="btn-primary">
-                            Deposit
-                        </button>
-                    </form>
-                </div>
-
-                <div>
-                    <h4 class="text-xl font-semibold text-text-primary mb-2">
-                        Buy Crypto
-                    </h4>
-                    <form id="buyForm" class="flex flex-col space-y-2">
-                        <input
-                            type="number"
-                            id="buyAmount"
-                            min="0.01"
-                            step="0.01"
-                            placeholder="Amount to Buy (USD)"
-                            required
-                            class="w-full bg-background border border-border-subtle rounded-lg text-text-primary p-2 focus:ring-2 focus:ring-primary focus:border-primary"
-                        />
-                        <button
-                            type="submit"
-                            class="btn-primary bg-indigo-600 hover:bg-indigo-700"
-                        >
-                            Buy
-                        </button>
-                    </form>
-                </div>
-                
-                <div id="withdrawalFormSection">
-                    <h4 class="text-xl font-semibold text-text-primary mb-2 text-red-400">
-                        Withdraw Funds
-                    </h4>
-                    <form id="withdrawalForm" class="flex flex-col space-y-2">
-                        <input
-                            type="number"
-                            id="withdrawAmount"
-                            min="0.01"
-                            step="0.01"
-                            placeholder="Amount to Withdraw"
-                            required
-                            class="w-full bg-background border border-border-subtle rounded-lg text-text-primary p-2 focus:ring-2 focus:ring-red-400 focus:border-red-400"
-                        />
-                        <input
-                            type="text"
-                            id="walletAddress"
-                            placeholder="USDT Wallet Address"
-                            required
-                            class="w-full bg-background border border-border-subtle rounded-lg text-text-primary p-2 focus:ring-2 focus:ring-red-400 focus:border-red-400"
-                        />
-                        <button
-                            type="submit"
-                            class="btn-primary bg-red-600 hover:bg-red-700"
-                        >
-                            Request Withdrawal
-                        </button>
-                    </form>
-                </div>
-            </div>
-            
-            <div class="border-t border-border-subtle pt-6 mt-6">
-                 <div>
-                    <h4 class="text-lg font-semibold text-text-primary mb-4"> Market Overview </h4>
-                    <p class="text-text-secondary">Market data is currently simulated.</p>
-                 </div>
-            </div>
-        </div>
-          
-          <div id="transactionHistory" class="bg-card p-6 rounded-xl shadow-lg border border-border-subtle">
-            <h3 class="text-xl font-semibold text-text-primary mb-6">
-              Transaction History
-            </h3>
-            <div class="overflow-x-auto">
-              <table class="min-w-full divide-y divide-border-subtle">
-                <thead class="bg-background">
-                  <tr>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
-                    >
-                      Date
-                    </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
-                    >
-                      Type
-                    </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
-                    >
-                      Amount
-                    </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
-                    >
-                      Status
-                    </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
-                    >
-                      ID
-                    </th>
-                  </tr>
-                </thead>
-                <tbody id="transactionTableBody" class="divide-y divide-border-subtle">
-                  </tbody>
-              </table>
               <div
-                id="noTransactions"
-                class="hidden text-center py-6 text-text-secondary"
+                class="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center"
               >
-                No transactions yet.
+                <svg
+                  class="w-4 h-4 text-white"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </div>
+              <span class="text-text-primary text-sm" id="usernameDisplay"
+                >User</span
+              >
+              <svg
+                class="w-4 h-4 text-text-secondary"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+
+            <!-- Dropdown Menu -->
+            <div
+              id="profileMenu"
+              class="hidden absolute right-0 mt-2 w-48 bg-surface border border-border-subtle rounded-lg shadow-lg z-50"
+            >
+              <div class="py-2">
+                <a
+                  href="user_profile_settings.html"
+                  class="block px-4 py-2 text-sm text-text-primary hover:bg-surface-700 transition-colors"
+                >
+                  <div class="flex items-center space-x-2">
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                      />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                    </svg>
+                    <span>Profile Settings</span>
+                  </div>
+                </a>
+                <a
+                  href="javascript:void(0)"
+                  onclick="logout()"
+                  class="block px-4 py-2 text-sm text-error hover:bg-surface-700 transition-colors"
+                >
+                  <div class="flex items-center space-x-2">
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                      />
+                    </svg>
+                    <span>Logout</span>
+                  </div>
+                </a>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto p-4 md:p-8">
+      <h2 class="text-3xl font-bold text-text-primary mb-6">User Dashboard</h2>
+
+      <!-- Metrics Section -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <!-- Available Balance Card -->
+        <div
+          class="bg-card p-6 rounded-xl shadow-lg border border-border-subtle"
+        >
+          <h3 class="text-lg font-medium text-text-secondary mb-2">
+            Available Balance
+          </h3>
+          <p id="availableBalance" class="text-4xl font-bold text-text-primary">
+            $0.00
+          </p>
+          <p class="text-sm text-green-400 mt-1 flex items-center">
+            <!-- Icon placeholder -->
+            <svg
+              class="w-4 h-4 mr-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+              ></path>
+            </svg>
+            Ready for trading
+          </p>
+        </div>
+
+        <!-- Total Assets Card (Simplified to match Available Balance for this demo) -->
+        <div
+          class="bg-card p-6 rounded-xl shadow-lg border border-border-subtle"
+        >
+          <h3 class="text-lg font-medium text-text-secondary mb-2">
+            Total Portfolio Value
+          </h3>
+          <p id="totalAssets" class="text-4xl font-bold text-text-primary">
+            $0.00
+          </p>
+          <p class="text-sm text-text-secondary mt-1">Includes all holdings</p>
+        </div>
+
+        <!-- Locked Balance Card (For consistency with original file) -->
+        <div
+          class="bg-card p-6 rounded-xl shadow-lg border border-border-subtle"
+        >
+          <h3 class="text-lg font-medium text-text-secondary mb-2">
+            Locked Funds
+          </h3>
+          <p id="lockedBalance" class="text-4xl font-bold text-text-primary">
+            $0.00
+          </p>
+          <p class="text-sm text-red-400 mt-1">Pending transactions</p>
+        </div>
+      </div>
+      <!-- Action Grid Section -->
+      <section class="mb-8">
+        <h3 class="text-xl font-semibold text-text-primary mb-6">
+          Quick Actions
+        </h3>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <!-- Deposit -->
+          <button
+            onclick="handleAction('deposit')"
+            class="card hover:bg-surface-700 transition-all duration-200 hover:scale-105 text-center"
+          >
+            <div
+              class="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-3"
+            >
+              <svg
+                class="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
+              </svg>
+            </div>
+            <p class="text-text-primary font-medium">Deposit</p>
+          </button>
+
+          <!-- Withdraw -->
+          <button
+            onclick="handleAction('withdraw')"
+            class="card hover:bg-surface-700 transition-all duration-200 hover:scale-105 text-center"
+          >
+            <div
+              class="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-3"
+            >
+              <svg
+                class="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M20 12H4m16 0l-4-4m4 4l-4 4"
+                />
+              </svg>
+            </div>
+            <p class="text-text-primary font-medium">Withdraw</p>
+          </button>
+
+          <!-- Transaction -->
+          <button
+            onclick="handleAction('transaction')"
+            class="card hover:bg-surface-700 transition-all duration-200 hover:scale-105 text-center"
+          >
+            <div
+              class="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-3"
+            >
+              <svg
+                class="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                />
+              </svg>
+            </div>
+            <p class="text-text-primary font-medium">Transaction</p>
+          </button>
+
+          <!-- Pledge -->
+          <button
+            onclick="handleAction('pledge')"
+            class="card hover:bg-surface-700 transition-all duration-200 hover:scale-105 text-center"
+          >
+            <div
+              class="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-3"
+            >
+              <svg
+                class="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                />
+              </svg>
+            </div>
+            <p class="text-text-primary font-medium">Pledge</p>
+          </button>
+
+          <!-- Transfer -->
+          <button
+            onclick="handleAction('transfer')"
+            class="card hover:bg-surface-700 transition-all duration-200 hover:scale-105 text-center"
+          >
+            <div
+              class="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-3"
+            >
+              <svg
+                class="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                />
+              </svg>
+            </div>
+            <p class="text-text-primary font-medium">Transfer</p>
+          </button>
+
+          <!-- DeFi Mining -->
+          <button
+            onclick="handleAction('defi')"
+            class="card hover:bg-surface-700 transition-all duration-200 hover:scale-105 text-center"
+          >
+            <div
+              class="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-3"
+            >
+              <svg
+                class="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                />
+              </svg>
+            </div>
+            <p class="text-text-primary font-medium">DeFi Mining</p>
+          </button>
+        </div>
+      </section>
+
+      <!-- Actions Section (Buy and Deposit) -->
+      <div
+        class="bg-card p-6 rounded-xl shadow-lg border border-border-subtle mb-8"
+      >
+        <h3 class="text-2xl font-bold text-text-primary mb-4">Quick Buy Coins </h3>
+        <div
+          id="actionNotification"
+          class="hidden p-3 rounded-lg text-sm mb-4"
+        ></div>
+
+        <div class="flex flex-col md:flex-row gap-4">
+          <div class="flex items-center space-x-3 mb-4">
+                <img
+                  src="https://images.unsplash.com/photo-1651055693398-0d66969cf759"
+                  alt="Tether USDT cryptocurrency coin logo"
+                  class="w-10 h-10 rounded-full object-cover"
+                  onerror="this.src='https://images.pexels.com/photos/730547/pexels-photo-730547.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'; this.onerror=null;"
+                />
+                <div>
+                  <h4 class="text-lg font-semibold text-text-primary">USDT</h4>
+                  <p class="text-text-secondary text-sm">Tether USD</p>
+                </div>
+                <div class="ml-auto text-right">
+                  <p class="text-text-primary font-semibold">$1.00</p>
+                  <p class="text-success text-sm">+0.01%</p>
+                </div>
+              </div>
+          <!-- Deposit Form -->
+          <div class="md:w-1/2">
+            <h4 class="text-xl font-semibold text-text-primary mb-2">
+              Deposit Funds
+            </h4>
+            <form id="depositForm" class="flex space-x-2">
+              <input
+                type="number"
+                id="depositAmount"
+                min="0.01"
+                step="0.01"
+                placeholder="Amount to Deposit"
+                required
+                class="w-full bg-background border border-border-subtle rounded-lg text-text-primary p-2 focus:ring-2 focus:ring-primary focus:border-primary"
+              />
+              <button
+                onclick="alert('Contact the Admin to for your secure deposit on WhatsApp +1 978 505 3319.')"
+                type="submit"
+                class="btn-primary flex-shrink-0"
+              >
+                Deposit
+              </button>
+            </form>
+          </div>
+
+          <!-- Buy Form -->
+          <div class="md:w-1/2">
+            <h4 class="text-xl font-semibold text-text-primary mb-2">
+              Buy Crypto
+            </h4>
+            <form id="buyForm" class="flex space-x-2">
+              <input
+                type="number"
+                id="buyAmount"
+                min="0.01"
+                step="0.01"
+                placeholder="Amount to Buy (USD)"
+                required
+                class="w-full bg-background border border-border-subtle rounded-lg text-text-primary p-2 focus:ring-2 focus:ring-primary focus:border-primary"
+              />
+              <button
+                onclick="alert('Contact the Admin to buy your cryptocurrency on WhatsApp +1 978 505 3319.')"
+                type="submit"
+                class="btn-primary flex-shrink-0 bg-indigo-600 hover:bg-indigo-700"
+              >
+                Buy
+              </button>
+            </form>
+          </div>
+        </div>
+        <!-- Market Overview -->
+            <div>
+              <h4 class="text-lg font-semibold text-text-primary mb-4">
+                Market Overview
+              </h4>
+              <div class="space-y-3">
+                <div
+                  class="flex items-center justify-between p-3 bg-surface-700 rounded-lg"
+                >
+                  <div class="flex items-center space-x-3">
+                    <img
+                      src="https://images.unsplash.com/photo-1629788962818-3b5127bc6a5a"
+                      alt="Bitcoin cryptocurrency coin with golden color"
+                      class="w-8 h-8 rounded-full object-cover"
+                      onerror="this.src='https://images.unsplash.com/photo-1518546305927-5a555bb7020d?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                    />
+                    <div>
+                      <p class="text-text-primary font-medium">BTC</p>
+                      <p class="text-text-secondary text-xs">Bitcoin</p>
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-text-primary font-semibold">$67,234.50</p>
+                    <p class="text-success text-xs">+3.24%</p>
+                  </div>
+                </div>
+
+                <div
+                  class="flex items-center justify-between p-3 bg-surface-700 rounded-lg"
+                >
+                  <div class="flex items-center space-x-3">
+                    <img
+                      src="https://images.unsplash.com/photo-1641580546594-cab974df226d"
+                      alt="Ethereum cryptocurrency coin with blue and silver design"
+                      class="w-8 h-8 rounded-full object-cover"
+                      onerror="this.src='https://images.unsplash.com/photo-1622630998477-20aa696ecb05?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                    />
+                    <div>
+                      <p class="text-text-primary font-medium">ETH</p>
+                      <p class="text-text-secondary text-xs">Ethereum</p>
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-text-primary font-semibold">$2,456.78</p>
+                    <p class="text-error text-xs">-1.12%</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+      <!-- Investment Plans Section -->
+      <section class="mb-8">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-xl font-semibold text-text-primary">
+            Investment Plans
+          </h3>
+          <a
+            href="investment_plans.html"
+            class="text-primary hover:text-secondary transition-colors text-sm font-medium"
+          >
+            View All Plans →
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- 1-Day Plan -->
+          <div class="card-elevated border-l-4 border-success">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center space-x-3">
+                <div
+                  class="w-12 h-12 bg-success bg-opacity-20 rounded-full flex items-center justify-center"
+                >
+                  <img
+                    src="https://images.unsplash.com/photo-1640697462212-b6d88708be5d"
+                    alt="Tether USDT symbol for 1-day investment plan"
+                    class="w-6 h-6 rounded-full object-cover"
+                    onerror="this.src='https://images.pexels.com/photos/730547/pexels-photo-730547.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'; this.onerror=null;"
+                  />
+                </div>
+                <div>
+                  <h4 class="text-lg font-semibold text-text-primary">
+                    1-Day USDT Lock
+                  </h4>
+                  <p class="text-text-secondary text-sm">
+                    Short-term investment
+                  </p>
+                </div>
+              </div>
+              <div class="text-right">
+                <p class="text-success text-xl font-bold">2.5%</p>
+                <p class="text-text-secondary text-xs">Daily Return</p>
+              </div>
+            </div>
+
+            <div class="space-y-3 mb-4">
+              <div class="flex justify-between">
+                <span class="text-text-secondary">Minimum Investment:</span>
+                <span class="text-text-primary font-semibold">$100.00</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-text-secondary">Lock Period:</span>
+                <span class="text-text-primary font-semibold">1 Day</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-text-secondary">Expected Return:</span>
+                <span class="text-success font-semibold">$102.50</span>
+              </div>
+            </div>
+
+            <button
+              onclick="investInPlan('1day', 100)"
+              class="w-full btn-secondary"
+            >
+              Invest Now
+            </button>
+          </div>
+
+          <!-- 7-Day Plan -->
+          <div class="card-elevated border-l-4 border-primary">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center space-x-3">
+                <div
+                  class="w-12 h-12 bg-primary bg-opacity-20 rounded-full flex items-center justify-center"
+                >
+                  <img
+                    src="https://images.unsplash.com/photo-1626163015484-81fc7e3b90d8"
+                    alt="Tether USDT symbol for 7-day investment plan"
+                    class="w-6 h-6 rounded-full object-cover"
+                    onerror="this.src='https://images.pexels.com/photos/730547/pexels-photo-730547.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'; this.onerror=null;"
+                  />
+                </div>
+                <div>
+                  <h4 class="text-lg font-semibold text-text-primary">
+                    7-Day USDT Lock
+                  </h4>
+                  <p class="text-text-secondary text-sm">Weekly investment</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <p class="text-primary text-xl font-bold">18.5%</p>
+                <p class="text-text-secondary text-xs">Weekly Return</p>
+              </div>
+            </div>
+
+            <div class="space-y-3 mb-4">
+              <div class="flex justify-between">
+                <span class="text-text-secondary">Minimum Investment:</span>
+                <span class="text-text-primary font-semibold">$1,000.00</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-text-secondary">Lock Period:</span>
+                <span class="text-text-primary font-semibold">7 Days</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-text-secondary">Expected Return:</span>
+                <span class="text-primary font-semibold">$1,185.00</span>
+              </div>
+            </div>
+
+            <button
+              onclick="investInPlan('7day', 1000)"
+              class="w-full btn-primary"
+            >
+              Invest Now
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Liquidity Mining Banner -->
+      <section class="mb-8">
+        <div
+          class="card-elevated bg-gradient-to-r from-primary to-secondary relative overflow-hidden"
+        >
+          <div class="relative z-10 flex items-center justify-between">
+            <div>
+              <h3 class="text-2xl font-bold text-white mb-2">
+                LIQUIDITY MINING
+              </h3>
+              <p class="text-white text-lg mb-4">EARN HIGH INCOME</p>
+              <p class="text-white opacity-90 text-sm mb-4">
+                Participate in our liquidity mining program and earn up to 25%
+                APY on your crypto holdings.
+              </p>
+              <button
+                onclick="handleAction('liquidity')"
+                class="bg-white text-primary px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+              >
+                Start Mining
+              </button>
+            </div>
+            <div class="hidden md:flex items-center space-x-4">
+              <img
+                src="https://images.unsplash.com/photo-1628671751505-45df75ceb5fa"
+                alt="Golden Bitcoin coin for liquidity mining promotion"
+                class="w-16 h-16 rounded-full object-cover animate-pulse"
+                onerror="this.src='https://images.unsplash.com/photo-1518546305927-5a555bb7020d?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+              />
+              <img
+                src="https://images.unsplash.com/photo-1634979149813-dbe443a8809b"
+                alt="Ethereum coin for liquidity mining program"
+                class="w-12 h-12 rounded-full object-cover animate-pulse"
+                onerror="this.src='https://images.unsplash.com/photo-1622630998477-20aa696ecb05?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+              />
+              <img
+                src="https://images.unsplash.com/photo-1626163015484-81fc7e3b90d8"
+                alt="USDT Tether coin for high-yield mining"
+                class="w-14 h-14 rounded-full object-cover animate-pulse"
+                onerror="this.src='https://images.pexels.com/photos/730547/pexels-photo-730547.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'; this.onerror=null;"
+              />
+            </div>
+          </div>
+          <!-- Background Pattern -->
+          <div class="absolute inset-0 opacity-10">
+            <svg class="w-full h-full" viewBox="0 0 100 100" fill="none">
+              <defs>
+                <pattern
+                  id="grid"
+                  width="10"
+                  height="10"
+                  patternUnits="userSpaceOnUse"
+                >
+                  <path
+                    d="M 10 0 L 0 0 0 10"
+                    fill="none"
+                    stroke="white"
+                    stroke-width="0.5"
+                  />
+                </pattern>
+              </defs>
+              <rect width="100" height="100" fill="url(#grid)" />
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- Transaction History Section -->
+      <div class="bg-card p-6 rounded-xl shadow-lg border border-border-subtle" id="transactionHistory">
+        <h3 class="text-2xl font-bold text-text-primary mb-4">
+          Transaction History
+        </h3>
+
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-border-subtle">
+            <thead>
+              <tr>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  Date
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  Type
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  Amount
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  Status
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  ID
+                </th>
+              </tr>
+            </thead>
+            <tbody
+              id="transactionTableBody"
+              class="bg-card divide-y divide-border-subtle text-text-primary"
+            >
+              <!-- Transactions will be inserted here by JavaScript -->
+            </tbody>
+          </table>
+          <div id="noTransactions" class="p-4 text-center text-text-secondary">
+            No transactions found.
+          </div>
+        </div>
+      </div>
+      <!-- Current Investments -->
+      <section class="mb-8">
+        <h3 class="text-xl font-semibold text-text-primary mb-6">
+          Current Investments
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Active Investment 1 -->
+          <div class="card-elevated border-l-4 border-success">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h4 class="text-lg font-semibold text-text-primary">
+                  7-Day USDT Lock
+                </h4>
+                <p class="text-text-secondary text-sm">Started: Oct 29, 2025</p>
+              </div>
+              <div class="text-right">
+                <span
+                  class="bg-success bg-opacity-20 text-success px-3 py-1 rounded-full text-sm font-medium"
+                >
+                  Active
+                </span>
+              </div>
+            </div>
+
+            <div class="space-y-3 mb-4">
+              <div class="flex justify-between">
+                <span class="text-text-secondary">Investment Amount:</span>
+                <span class="text-text-primary font-semibold">$1,000.00</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-text-secondary">Current Profit:</span>
+                <span class="text-success font-semibold">+$45.50</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-text-secondary">Expected Return:</span>
+                <span class="text-primary font-semibold">$1,185.00</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-text-secondary">Time Remaining:</span>
+                <span class="text-text-primary font-semibold">6 days 14h</span>
+              </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="mb-4">
+              <div class="flex justify-between text-sm mb-2">
+                <span class="text-text-secondary">Progress</span>
+                <span class="text-text-primary">14%</span>
+              </div>
+              <div class="w-full bg-surface-700 rounded-full h-2">
+                <div
+                  class="bg-success h-2 rounded-full"
+                  style="width: 14%"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Investment 2 -->
+          <div class="card-elevated border-l-4 border-primary">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h4 class="text-lg font-semibold text-text-primary">
+                  1-Day USDT Lock
+                </h4>
+                <p class="text-text-secondary text-sm">Started: Oct 30, 2025</p>
+              </div>
+              <div class="text-right">
+                <span
+                  class="bg-primary bg-opacity-20 text-primary px-3 py-1 rounded-full text-sm font-medium"
+                >
+                  Active
+                </span>
+              </div>
+            </div>
+
+            <div class="space-y-3 mb-4">
+              <div class="flex justify-between">
+                <span class="text-text-secondary">Investment Amount:</span>
+                <span class="text-text-primary font-semibold">$500.00</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-text-secondary">Current Profit:</span>
+                <span class="text-success font-semibold">+$8.75</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-text-secondary">Expected Return:</span>
+                <span class="text-primary font-semibold">$512.50</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-text-secondary">Time Remaining:</span>
+                <span class="text-text-primary font-semibold">16h 45m</span>
+              </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="mb-4">
+              <div class="flex justify-between text-sm mb-2">
+                <span class="text-text-secondary">Progress</span>
+                <span class="text-text-primary">70%</span>
+              </div>
+              <div class="w-full bg-surface-700 rounded-full h-2">
+                <div
+                  class="bg-primary h-2 rounded-full"
+                  style="width: 70%"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full py-6 px-4 border-t border-border-subtle">
+      <div class="max-w-7xl mx-auto text-center">
+        <p class="text-xs text-text-secondary">
+          © 2025 SpaceX Crypto. All Rights Reserved. |
+          <a
+            href="javascript:void(0)"
+            class="text-primary hover:text-secondary transition-colors"
+            >Privacy Policy</a
+          >
+          |
+          <a
+            href="javascript:void(0)"
+            class="text-primary hover:text-secondary transition-colors"
+            >Terms of Service</a
+          >
+        </p>
+      </div>
+    </footer>
     </main>
 
     <script>
@@ -511,60 +886,68 @@
 
       // --- UTILITY FUNCTIONS ---
 
+      // Check authentication status and redirect if necessary
       function checkAuth() {
         if (!token || userType !== "user") {
           window.location.href = "user_login.html";
           return false;
         }
-        document.getElementById("usernameDisplay").textContent = username || "User";
+        document.getElementById(
+          "userNameDisplay"
+        ).textContent = `Hello, ${username}`;
         return true;
       }
 
-      function logout() {
-        localStorage.removeItem("token");
-        localStorage.removeItem("userId");
-        localStorage.removeItem("userType");
-        localStorage.removeItem("username");
-        window.location.href = "user_login.html";
+      document
+        .getElementById("profileDropdown")
+        .addEventListener("click", function (e) {
+          e.stopPropagation();
+          const menu = document.getElementById("profileMenu");
+          menu.classList.toggle("hidden");
+        });
+
+      // Close dropdown when clicking outside
+      document.addEventListener("click", function () {
+        document.getElementById("profileMenu").classList.add("hidden");
+      });
+
+
+      // Function to show action notification
+      function showActionNotification(message, type = "success") {
+        const box = document.getElementById("actionNotification");
+
+        box.classList.remove(
+          "hidden",
+          "bg-red-900",
+          "text-red-300",
+          "bg-green-900",
+          "text-green-300",
+          "bg-yellow-900",
+          "text-yellow-300"
+        );
+
+        if (type === "success") {
+          box.classList.add("bg-green-900", "text-green-300");
+        } else if (type === "error") {
+          box.classList.add("bg-red-900", "text-red-300");
+        } else if (type === "warning") {
+          box.classList.add("bg-yellow-900", "text-yellow-300");
+        }
+
+        box.textContent = message;
+
+        setTimeout(() => {
+          box.classList.add("hidden");
+        }, 5000);
       }
 
+      // Format currency
       const formatter = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
       });
 
-      // *** STYLED ALERT/NOTIFICATION FUNCTION ***
-      function showActionNotification(message, type = "info") {
-        const box = document.getElementById("actionNotification");
-
-        // Reset classes
-        box.className = 'fixed top-0 left-1/2 -translate-x-1/2 mt-4 p-4 rounded-lg text-sm z-50 transition-all duration-500 opacity-0 min-w-[300px] max-w-md text-center shadow-lg';
-        box.classList.add("text-white", "font-medium");
-
-        // Apply type-specific styles
-        if (type === "success") {
-            box.classList.add("bg-green-600");
-        } else if (type === "error") {
-            box.classList.add("bg-red-600");
-        } else if (type === "warning") {
-            box.classList.add("bg-yellow-600");
-        } else {
-            box.classList.add("bg-blue-600"); // Default to 'info'
-        }
-
-        box.textContent = message;
-
-        // Show and hide with transition
-        setTimeout(() => {
-             box.classList.remove("opacity-0");
-        }, 10);
-        
-        setTimeout(() => {
-            box.classList.add("opacity-0");
-        }, 8000); // Display for 8 seconds
-      }
-
-      // --- DATA FETCHING & RENDERING (Unchanged) ---
+      // --- DATA FETCHING & RENDERING ---
 
       async function fetchUserData() {
         if (!checkAuth()) return;
@@ -577,6 +960,7 @@
           });
 
           if (!response.ok) {
+            // If token is invalid or user not found, force logout
             if (response.status === 401 || response.status === 404) {
               logout();
               return;
@@ -619,54 +1003,50 @@
             row.className = "hover:bg-gray-800 transition duration-150";
 
             // Status styling
-            let statusClass = "bg-yellow-500 text-yellow-900"; // Pending
+            let statusClass = "status-pending";
             if (t.status === "complete") {
-              statusClass = "bg-green-500 text-green-900"; // Complete
+              statusClass = "status-complete";
             } else if (t.status === "failed") {
-              statusClass = "bg-red-500 text-red-900"; // Failed
+              statusClass = "status-failed";
             }
 
             row.innerHTML = `
-                        <td class="px-6 py-4 whitespace-nowrap text-sm">${new Date(
-                          t.date
-                        ).toLocaleDateString()}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm capitalize">${
-                          t.type
-                        }</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${
-                          t.type === "buy" || t.type === "withdraw" ? "text-red-400" : "text-green-400"
-                        }">${formatter.format(t.amount)}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusClass}">
-                                ${t.status}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-xs text-text-secondary">${t.id.substring(
-                          0,
-                          8
-                        )}...</td>
-                    `;
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">${new Date(
+                      t.date
+                    ).toLocaleDateString()}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm capitalize">${
+                      t.type
+                    }</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${
+                      t.type === "buy" ? "text-red-400" : "text-green-400"
+                    }">${formatter.format(t.amount)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusClass}">
+                            ${t.status}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-xs text-text-secondary">${t.id.substring(
+                      0,
+                      8
+                    )}...</td>
+                `;
           });
         }
       }
 
-      // --- TRANSACTION HANDLERS (UPDATED) ---
+      // --- TRANSACTION HANDLERS ---
 
-      async function handleTransaction(type, amount, walletAddress = null) {
+      async function handleTransaction(type, amount) {
         if (!checkAuth()) return;
 
         const value = parseFloat(amount);
         if (isNaN(value) || value <= 0) {
-            showActionNotification("Please enter a valid amount.", "error");
-            return;
+          showActionNotification("Please enter a valid amount.", "error");
+          return;
         }
 
-        if (type === 'withdraw' && (!walletAddress || walletAddress.length < 10)) {
-            showActionNotification("Please enter a valid USDT Wallet Address.", "error");
-            return;
-        }
-
-        const formId = type + "Form";
+        const buttonId = type === "deposit" ? "depositButton" : "buyButton";
+        const formId = type === "deposit" ? "depositForm" : "buyForm";
         const button = document.querySelector(
           `#${formId} button[type="submit"]`
         );
@@ -675,38 +1055,25 @@
         button.disabled = true;
 
         try {
-          const bodyData = { type, amount: value };
-          if (type === "withdraw") {
-            bodyData.walletAddress = walletAddress; // Send wallet address to backend
-          }
-
           const response = await fetch(`${API_BASE_URL}/user/transaction`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify(bodyData),
+            body: JSON.stringify({ type, amount: value }),
           });
 
           const result = await response.json();
 
           if (response.ok) {
-            let successMessage = `Successfully submitted ${type} for ${formatter.format(value)}. It is now PENDING approval.`;
-                
-            if (type === 'deposit') {
-                successMessage = `Deposit request for ${formatter.format(value)} is now PENDING. Please contact the Admin on WhatsApp +1 978 505 3319 to complete the secure deposit.`;
-            } else if (type === 'buy') {
-                successMessage = `Crypto buy request for ${formatter.format(value)} is now PENDING. Please contact the Admin on WhatsApp +1 978 505 3319 to complete your purchase.`;
-            } else if (type === 'withdraw') {
-                 successMessage = `Withdrawal request for ${formatter.format(value)} to wallet ${walletAddress.substring(0, 8)}... submitted! The admin will contact you to process the transfer.`;
-            }
-
-            showActionNotification(successMessage, "success");
-            
-            document.getElementById(type + "Amount").value = ""; 
-            if (type === "withdraw") document.getElementById("walletAddress").value = "";
-
+            showActionNotification(
+              `Successfully submitted ${type} for ${formatter.format(
+                value
+              )}. It is now PENDING approval.`,
+              "success"
+            );
+            document.getElementById(type + "Amount").value = ""; // Clear input
             fetchUserData(); // Refresh history
           } else {
             showActionNotification(
@@ -726,81 +1093,30 @@
         }
       }
 
-      // --- EVENT LISTENERS (UPDATED) ---
-
-      // Deposit Form Submission
-      document.getElementById("depositForm").addEventListener("submit", (e) => {
-        e.preventDefault();
-        const amount = document.getElementById("depositAmount").value;
-        handleTransaction("deposit", parseFloat(amount));
-      });
-
-      // Buy Form Submission
-      document.getElementById("buyForm").addEventListener("submit", (e) => {
-        e.preventDefault();
-        const amount = document.getElementById("buyAmount").value;
-        handleTransaction("buy", parseFloat(amount));
-      });
-
-      // Withdrawal Form Submission (NEW)
-      document.getElementById("withdrawalForm").addEventListener("submit", (e) => {
-        e.preventDefault();
-        const amount = document.getElementById("withdrawAmount").value;
-        const walletAddress = document.getElementById("walletAddress").value.trim();
-        handleTransaction("withdraw", parseFloat(amount), walletAddress);
-      });
-
+      // --- EVENT LISTENERS ---
       document.getElementById("logoutButton").addEventListener("click", () => {
         logout();
       });
 
-      document
-        .getElementById("profileDropdown")
-        .addEventListener("click", function (e) {
-          e.stopPropagation();
-          document.getElementById("profileMenu").classList.toggle("hidden");
-        });
-
-      document.addEventListener("click", function () {
-        document.getElementById("profileMenu").classList.add("hidden");
-      });
-
-      // Handle Quick Action buttons (UPDATED to use new notification)
-      function handleAction(action) {
-        switch (action) {
-          case "deposit":
-            showActionNotification("Please use the **Deposit Funds** form above to initiate your secure deposit. Contact Admin for final processing.", "info");
-            break;
-          case "withdraw":
-            openWithdrawalForm();
-            break;
-          case "transaction":
-            document
-              .getElementById("transactionHistory")
-              .scrollIntoView({ behavior: "smooth" });
-            break;
-          case "pledge":
-            window.location.href = "investment_plans.html";
-            break;
-          case "transfer":
-            showActionNotification("Transfer funds to another account is temporarily unavailable. Please contact the Admin on WhatsApp +1 978 505 3319 for assistance.", "warning");
-            break;
-          case "defi":
-            showActionNotification("Participate in DeFi mining pools: Contact the Admin for details on WhatsApp +1 978 505 3319.", "info");
-            break;
-          case "liquidity":
-            showActionNotification("Start Earning High Income: Contact the Admin for details on WhatsApp +1 978 505 3319.", "info");
-            break;
-        }
+      function logout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("userType");
+        localStorage.removeItem("username");
+        window.location.href = "user_login.html";
       }
 
-      // NEW function to scroll to the withdrawal form
-      function openWithdrawalForm() {
-        const section = document.getElementById('withdrawalFormSection');
-        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        showActionNotification("Please enter the amount and your USDT Wallet Address in the form below.", "info");
-    }
+      document.getElementById("depositForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const amount = document.getElementById("depositAmount").value;
+        handleTransaction("deposit", amount);
+      });
 
+      document.getElementById("buyForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const amount = document.getElementById("buyAmount").value;
+        handleTransaction("buy", amount);
+      });
 
       // --- INITIALIZATION ---
       window.onload = () => {
@@ -808,6 +1124,37 @@
         // Since we are polling for real-time updates, refresh data every 10 seconds
         setInterval(fetchUserData, 10000);
       };
+
+      // Handle action buttons
+      function handleAction(action) {
+        switch (action) {
+          case "deposit":
+            showActionModal("Deposit", "Add funds to your account");
+            break;
+          case "withdraw":
+            showActionModal("Withdraw", "Withdraw funds from your account");
+            break;
+          case "transaction":
+             document.getElementById('transactionHistory').scrollIntoView({ behavior: 'smooth' });
+            break;
+          case "pledge":
+            window.location.href = "investment_plans.html";
+            break;
+          case "transfer":
+            showActionModal("Transfer", "Transfer funds to another account");
+            break;
+          case "defi":
+            showActionModal("DeFi Mining", "Participate in DeFi mining pools");
+            break;
+          case "liquidity":
+            showActionModal("Liquidity Mining", "Contact the admin");
+            break;
+        }
+      }
+      // Show action modal
+      function showActionModal(title, description) {
+        alert(`${title}\n\n${description}\n\n Contact on WhatsApp +1 978 505 3319 !`);
+      }
     </script>
   </body>
 </html>
