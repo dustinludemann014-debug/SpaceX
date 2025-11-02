@@ -77,7 +77,6 @@
     </style>
   </head>
   <body class="bg-background min-h-screen">
-    <!-- Header Section -->
     <header class="w-full py-6 px-4 border-b border-border-subtle">
       <div class="max-w-7xl mx-auto flex justify-between items-center">
         <h1 class="text-2xl font-bold text-text-primary">
@@ -95,9 +94,7 @@
       </div>
     </header>
 
-    <!-- Main Content -->
     <main class="max-w-7xl mx-auto p-4 md:p-8">
-      <!-- Tabs Navigation -->
       <div
         class="border-b border-border-subtle mb-6 flex space-x-4 overflow-x-auto"
       >
@@ -107,7 +104,6 @@
         </button>
       </div>
 
-      <!-- Tab Content: User Management -->
       <div id="users" class="tab-content active">
         <h2 class="text-2xl font-bold text-text-primary mb-6">
           User Management
@@ -118,7 +114,6 @@
           class="hidden p-3 rounded-lg text-sm mb-4"
         ></div>
 
-        <!-- Search Bar -->
         <input
           type="text"
           id="userSearch"
@@ -163,8 +158,7 @@
               id="userTableBody"
               class="divide-y divide-border-subtle text-text-primary"
             >
-              <!-- User rows will be injected here -->
-            </tbody>
+              </tbody>
           </table>
           <div id="noUsers" class="p-4 text-center text-text-secondary hidden">
             No users found.
@@ -172,7 +166,6 @@
         </div>
       </div>
 
-      <!-- Tab Content: Transaction Review -->
       <div id="transactions" class="tab-content">
         <h2 class="text-2xl font-bold text-text-primary mb-6">
           Transaction Review
@@ -207,6 +200,11 @@
                 <th
                   class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
                 >
+                  Wallet Address
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
                   Amount
                 </th>
                 <th
@@ -225,8 +223,7 @@
               id="transactionTableBody"
               class="divide-y divide-border-subtle text-text-primary"
             >
-              <!-- Transaction rows will be injected here -->
-            </tbody>
+              </tbody>
           </table>
           <div
             id="noPendingTransactions"
@@ -237,56 +234,43 @@
         </div>
       </div>
 
-      <!-- Modal for Balance Update -->
       <div
         id="balanceModal"
         class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center p-4"
       >
-        <div
-          class="bg-card rounded-xl p-6 w-full max-w-sm shadow-2xl border border-border-subtle"
-        >
+        <div class="bg-card p-6 rounded-xl shadow-2xl w-full max-w-sm">
           <h3 class="text-xl font-bold text-text-primary mb-4">
-            Update User Balance
+            Update Balance
           </h3>
           <p class="text-text-secondary mb-4">
-            Editing balance for:
-            <span
-              id="modalUsername"
-              class="font-medium text-text-primary"
-            ></span>
-          </p>
-          <form id="updateBalanceForm" data-user-id="">
-            <label
-              for="newBalance"
-              class="block text-sm font-medium text-text-secondary mb-1"
-              >New Available Balance (USD)</label
+            Set the new balance for user:
+            <span id="modalUsername" class="font-medium text-text-primary"
+              >User</span
             >
-            <input
-              type="number"
-              id="newBalance"
-              step="0.01"
-              min="0"
-              required
-              class="w-full bg-background border border-border-subtle rounded-lg text-text-primary p-2 mb-4 focus:ring-2 focus:ring-primary focus:border-primary"
-              placeholder="e.g., 5000.00"
-            />
-            <div class="flex justify-end space-x-3">
-              <button
-                type="button"
-                id="cancelBalanceUpdate"
-                class="px-4 py-2 text-text-secondary bg-gray-700 rounded-lg hover:bg-gray-600"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                class="px-4 py-2 bg-primary text-white font-semibold rounded-lg hover:bg-opacity-90"
-                id="modalUpdateButton"
-              >
-                Update Balance
-              </button>
-            </div>
-          </form>
+          </p>
+          <input
+            type="number"
+            id="newBalanceInput"
+            step="0.01"
+            min="0"
+            placeholder="New Balance (e.g., 5000.00)"
+            class="w-full bg-background border border-border-subtle rounded-lg text-text-primary p-2 mb-4 focus:ring-2 focus:ring-primary focus:border-primary"
+          />
+          <div class="flex justify-end space-x-3">
+            <button
+              id="cancelBalanceUpdate"
+              class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-lg transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              id="confirmBalanceUpdate"
+              data-user-id=""
+              class="bg-primary hover:bg-blue-600 text-white font-medium px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+            >
+              Save Changes
+            </button>
+          </div>
         </div>
       </div>
     </main>
@@ -294,6 +278,7 @@
     <script>
       const API_BASE_URL = "https://spacex-tkks.onrender.com/api";
       const token = localStorage.getItem("token");
+      const userId = localStorage.getItem("userId");
       const userType = localStorage.getItem("userType");
       const username = localStorage.getItem("username");
 
@@ -303,13 +288,10 @@
       // --- UTILITY FUNCTIONS ---
       function checkAuth() {
         if (!token || userType !== "admin") {
-          // Changed relative path to root-relative path
-          window.location.href = "/user_login.html";
+          window.location.href = "user_login.html";
           return false;
         }
-        document.getElementById(
-          "userNameDisplay"
-        ).textContent = `Hello, Admin (${username})`;
+        document.getElementById("userNameDisplay").textContent = `Hello, ${username}`;
         return true;
       }
 
@@ -324,7 +306,6 @@
         containerId = "userNotification"
       ) {
         const box = document.getElementById(containerId);
-
         box.classList.remove(
           "hidden",
           "bg-red-900",
@@ -334,7 +315,6 @@
           "bg-yellow-900",
           "text-yellow-300"
         );
-
         if (type === "success") {
           box.classList.add("bg-green-900", "text-green-300");
         } else if (type === "error") {
@@ -342,9 +322,7 @@
         } else if (type === "warning") {
           box.classList.add("bg-yellow-900", "text-yellow-300");
         }
-
         box.textContent = message;
-
         setTimeout(() => {
           box.classList.add("hidden");
         }, 5000);
@@ -353,12 +331,12 @@
       // --- DATA FETCHING ---
       async function fetchAdminData() {
         if (!checkAuth()) return;
-
         try {
           const response = await fetch(`${API_BASE_URL}/admin/data`, {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           });
-
           if (!response.ok) {
             if (response.status === 401 || response.status === 403) {
               logout();
@@ -366,11 +344,9 @@
             }
             throw new Error("Failed to fetch admin data");
           }
-
           const data = await response.json();
           allUsers = data.users.filter((u) => u.userType !== "admin"); // Hide admins from the user list
           allTransactions = data.transactions;
-
           renderUserTable();
           renderTransactionTable();
         } catch (error) {
@@ -389,7 +365,6 @@
         const noUsers = document.getElementById("noUsers");
         tableBody.innerHTML = "";
         const searchLower = searchTerm.toLowerCase();
-
         const filteredUsers = allUsers.filter(
           (u) =>
             u.username.toLowerCase().includes(searchLower) ||
@@ -401,44 +376,38 @@
           noUsers.classList.remove("hidden");
         } else {
           noUsers.classList.add("hidden");
-          filteredUsers.forEach((user) => {
+          filteredUsers.forEach((u) => {
             const row = tableBody.insertRow();
             row.className = "hover:bg-gray-800 transition duration-150";
 
-            let statusClass =
-              user.status === "approved" ? "status-approved" : "status-pending";
+            const statusClass =
+              u.status === "approved" ? "status-approved" : "status-pending";
+            const actions =
+              u.status === "pending"
+                ? `<button onclick="approveUser('${u.id}')" class="text-green-400 hover:text-green-500 font-medium mr-3">Approve</button>`
+                : "";
 
             row.innerHTML = `
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">${
-                      user.username
-                    } <span class="text-xs text-text-secondary">(${user.id.substring(
+              <td class="px-6 py-4 whitespace-nowrap text-sm">${u.username} <span class="text-xs text-text-secondary">(${u.id.substring(
               0,
               8
             )}...)</span></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">${
-                      user.email
-                    }</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusClass} capitalize">
-                            ${user.status}
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">${formatter.format(
-                      user.balance
-                    )}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm flex space-x-2">
-                        ${
-                          user.status !== "approved"
-                            ? `<button onclick="approveUser('${user.id}')" class="text-green-400 hover:text-green-500 font-medium">Approve</button>`
-                            : ""
-                        }
-                        <button onclick="openBalanceModal('${user.id}', '${
-              user.username
-            }', ${
-              user.balance
-            })" class="text-primary hover:text-opacity-80 font-medium">Edit Balance</button>
-                    </td>
-                `;
+              <td class="px-6 py-4 whitespace-nowrap text-sm">${u.email}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusClass}">
+                  ${u.status}
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">${formatter.format(
+                u.balance
+              )}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">
+                ${actions}
+                <button onclick="openBalanceModal('${u.id}', '${u.username}', ${
+              u.balance
+            })" class="text-primary hover:text-blue-500 font-medium">Edit Balance</button>
+              </td>
+            `;
           });
         }
       }
@@ -448,7 +417,7 @@
         const noPending = document.getElementById("noPendingTransactions");
         tableBody.innerHTML = "";
 
-        // Filter for pending transactions only
+        // Only show pending transactions for review
         const pendingTransactions = allTransactions.filter(
           (t) => t.status === "pending"
         );
@@ -460,40 +429,59 @@
           pendingTransactions.forEach((t) => {
             const row = tableBody.insertRow();
             row.className = "hover:bg-gray-800 transition duration-150";
-
             const user = allUsers.find((u) => u.id === t.userId);
             const userName = user ? user.username : "Unknown User";
-
             let amountText = formatter.format(t.amount);
             let amountClass =
               t.type === "deposit" ? "text-green-400" : "text-red-400";
+            
+            // *** NEW: Wallet Address Display ***
+            const walletAddressDisplay = t.type === 'withdraw' 
+                ? `<span class="text-xs text-text-primary block break-all" title="${t.walletAddress}">...${t.walletAddress.slice(-10)}</span>` 
+                : `<span class="text-text-secondary">N/A</span>`;
+
+            // *** NEW: Action Buttons (Approve + Deny) ***
+            const actionButtons = `
+                <button 
+                    onclick="approveTransaction('${t.id}')" 
+                    class="text-green-400 hover:text-green-500 font-medium mr-3"
+                >
+                    Approve
+                </button>
+                <button 
+                    onclick="denyTransaction('${t.id}')" 
+                    class="text-red-400 hover:text-red-500 font-medium"
+                >
+                    Deny
+                </button>
+            `;
+            // **********************************
 
             row.innerHTML = `
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">${new Date(
-                      t.date
-                    ).toLocaleDateString()} <span class="text-xs text-text-secondary">(${t.id.substring(
+              <td class="px-6 py-4 whitespace-nowrap text-sm">${new Date(
+                t.date
+              ).toLocaleDateString()} <span class="text-xs text-text-secondary">(${t.id.substring(
               0,
               8
             )}...)</span></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">${userName} <span class="text-xs text-text-secondary">(${t.userId.substring(
+              <td class="px-6 py-4 whitespace-nowrap text-sm">${userName} <span class="text-xs text-text-secondary">(${t.userId.substring(
               0,
               8
             )}...)</span></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm capitalize">${
-                      t.type
-                    }</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${amountClass}">${amountText}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium status-pending">
-                            Pending
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                        <button onclick="approveTransaction('${
-                          t.id
-                        }')" class="text-green-400 hover:text-green-500 font-medium">Approve</button>
-                    </td>
-                `;
+              <td class="px-6 py-4 whitespace-nowrap text-sm capitalize">${
+                t.type
+              }</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">${walletAddressDisplay}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${amountClass}">${amountText}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium status-pending">
+                  Pending
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">
+                ${actionButtons}
+              </td>
+            `;
           });
         }
       }
@@ -501,7 +489,9 @@
       // --- ACTION HANDLERS ---
 
       async function approveUser(userId) {
-        if (!checkAuth()) return;
+        if (!confirm("Are you sure you want to approve this user?")) {
+          return;
+        }
 
         try {
           const response = await fetch(`${API_BASE_URL}/admin/approve-user`, {
@@ -516,11 +506,7 @@
           const result = await response.json();
 
           if (response.ok) {
-            showNotification(
-              `User ${result.user.username} has been approved.`,
-              "success",
-              "userNotification"
-            );
+            showNotification(result.message, "success", "userNotification");
             fetchAdminData(); // Refresh data
           } else {
             showNotification(
@@ -530,9 +516,9 @@
             );
           }
         } catch (error) {
-          console.error("Approve User API Error:", error);
+          console.error("Error approving user:", error);
           showNotification(
-            "Could not connect to the server.",
+            "Server error while approving user.",
             "error",
             "userNotification"
           );
@@ -540,7 +526,9 @@
       }
 
       async function approveTransaction(transactionId) {
-        if (!checkAuth()) return;
+        if (!confirm("Are you sure you want to APPROVE this transaction?")) {
+          return;
+        }
 
         try {
           const response = await fetch(
@@ -559,9 +547,7 @@
 
           if (response.ok) {
             showNotification(
-              `Transaction approved. User balance updated to ${formatter.format(
-                result.user.balance
-              )}.`,
+              result.message,
               "success",
               "transactionNotification"
             );
@@ -574,42 +560,86 @@
             );
           }
         } catch (error) {
-          console.error("Approve Transaction API Error:", error);
+          console.error("Error approving transaction:", error);
           showNotification(
-            "Could not connect to the server.",
+            "Server error while approving transaction.",
             "error",
             "transactionNotification"
           );
         }
       }
 
-      // --- BALANCE MODAL LOGIC ---
+      // *** NEW ACTION HANDLER: DENY TRANSACTION ***
+      async function denyTransaction(transactionId) {
+        if (!confirm("Are you sure you want to DENY this transaction? (Funds will be refunded if it was a pending withdrawal)")) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/admin/deny-transaction`, { // New endpoint
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ transactionId }),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                showNotification(result.message, "success", "transactionNotification");
+                fetchAdminData(); // Refresh data
+            } else {
+                showNotification(
+                    result.message || "Failed to deny transaction.",
+                    "error",
+                    "transactionNotification"
+                );
+            }
+        } catch (error) {
+            console.error("Error denying transaction:", error);
+            showNotification(
+                "Server error while denying transaction.",
+                "error",
+                "transactionNotification"
+            );
+        }
+      }
+      // Add to window scope so it can be called from onclick
+      window.denyTransaction = denyTransaction;
+
+      // MODAL LOGIC
+
+      let modalUserId = null;
 
       function openBalanceModal(userId, username, currentBalance) {
+        modalUserId = userId;
         document.getElementById("modalUsername").textContent = username;
-        document.getElementById("updateBalanceForm").dataset.userId = userId;
-        document.getElementById("newBalance").value = currentBalance.toFixed(2);
+        document.getElementById("newBalanceInput").value = currentBalance.toFixed(2);
         document.getElementById("balanceModal").classList.remove("hidden");
         document.getElementById("balanceModal").classList.add("flex");
       }
 
       function closeBalanceModal() {
+        modalUserId = null;
         document.getElementById("balanceModal").classList.add("hidden");
         document.getElementById("balanceModal").classList.remove("flex");
       }
 
+      // Event listener for modal close
       document
         .getElementById("cancelBalanceUpdate")
         .addEventListener("click", closeBalanceModal);
 
+      // Event listener for modal update
       document
-        .getElementById("updateBalanceForm")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault();
+        .getElementById("confirmBalanceUpdate")
+        .addEventListener("click", async () => {
+          if (!modalUserId) return;
 
-          const userId = e.target.dataset.userId;
-          const newBalance = document.getElementById("newBalance").value;
-          const updateButton = document.getElementById("modalUpdateButton");
+          const newBalance = document.getElementById("newBalanceInput").value;
+          const updateButton = document.getElementById("confirmBalanceUpdate");
           const originalText = updateButton.textContent;
           updateButton.textContent = "Saving...";
           updateButton.disabled = true;
@@ -624,12 +654,11 @@
                   Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({
-                  userId,
+                  userId: modalUserId,
                   newBalance: parseFloat(newBalance),
                 }),
               }
             );
-
             const result = await response.json();
 
             if (response.ok) {
@@ -640,8 +669,8 @@
                 "success",
                 "userNotification"
               );
-              closeBalanceModal();
               fetchAdminData(); // Refresh data
+              closeBalanceModal();
             } else {
               showNotification(
                 result.message || "Failed to update balance.",
@@ -650,9 +679,9 @@
               );
             }
           } catch (error) {
-            console.error("Update Balance API Error:", error);
+            console.error("Error updating balance:", error);
             showNotification(
-              "Could not connect to the server.",
+              "Server error while updating balance.",
               "error",
               "userNotification"
             );
@@ -700,6 +729,11 @@
         // Since we are polling for real-time updates, refresh data every 10 seconds
         setInterval(fetchAdminData, 10000);
       };
+
+      // Add approveUser and openBalanceModal to window scope so they can be called from onclick
+      window.approveUser = approveUser;
+      window.openBalanceModal = openBalanceModal;
+      window.approveTransaction = approveTransaction; // Ensure this is available for the original approve button
     </script>
   </body>
 </html>
