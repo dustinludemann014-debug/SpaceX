@@ -242,7 +242,7 @@ app.post('/api/user/transaction', authenticateToken, async (req, res) => {
     }
 });
 
-// 7. User Dashboard Data (Unchanged)
+// 7. User Dashboard Data (*** MODIFIED TO INCLUDE EMAIL ***)
 app.get('/api/user/data', authenticateToken, async (req, res) => {
     const userId = req.userId; 
     try {
@@ -254,6 +254,7 @@ app.get('/api/user/data', authenticateToken, async (req, res) => {
         res.json({
             success: true,
             username: user.username,
+            email: user.email, // <-- ADDED THIS LINE
             balance: user.balance,
             transactions: userTransactions
         });
@@ -328,6 +329,78 @@ app.post('/api/reset-password', async (req, res) => {
          res.status(500).json({ success: false, message: 'Error resetting password.' });
     }
 });
+
+// --- *** NEW ENDPOINT #10 *** ---
+// 10. User: Update Profile (Username)
+app.put('/api/user/update', authenticateToken, async (req, res) => {
+    const { username } = req.body;
+    const userId = req.userId; // Get user ID from auth token
+
+    if (!username) {
+        return res.status(400).json({ success: false, message: 'Username is required.' });
+    }
+
+    try {
+        const user = await User.findOneAndUpdate(
+            { id: userId },
+            { username: username },
+            { new: true } // Return the updated document
+        ).select('-password'); // Exclude password from the response
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found.' });
+        }
+
+        res.json({ success: true, message: 'Profile updated successfully.', user });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error updating profile.' });
+    }
+});
+
+// --- *** NEW ENDPOINT #11 *** ---
+// 11. User: Change Password (Authenticated)
+app.post('/api/user/change-password', authenticateToken, async (req, res) => {
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+    const userId = req.userId; // Get user ID from auth token
+
+    // --- Validation ---
+    if (!currentPassword || !newPassword || !confirmPassword) {
+        return res.status(400).json({ success: false, message: 'All password fields are required.' });
+    }
+    if (newPassword !== confirmPassword) {
+        return res.status(400).json({ success: false, message: 'New passwords do not match.' });
+    }
+    if (newPassword.length < 8) {
+         return res.status(400).json({ success: false, message: 'New password must be at least 8 characters long.' });
+    }
+
+    try {
+        // 1. Find the user
+        const user = await User.findOne({ id: userId });
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found.' });
+        }
+
+        // 2. Compare the *current* password with the hash in the DB
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ success: false, message: 'Invalid current password.' });
+        }
+
+        // 3. Hash the *new* password
+        const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+        // 4. Save the new password
+        user.password = hashedPassword;
+        await user.save();
+
+        res.json({ success: true, message: 'Password updated successfully.' });
+
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error updating password.' });
+    }
+});
+
 
 // --- Initial Data Function (NOW HASHES DEMO PASSWORDS) ---
 async function createInitialData() {
