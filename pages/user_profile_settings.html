@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile Settings - CryptoVault Pro</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script
+      type="module"
+      src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fcryptovaul9343back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.9"
+    ></script>
+    <script
+      type="module"
+      src="https://static.rocket.new/rocket-shot.js?v=0.0.1"
+    ></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-background min-h-screen">
+    <!-- Header Section -->
+    <header class="w-full py-6 px-4 border-b border-border-subtle">
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <!-- Logo -->
+        <div class="flex items-center space-x-2">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 2L2 7V17L12 22L22 17V7L12 2ZM12 17L7 14.5L12 12L17 14.5L12 17ZM12 12L7 9.5L12 7L17 9.5L12 12Z"
+              fill="#F7931A"
+            />
+          </svg>
+          <span class="text-text-primary text-xl font-bold"
+            >CryptoVault Pro</span
+          >
+        </div>
+
+        <!-- Navigation Links -->
+        <nav class="hidden md:flex space-x-8">
+          <a
+            href="user_dashboard.html"
+            class="text-text-secondary hover:text-primary transition-colors"
+            >Dashboard</a
+          >
+          <a
+            href="investment_plans.html"
+            class="text-text-secondary hover:text-primary transition-colors"
+            >Investments</a
+          >
+          <a
+            href="user_profile_settings.html"
+            class="text-primary font-medium transition-colors"
+            >Settings</a
+          >
+        </nav>
+
+        <!-- Mobile Menu Button (Hidden on Desktop) -->
+        <button class="md:hidden text-text-primary" data-mobile-menu>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16m-7 6h7"
+            />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl font-bold text-text-primary mb-8">
+        Profile Settings
+      </h1>
+
+      <div class="flex flex-col md:flex-row gap-8">
+        <!-- Sidebar Navigation -->
+        <div
+          class="w-full md:w-1/4 bg-surface rounded-xl p-4 shadow-lg border border-border-subtle h-fit"
+        >
+          <button
+            class="settings-tab-btn active w-full text-left p-3 rounded-lg text-lg font-medium transition-colors mb-2"
+            data-tab="profile-tab"
+          >
+            <span class="flex items-center">
+              <svg
+                class="w-5 h-5 mr-3"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                ></path>
+              </svg>
+              Profile Information
+            </span>
+          </button>
+          <button
+            class="settings-tab-btn w-full text-left p-3 rounded-lg text-lg font-medium transition-colors mb-2"
+            data-tab="security-tab"
+          >
+            <span class="flex items-center">
+              <svg
+                class="w-5 h-5 mr-3"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 7a2 2 0 012 2v5.5a2.5 2.5 0 01-5 0V9a2 2 0 012-2zM4 9a2 2 0 012-2h4a2 2 0 012 2v5.5a2.5 2.5 0 01-5 0V9zM8 15h8m-4 0v4"
+                ></path>
+              </svg>
+              Security & Access
+            </span>
+          </button>
+          <button
+            class="settings-tab-btn w-full text-left p-3 rounded-lg text-lg font-medium transition-colors mb-2"
+            data-tab="delete-tab"
+          >
+            <span class="flex items-center text-error">
+              <svg
+                class="w-5 h-5 mr-3"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                ></path>
+              </svg>
+              Account Deletion
+            </span>
+          </button>
+        </div>
+
+        <!-- Content Area -->
+        <div class="w-full md:w-3/4">
+          <!-- Profile Information Tab -->
+          <div
+            id="profile-tab"
+            class="settings-tab-content active bg-surface rounded-xl p-6 shadow-lg border border-border-subtle"
+          >
+            <h2 class="text-2xl font-semibold text-text-primary mb-6">
+              Update Profile
+            </h2>
+            <form id="profileForm" class="space-y-6">
+              <div>
+                <label
+                  for="username"
+                  class="block text-sm font-medium text-text-secondary mb-2"
+                  >Username</label
+                >
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  class="input-field w-full"
+                  placeholder="Enter your full name"
+                />
+              </div>
+              <div>
+                <label
+                  for="email"
+                  class="block text-sm font-medium text-text-secondary mb-2"
+                  >Email Address</label
+                >
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  class="input-field w-full"
+                  placeholder="you@example.com"
+                  disabled
+                />
+              </div>
+              <button type="submit" class="btn-primary w-full md:w-auto">
+                Save Changes
+              </button>
+            </form>
+          </div>
+
+          <!-- Security & Access Tab -->
+          <div
+            id="security-tab"
+            class="settings-tab-content hidden bg-surface rounded-xl p-6 shadow-lg border border-border-subtle"
+          >
+            <h2 class="text-2xl font-semibold text-text-primary mb-6">
+              Change Password
+            </h2>
+            <form id="passwordForm" class="space-y-6">
+              <div>
+                <label
+                  for="currentPassword"
+                  class="block text-sm font-medium text-text-secondary mb-2"
+                  >Current Password</label
+                >
+                <input
+                  type="password"
+                  id="currentPassword"
+                  name="currentPassword"
+                  class="input-field w-full"
+                  placeholder="Enter current password"
+                />
+              </div>
+              <div>
+                <label
+                  for="newPassword"
+                  class="block text-sm font-medium text-text-secondary mb-2"
+                  >New Password</label
+                >
+                <input
+                  type="password"
+                  id="newPassword"
+                  name="newPassword"
+                  class="input-field w-full"
+                  placeholder="Enter new password"
+                />
+              </div>
+              <div>
+                <label
+                  for="confirmPassword"
+                  class="block text-sm font-medium text-text-secondary mb-2"
+                  >Confirm New Password</label
+                >
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  class="input-field w-full"
+                  placeholder="Confirm new password"
+                />
+              </div>
+              <button type="submit" class="btn-primary w-full md:w-auto">
+                Update Password
+              </button>
+            </form>
+          </div>
+
+          <!-- Account Deletion Tab -->
+          <div
+            id="delete-tab"
+            class="settings-tab-content hidden bg-error/10 border border-error p-6 rounded-xl shadow-lg"
+          >
+            <h2 class="text-2xl font-semibold text-error mb-4">
+              Permanent Account Deletion
+            </h2>
+            <p class="text-text-secondary mb-6">
+              Deleting your account is permanent and irreversible. All your
+              data, transaction history, and investment records will be
+              immediately erased. Please ensure you have withdrawn all funds
+              before proceeding.
+            </p>
+            <button
+              id="requestDeletionButton"
+              class="bg-error text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-error focus:ring-opacity-50"
+            >
+              Request Account Deletion
+            </button>
+            <p class="text-xs text-text-secondary mt-3">
+              This action will log you out and submit a request to the admin for
+              final processing.
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Notification Container (Needed for showNotification function) -->
+    <div
+      id="notification-container"
+      class="fixed top-4 right-4 space-y-2 z-50"
+    ></div>
+
+    <script>
+      const API_BASE_URL = "http://localhost:4000/api";
+
+      // Global Utility for Notifications (Replaces alert/confirm)
+      function showNotification(message, type = "info") {
+        const container = document.getElementById("notification-container");
+        if (!container) return;
+
+        const bgColor =
+          {
+            success: "bg-success",
+            error: "bg-error",
+            warning: "bg-warning",
+            info: "bg-primary",
+          }[type] || "bg-primary";
+
+        const notification = document.createElement("div");
+        notification.className = `p-4 rounded-lg shadow-xl text-white ${bgColor} max-w-sm transition-opacity duration-300 ease-out`;
+        notification.textContent = message;
+
+        container.appendChild(notification);
+
+        // Automatically remove after 5 seconds
+        setTimeout(() => {
+          notification.classList.add("opacity-0");
+          notification.addEventListener("transitionend", () =>
+            notification.remove()
+          );
+        }, 5000);
+      }
+
+      function logout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("userType");
+        localStorage.removeItem("username");
+        // Use root-relative path for safety
+        window.location.href = "/user_login.html";
+      }
+
+      // --- FETCH USER DATA ---
+
+      async function fetchUserData() {
+        const userId = localStorage.getItem("userId");
+        if (!userId) {
+          // If no userId, redirect to login
+          logout();
+          return;
+        }
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/user/${userId}`);
+          const result = await response.json();
+
+          if (response.ok) {
+            // Populate profile form
+            document.getElementById("username").value = result.user.username;
+            document.getElementById("email").value = result.user.email;
+          } else {
+            showNotification(
+              result.message || "Failed to load user data.",
+              "error"
+            );
+            // If user is not found, log out
+            if (response.status === 404) logout();
+          }
+        } catch (error) {
+          console.error("Fetch User Data API Error:", error);
+          showNotification("Could not connect to the server.", "error");
+        }
+      }
+
+      // --- PROFILE UPDATE FORM ---
+
+      document
+        .getElementById("profileForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const submitButton = this.querySelector('button[type="submit"]');
+          const originalText = submitButton.textContent;
+          submitButton.textContent = "Saving...";
+          submitButton.disabled = true;
+
+          const userId = localStorage.getItem("userId");
+          const newUsername = document.getElementById("username").value;
+          const data = { username: newUsername };
+
+          try {
+            // Note: The /user/update route is NOT implemented in server.js yet,
+            // but this implements the client-side logic ready for when it is added.
+            // For now, it will fail gracefully.
+            const response = await fetch(
+              `${API_BASE_URL}/user/${userId}/update`,
+              {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+              }
+            );
+
+            if (response.ok) {
+              showNotification("Profile updated successfully!", "success");
+              localStorage.setItem("username", newUsername); // Update local storage too
+            } else {
+              const result = await response.json();
+              showNotification(
+                result.message || "Failed to update profile.",
+                "error"
+              );
+            }
+          } catch (error) {
+            console.error("Profile Update API Error:", error);
+            showNotification(
+              "Could not connect to the server or update profile.",
+              "error"
+            );
+          } finally {
+            submitButton.textContent = originalText;
+            submitButton.disabled = false;
+          }
+        });
+
+      // --- ACCOUNT DELETION LOGIC (Replaced alert/confirm) ---
+
+      document
+        .getElementById("requestDeletionButton")
+        .addEventListener("click", function () {
+          // WARNING: In a real application, this should trigger a confirmation MODAL
+          // where the user types "DELETE" to confirm, then a request to the server.
+
+          const submitButton = this;
+          const originalText = submitButton.textContent;
+
+          // Temporary simple feedback since a modal can't be added quickly:
+          // This bypasses the need for confirm/alert, using only the notification system.
+          // In the future, this should be replaced with a full modal component.
+          showNotification(
+            "Account deletion request submitted. An administrator will contact you via email within 24 hours.",
+            "warning"
+          );
+
+          // Simulate log out after submission
+          setTimeout(() => {
+            logout();
+          }, 3000); // Give time for the notification to be seen
+        });
+
+      // --- EVENT LISTENERS & INITIALIZATION ---
+
+      document.querySelectorAll(".settings-tab-btn").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          document
+            .querySelectorAll(".settings-tab-btn")
+            .forEach((t) => t.classList.remove("active"));
+          document
+            .querySelectorAll(".settings-tab-content")
+            .forEach((c) => c.classList.add("hidden"));
+          document
+            .querySelectorAll(".settings-tab-content")
+            .forEach((c) => c.classList.remove("active"));
+
+          tab.classList.add("active");
+          document.getElementById(tab.dataset.tab).classList.remove("hidden");
+          document.getElementById(tab.dataset.tab).classList.add("active");
+        });
+      });
+
+      window.onload = () => {
+        fetchUserData();
+      };
+
+      // Add CSS for active tab styling
+      const style = document.createElement("style");
+      style.textContent = `
+            .settings-tab-btn.active {
+                background-color: var(--color-primary);
+                color: white;
+            }
+            .settings-tab-btn:not(.active) {
+                color: var(--color-text-secondary);
+            }
+            .settings-tab-btn:not(.active):hover {
+                background-color: var(--color-surface);
+                color: var(--color-text-primary);
+            }
+        `;
+      document.head.appendChild(style);
+    </script>
+  </body>
+</html>

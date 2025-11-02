@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Investment Plans - CryptoVault Pro</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script
+      type="module"
+      src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fcryptovaul9343back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.9"
+    ></script>
+    <script
+      type="module"
+      src="https://static.rocket.new/rocket-shot.js?v=0.0.1"
+    ></script>
+  </head>
+  <body class="bg-background min-h-screen">
+    <!-- Header Section -->
+    <header class="w-full py-6 px-4 border-b border-border-subtle">
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <!-- Logo -->
+        <div class="flex items-center space-x-3">
+          <div
+            class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center"
+          >
+            <svg
+              class="w-6 h-6 text-white"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+              />
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold text-gradient-primary">BIT</h1>
+            <p class="text-xs text-text-secondary">CryptoVault Pro</p>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="hidden md:flex items-center space-x-8">
+          <a
+            href="user_dashboard.html"
+            class="text-text-secondary hover:text-primary transition-colors"
+            >Dashboard</a
+          >
+          <a href="investment_plans.html" class="text-primary font-medium"
+            >Investment Plans</a
+          >
+          <a
+            href="user_profile_settings.html"
+            class="text-text-secondary hover:text-primary transition-colors"
+            >Profile</a
+          >
+        </nav>
+
+        <!-- Language Selector -->
+        <div class="flex items-center space-x-4">
+          <div class="relative">
+            <select
+              class="bg-surface border border-border-subtle rounded-lg px-3 py-2 text-text-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option value="en">🇺🇸 English</option>
+              <option value="es">🇪🇸 Español</option>
+              <option value="fr">🇫🇷 Français</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 px-4 py-8">
+      <div class="max-w-7xl mx-auto">
+        <!-- Page Header -->
+        <div class="text-center mb-12">
+          <h2 class="text-4xl font-bold text-text-primary mb-4">
+            USDT Investment Plans
+          </h2>
+          <p class="text-text-secondary text-lg max-w-2xl mx-auto">
+            Choose from our carefully curated investment plans designed to
+            maximize your USDT returns through secure DeFi mining protocols.
+          </p>
+        </div>
+
+        <!-- Investment Calculator Section -->
+        <section class="mb-12">
+          <div class="card-elevated max-w-2xl mx-auto">
+            <div class="text-center mb-6">
+              <h3 class="text-2xl font-bold text-text-primary mb-2">
+                Investment Calculator
+              </h3>
+              <p class="text-text-secondary">
+                Calculate your potential earnings before investing
+              </p>
+            </div>
+
+            <div class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label
+                    class="block text-sm font-medium text-text-primary mb-2"
+                    >Investment Amount (USDT)</label
+                  >
+                  <input
+                    type="number"
+                    id="investmentAmount"
+                    class="input-field w-full"
+                    placeholder="Enter amount"
+                    min="100"
+                    step="0.01"
+                    value="100"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-text-primary mb-2"
+                    >Investment Plan</label
+                  >
+                  <select id="investmentPlan" class="input-field w-full">
+                    <option value="1day">1-Day Plan (2.5% Daily)</option>
+                    <option value="7day">7-Day Plan (3.2% Daily)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div
+                class="bg-surface-700 rounded-lg p-6 border border-border-subtle"
+              >
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="text-center">
+                    <p class="text-text-secondary text-sm mb-1">
+                      Daily Earnings
+                    </p>
+                    <p
+                      class="text-2xl font-bold text-success"
+                      id="dailyEarnings"
+                    >
+                      $2.50
+                    </p>
+                  </div>
+                  <div class="text-center">
+                    <p class="text-text-secondary text-sm mb-1">Total Return</p>
+                    <p class="text-2xl font-bold text-primary" id="totalReturn">
+                      $102.50
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Investment Plans Grid -->
+        <section class="mb-12">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- 1-Day Plan -->
+            <div class="card-elevated relative overflow-hidden">
+              <div class="absolute top-4 right-4">
+                <div
+                  class="bg-success bg-opacity-20 text-success px-3 py-1 rounded-full text-sm font-medium"
+                >
+                  Popular
+                </div>
+              </div>
+
+              <div class="mb-6">
+                <div class="flex items-center space-x-3 mb-4">
+                  <img
+                    src="https://images.unsplash.com/photo-1640697462212-b6d88708be5d"
+                    alt="Tether USDT cryptocurrency coin symbol"
+                    class="w-12 h-12 object-cover rounded-full"
+                    onerror="this.src='https://images.pexels.com/photos/8369648/pexels-photo-8369648.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'; this.onerror=null;"
+                  />
+                  <div>
+                    <h3 class="text-2xl font-bold text-text-primary">
+                      1-Day USDT Plan
+                    </h3>
+                    <p class="text-text-secondary">
+                      Quick returns with daily liquidity
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="space-y-4 mb-8">
+                <div
+                  class="flex justify-between items-center py-2 border-b border-border-subtle"
+                >
+                  <span class="text-text-secondary">Minimum Investment</span>
+                  <span class="text-text-primary font-semibold text-data"
+                    >100.00 USDT</span
+                  >
+                </div>
+                <div
+                  class="flex justify-between items-center py-2 border-b border-border-subtle"
+                >
+                  <span class="text-text-secondary">Daily Return Rate</span>
+                  <span class="text-success font-bold">2.5%</span>
+                </div>
+                <div
+                  class="flex justify-between items-center py-2 border-b border-border-subtle"
+                >
+                  <span class="text-text-secondary">Lock-up Period</span>
+                  <span class="text-text-primary font-semibold">1 Day</span>
+                </div>
+                <div
+                  class="flex justify-between items-center py-2 border-b border-border-subtle"
+                >
+                  <span class="text-text-secondary">Risk Level</span>
+                  <span class="text-warning font-medium">Low</span>
+                </div>
+                <div class="flex justify-between items-center py-2">
+                  <span class="text-text-secondary">Withdrawal</span>
+                  <span class="text-text-primary font-semibold"
+                    >After 24 hours</span
+                  >
+                </div>
+              </div>
+
+              <div class="bg-surface-700 rounded-lg p-4 mb-6">
+                <div class="text-center">
+                  <p class="text-text-secondary text-sm mb-1">
+                    Example: 100 USDT Investment
+                  </p>
+                  <p class="text-xl font-bold text-success">
+                    Daily Profit: $2.50
+                  </p>
+                  <p class="text-text-secondary text-sm mt-1">
+                    Total Return: $102.50
+                  </p>
+                </div>
+              </div>
+
+              <button
+                class="w-full btn-primary bg-gradient-to-r from-primary to-secondary hover:from-primary-600 hover:to-primary-400 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 transform hover:scale-105"
+              >
+                <span class="flex items-center justify-center space-x-2">
+                  <svg
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                    />
+                  </svg>
+                  <span>Invest Now</span>
+                </span>
+              </button>
+            </div>
+
+            <!-- 7-Day Plan -->
+            <div class="card-elevated relative overflow-hidden">
+              <div class="absolute top-4 right-4">
+                <div
+                  class="bg-primary bg-opacity-20 text-primary px-3 py-1 rounded-full text-sm font-medium"
+                >
+                  Premium
+                </div>
+              </div>
+
+              <div class="mb-6">
+                <div class="flex items-center space-x-3 mb-4">
+                  <img
+                    src="https://images.unsplash.com/photo-1626163015484-81fc7e3b90d8"
+                    alt="Premium USDT investment plan with blockchain technology"
+                    class="w-12 h-12 object-cover rounded-full"
+                    onerror="this.src='https://images.unsplash.com/photo-1640340434855-6084b1f4901c?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                  />
+                  <div>
+                    <h3 class="text-2xl font-bold text-text-primary">
+                      7-Day USDT Plan
+                    </h3>
+                    <p class="text-text-secondary">
+                      Higher returns for committed investors
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="space-y-4 mb-8">
+                <div
+                  class="flex justify-between items-center py-2 border-b border-border-subtle"
+                >
+                  <span class="text-text-secondary">Minimum Investment</span>
+                  <span class="text-text-primary font-semibold text-data"
+                    >1,000.00 USDT</span
+                  >
+                </div>
+                <div
+                  class="flex justify-between items-center py-2 border-b border-border-subtle"
+                >
+                  <span class="text-text-secondary">Daily Return Rate</span>
+                  <span class="text-success font-bold">3.2%</span>
+                </div>
+                <div
+                  class="flex justify-between items-center py-2 border-b border-border-subtle"
+                >
+                  <span class="text-text-secondary">Lock-up Period</span>
+                  <span class="text-text-primary font-semibold">7 Days</span>
+                </div>
+                <div
+                  class="flex justify-between items-center py-2 border-b border-border-subtle"
+                >
+                  <span class="text-text-secondary">Risk Level</span>
+                  <span class="text-warning font-medium">Medium</span>
+                </div>
+                <div class="flex justify-between items-center py-2">
+                  <span class="text-text-secondary">Withdrawal</span>
+                  <span class="text-text-primary font-semibold"
+                    >After 7 days</span
+                  >
+                </div>
+              </div>
+
+              <div class="bg-surface-700 rounded-lg p-4 mb-6">
+                <div class="text-center">
+                  <p class="text-text-secondary text-sm mb-1">
+                    Example: 1,000 USDT Investment
+                  </p>
+                  <p class="text-xl font-bold text-success">
+                    Daily Profit: $32.00
+                  </p>
+                  <p class="text-text-secondary text-sm mt-1">
+                    Total Return: $1,224.00
+                  </p>
+                </div>
+              </div>
+
+              <button
+                class="w-full btn-primary bg-gradient-to-r from-primary to-secondary hover:from-primary-600 hover:to-primary-400 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 transform hover:scale-105"
+              >
+                <span class="flex items-center justify-center space-x-2">
+                  <svg
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                    />
+                  </svg>
+                  <span>Invest Now</span>
+                </span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Plan Comparison Table -->
+        <section class="mb-12">
+          <div class="card-elevated">
+            <div class="text-center mb-8">
+              <h3 class="text-2xl font-bold text-text-primary mb-2">
+                Plan Comparison
+              </h3>
+              <p class="text-text-secondary">
+                Compare features side-by-side to make the best choice
+              </p>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead>
+                  <tr class="border-b border-border-subtle">
+                    <th
+                      class="text-left py-4 px-4 text-text-primary font-semibold"
+                    >
+                      Features
+                    </th>
+                    <th
+                      class="text-center py-4 px-4 text-text-primary font-semibold"
+                    >
+                      1-Day Plan
+                    </th>
+                    <th
+                      class="text-center py-4 px-4 text-text-primary font-semibold"
+                    >
+                      7-Day Plan
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-border-subtle">
+                  <tr>
+                    <td class="py-4 px-4 text-text-secondary">
+                      Minimum Investment
+                    </td>
+                    <td
+                      class="py-4 px-4 text-center text-data text-text-primary"
+                    >
+                      100.00 USDT
+                    </td>
+                    <td
+                      class="py-4 px-4 text-center text-data text-text-primary"
+                    >
+                      1,000.00 USDT
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="py-4 px-4 text-text-secondary">
+                      Daily Return Rate
+                    </td>
+                    <td class="py-4 px-4 text-center text-success font-bold">
+                      2.5%
+                    </td>
+                    <td class="py-4 px-4 text-center text-success font-bold">
+                      3.2%
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="py-4 px-4 text-text-secondary">
+                      Lock-up Period
+                    </td>
+                    <td class="py-4 px-4 text-center text-text-primary">
+                      1 Day
+                    </td>
+                    <td class="py-4 px-4 text-center text-text-primary">
+                      7 Days
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="py-4 px-4 text-text-secondary">
+                      Early Withdrawal
+                    </td>
+                    <td class="py-4 px-4 text-center text-error">
+                      Not Available
+                    </td>
+                    <td class="py-4 px-4 text-center text-error">
+                      Not Available
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="py-4 px-4 text-text-secondary">
+                      Compound Interest
+                    </td>
+                    <td class="py-4 px-4 text-center text-success">
+                      ✓ Available
+                    </td>
+                    <td class="py-4 px-4 text-center text-success">
+                      ✓ Available
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="py-4 px-4 text-text-secondary">Auto-Renewal</td>
+                    <td class="py-4 px-4 text-center text-success">
+                      ✓ Optional
+                    </td>
+                    <td class="py-4 px-4 text-center text-success">
+                      ✓ Optional
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Educational Content -->
+        <section class="mb-12">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- DeFi Mining Explanation -->
+            <div class="card">
+              <div class="flex items-center space-x-3 mb-4">
+                <div
+                  class="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center"
+                >
+                  <svg
+                    class="w-6 h-6 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
+                  </svg>
+                </div>
+                <h3 class="text-xl font-bold text-text-primary">
+                  What is DeFi Mining?
+                </h3>
+              </div>
+              <p class="text-text-secondary mb-4">
+                DeFi mining involves providing liquidity to decentralized
+                finance protocols to earn rewards. Your USDT is used in
+                automated market-making strategies that generate consistent
+                returns.
+              </p>
+              <ul class="space-y-2 text-text-secondary">
+                <li class="flex items-center space-x-2">
+                  <svg
+                    class="w-4 h-4 text-success"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  <span>Automated yield farming strategies</span>
+                </li>
+                <li class="flex items-center space-x-2">
+                  <svg
+                    class="w-4 h-4 text-success"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  <span>Smart contract security audits</span>
+                </li>
+                <li class="flex items-center space-x-2">
+                  <svg
+                    class="w-4 h-4 text-success"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  <span>Diversified protocol exposure</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Risk Factors -->
+            <div class="card">
+              <div class="flex items-center space-x-3 mb-4">
+                <div
+                  class="w-12 h-12 bg-gradient-to-br from-warning to-error rounded-lg flex items-center justify-center"
+                >
+                  <svg
+                    class="w-6 h-6 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                    />
+                  </svg>
+                </div>
+                <h3 class="text-xl font-bold text-text-primary">
+                  Risk Factors
+                </h3>
+              </div>
+              <p class="text-text-secondary mb-4">
+                While our investment plans are designed to be secure, it's
+                important to understand the potential risks involved in
+                cryptocurrency investments.
+              </p>
+              <ul class="space-y-2 text-text-secondary">
+                <li class="flex items-center space-x-2">
+                  <svg
+                    class="w-4 h-4 text-warning"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  <span>Market volatility affects returns</span>
+                </li>
+                <li class="flex items-center space-x-2">
+                  <svg
+                    class="w-4 h-4 text-warning"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  <span>Smart contract risks</span>
+                </li>
+                <li class="flex items-center space-x-2">
+                  <svg
+                    class="w-4 h-4 text-warning"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  <span>Liquidity constraints during lock-up</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Plan Availability -->
+        <section class="mb-12">
+          <div class="card-elevated">
+            <div class="text-center mb-6">
+              <h3 class="text-2xl font-bold text-text-primary mb-2">
+                Plan Availability
+              </h3>
+              <p class="text-text-secondary">
+                Current capacity and enrollment status
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div
+                class="bg-surface-700 rounded-lg p-6 border border-border-subtle"
+              >
+                <div class="flex items-center justify-between mb-4">
+                  <h4 class="text-lg font-semibold text-text-primary">
+                    1-Day Plan
+                  </h4>
+                  <div
+                    class="bg-success bg-opacity-20 text-success px-3 py-1 rounded-full text-sm"
+                  >
+                    Available
+                  </div>
+                </div>
+                <div class="space-y-3">
+                  <div class="flex justify-between">
+                    <span class="text-text-secondary">Current Capacity</span>
+                    <span class="text-text-primary">78%</span>
+                  </div>
+                  <div class="w-full bg-surface rounded-full h-2">
+                    <div
+                      class="bg-success h-2 rounded-full"
+                      style="width: 78%"
+                    ></div>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-text-secondary">Spots Remaining</span>
+                    <span class="text-success font-semibold">2,200</span>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="bg-surface-700 rounded-lg p-6 border border-border-subtle"
+              >
+                <div class="flex items-center justify-between mb-4">
+                  <h4 class="text-lg font-semibold text-text-primary">
+                    7-Day Plan
+                  </h4>
+                  <div
+                    class="bg-warning bg-opacity-20 text-warning px-3 py-1 rounded-full text-sm"
+                  >
+                    Limited
+                  </div>
+                </div>
+                <div class="space-y-3">
+                  <div class="flex justify-between">
+                    <span class="text-text-secondary">Current Capacity</span>
+                    <span class="text-text-primary">92%</span>
+                  </div>
+                  <div class="w-full bg-surface rounded-full h-2">
+                    <div
+                      class="bg-warning h-2 rounded-full"
+                      style="width: 92%"
+                    ></div>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-text-secondary">Spots Remaining</span>
+                    <span class="text-warning font-semibold">160</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Security Measures -->
+        <section class="mb-12">
+          <div class="card">
+            <div class="text-center mb-8">
+              <h3 class="text-2xl font-bold text-text-primary mb-2">
+                Platform Security
+              </h3>
+              <p class="text-text-secondary">
+                Your investments are protected by industry-leading security
+                measures
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div class="text-center">
+                <div
+                  class="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-4"
+                >
+                  <svg
+                    class="w-8 h-8 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                    />
+                  </svg>
+                </div>
+                <h4 class="text-lg font-semibold text-text-primary mb-2">
+                  Multi-Sig Wallets
+                </h4>
+                <p class="text-text-secondary text-sm">
+                  All funds secured with multi-signature technology requiring
+                  multiple approvals
+                </p>
+              </div>
+
+              <div class="text-center">
+                <div
+                  class="w-16 h-16 bg-gradient-to-br from-success to-accent rounded-full flex items-center justify-center mx-auto mb-4"
+                >
+                  <svg
+                    class="w-8 h-8 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                    />
+                  </svg>
+                </div>
+                <h4 class="text-lg font-semibold text-text-primary mb-2">
+                  Cold Storage
+                </h4>
+                <p class="text-text-secondary text-sm">
+                  95% of funds stored offline in secure cold storage facilities
+                </p>
+              </div>
+
+              <div class="text-center">
+                <div
+                  class="w-16 h-16 bg-gradient-to-br from-warning to-error rounded-full flex items-center justify-center mx-auto mb-4"
+                >
+                  <svg
+                    class="w-8 h-8 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </div>
+                <h4 class="text-lg font-semibold text-text-primary mb-2">
+                  Insurance Coverage
+                </h4>
+                <p class="text-text-secondary text-sm">
+                  Comprehensive insurance protection against security breaches
+                  and losses
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full py-6 px-4 border-t border-border-subtle">
+      <div class="max-w-7xl mx-auto text-center">
+        <p class="text-xs text-text-secondary">
+          © 2025 CryptoVault Pro. All Rights Reserved. |
+          <a
+            href="javascript:void(0)"
+            class="text-primary hover:text-secondary transition-colors"
+            >Privacy Policy</a
+          >
+          |
+          <a
+            href="javascript:void(0)"
+            class="text-primary hover:text-secondary transition-colors"
+            >Terms of Service</a
+          >
+        </p>
+      </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+      // Investment Calculator
+      function updateCalculator() {
+        const amount =
+          parseFloat(document.getElementById("investmentAmount").value) || 100;
+        const plan = document.getElementById("investmentPlan").value;
+
+        let dailyRate = 0.025; // 2.5% for 1-day plan
+        let days = 1;
+
+        if (plan === "7day") {
+          dailyRate = 0.032; // 3.2% for 7-day plan
+          days = 7;
+        }
+
+        const dailyEarnings = amount * dailyRate;
+        const totalReturn = amount + dailyEarnings * days;
+
+        document.getElementById(
+          "dailyEarnings"
+        ).textContent = `$${dailyEarnings.toFixed(2)}`;
+        document.getElementById(
+          "totalReturn"
+        ).textContent = `$${totalReturn.toFixed(2)}`;
+      }
+
+      // Event listeners for calculator
+      document
+        .getElementById("investmentAmount")
+        .addEventListener("input", updateCalculator);
+      document
+        .getElementById("investmentPlan")
+        .addEventListener("change", updateCalculator);
+
+      // Investment buttons
+      document.querySelectorAll("button").forEach((button) => {
+        if (button.textContent.includes("Invest Now")) {
+          button.addEventListener("click", function () {
+            // Check if user is logged in
+            const isLoggedIn = localStorage.getItem("isLoggedIn");
+            if (!isLoggedIn) {
+              alert("Please log in to start investing");
+              window.location.href = "user_login.html";
+              return;
+            }
+
+            // Get plan type from parent card
+            const card = this.closest(".card-elevated");
+            const planTitle = card.querySelector("h3").textContent;
+            const minInvestment = card.querySelector(".text-data").textContent;
+
+            // Show investment confirmation
+            const confirmed = confirm(
+              `Start investment in ${planTitle}?\nMinimum: ${minInvestment}`
+            );
+            if (confirmed) {
+              // Simulate investment process
+              this.innerHTML =
+                '<span class="flex items-center justify-center space-x-2"><svg class="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg><span>Processing...</span></span>';
+
+              setTimeout(() => {
+                alert(
+                  "Investment initiated successfully! Redirecting to dashboard..."
+                );
+                window.location.href = "user_dashboard.html";
+              }, 2000);
+            }
+          });
+        }
+      });
+
+      // Initialize calculator on page load
+      document.addEventListener("DOMContentLoaded", function () {
+        updateCalculator();
+
+        // Animate capacity bars
+        setTimeout(() => {
+          document.querySelectorAll('[style*="width:"]').forEach((bar) => {
+            bar.style.transition = "width 1s ease-in-out";
+          });
+        }, 500);
+      });
+
+      // Mobile menu toggle (if needed)
+      const mobileMenuButton = document.querySelector("[data-mobile-menu]");
+      if (mobileMenuButton) {
+        mobileMenuButton.addEventListener("click", function () {
+          const nav = document.querySelector("nav");
+          nav.classList.toggle("hidden");
+        });
+      }
+
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+        });
+      });
+
+      // Form validation for investment amount
+      document
+        .getElementById("investmentAmount")
+        .addEventListener("input", function () {
+          const value = parseFloat(this.value);
+          const plan = document.getElementById("investmentPlan").value;
+          const minAmount = plan === "7day" ? 1000 : 100;
+
+          if (value < minAmount) {
+            this.style.borderColor = "#EF4444";
+            this.title = `Minimum investment for this plan is ${minAmount} USDT`;
+          } else {
+            this.style.borderColor = "";
+            this.title = "";
+          }
+        });
+    </script>
+    <script
+      id="dhws-dataInjector"
+      src="../public/dhws-data-injector.js"
+    ></script>
+  </body>
+</html>

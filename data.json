@@ -1,0 +1,99 @@
+{
+  "users": [
+    {
+      "id": "admin-demo-123",
+      "email": "admin@benz.com",
+      "password": "",
+      "username": "Admin User",
+      "userType": "admin",
+      "status": "approved",
+      "balance": 100000
+    },
+    {
+      "id": "user-demo-456",
+      "email": "",
+      "password": "",
+      "username": "Demo User",
+      "userType": "user",
+      "status": "approved",
+      "balance": 100.1
+    },
+    {
+      "id": "793525d2-b5fa-48eb-93ca-ba55561f9c74",
+      "email": "user@gmail.com",
+      "password": "qwerty12345",
+      "username": "westy",
+      "userType": "user",
+      "status": "pending",
+      "balance": 0,
+      "investmentBalance": 0,
+      "totalDeposit": 0,
+      "totalWithdrawal": 0,
+      "pendingDeposit": 0,
+      "transactions": []
+    },
+    {
+      "id": "e39dfdf8-90d0-4ece-b453-a8a894fd0ed9",
+      "email": "532wini@akirapowered.com",
+      "password": "Lakers2025",
+      "username": "verifymyshipping",
+      "userType": "user",
+      "status": "approved",
+      "balance": 100,
+      "createdAt": "2025-10-31T21:48:12.226Z"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "7769290a-8765-46e6-94e9-2c27df588188",
+      "userId": "user-demo-456",
+      "type": "deposit",
+      "amount": 400,
+      "status": "complete",
+      "date": "2025-10-31T17:27:58.803Z",
+      "approvedAt": "2025-10-31T17:28:24.544Z"
+    },
+    {
+      "id": "c7ad3a6d-347a-414a-b315-4748177f12c5",
+      "userId": "user-demo-456",
+      "type": "deposit",
+      "amount": 100,
+      "status": "complete",
+      "date": "2025-10-31T18:23:46.645Z",
+      "approvedAt": "2025-10-31T18:24:36.577Z"
+    },
+    {
+      "id": "9364e8e8-fa05-4764-bfd8-732ebd90e243",
+      "userId": "user-demo-456",
+      "type": "buy",
+      "amount": 100,
+      "status": "pending",
+      "date": "2025-10-31T18:32:13.849Z"
+    },
+    {
+      "id": "c45847fd-f7e8-4a50-a4c9-31dd7b090915",
+      "userId": "e39dfdf8-90d0-4ece-b453-a8a894fd0ed9",
+      "type": "deposit",
+      "amount": 200,
+      "status": "complete",
+      "date": "2025-10-31T21:49:40.453Z",
+      "approvedAt": "2025-10-31T21:50:12.891Z"
+    },
+    {
+      "id": "2437b941-bd12-4370-8df1-efbaa76444e3",
+      "userId": "user-demo-456",
+      "type": "deposit",
+      "amount": 100,
+      "status": "pending",
+      "date": "2025-11-01T01:54:29.548Z"
+    },
+    {
+      "id": "44e1056b-07fe-4175-b0a8-3724c13e0485",
+      "userId": "user-demo-456",
+      "type": "buy",
+      "amount": 100,
+      "status": "pending",
+      "date": "2025-11-01T01:55:23.195Z"
+    }
+  ]
+}

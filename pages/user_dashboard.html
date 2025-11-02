@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Dashboard - SpaceX crypto</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script
+      type="module"
+      src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fcryptovaul9343back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.9"
+    ></script>
+    <script
+      type="module"
+      src="https://static.rocket.new/rocket-shot.js?v=0.0.1"
+    ></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .bg-background {
+        background-color: #0d1117;
+      }
+      .text-primary {
+        color: #007bff;
+      }
+      .border-border-subtle {
+        border-color: #21262d;
+      }
+      .text-text-primary {
+        color: #f0f6fc;
+      }
+      .text-text-secondary {
+        color: #8b949e;
+      }
+      .bg-card {
+        background-color: #161b22;
+      }
+      .shadow-md {
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      }
+      .border-primary {
+        border-color: #007bff;
+      }
+      .ring-primary {
+        --tw-ring-color: #007bff;
+      }
+      .ring-2 {
+        --tw-ring-width: 2px;
+      }
+      .btn-primary {
+        @apply px-4 py-2 bg-primary text-white font-semibold rounded-lg shadow-md hover:bg-opacity-90 focus:outline-none transition duration-150;
+      }
+      .status-pending {
+        @apply text-yellow-400 bg-yellow-900/50;
+      }
+      .status-complete {
+        @apply text-green-400 bg-green-900/50;
+      }
+      .status-failed {
+        @apply text-red-400 bg-red-900/50;
+      }
+    </style>
+  </head>
+  <body class="bg-background min-h-screen">
+    <!-- Header Section -->
+    <header class="w-full py-6 px-4 border-b border-border-subtle">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-text-primary">
+          <span class="text-primary">SpaceX</span> Crypto
+        </h1>
+        <nav class="space-x-4">
+          <span id="userNameDisplay" class="text-text-secondary"></span>
+          <button
+            id="logoutButton"
+            class="text-red-400 hover:text-red-500 transition duration-150"
+          >
+            Logout
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto p-4 md:p-8">
+      <h2 class="text-3xl font-bold text-text-primary mb-6">User Dashboard</h2>
+
+      <!-- Metrics Section -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <!-- Available Balance Card -->
+        <div
+          class="bg-card p-6 rounded-xl shadow-lg border border-border-subtle"
+        >
+          <h3 class="text-lg font-medium text-text-secondary mb-2">
+            Available Balance
+          </h3>
+          <p id="availableBalance" class="text-4xl font-bold text-text-primary">
+            $0.00
+          </p>
+          <p class="text-sm text-green-400 mt-1 flex items-center">
+            <!-- Icon placeholder -->
+            <svg
+              class="w-4 h-4 mr-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+              ></path>
+            </svg>
+            Ready for trading
+          </p>
+        </div>
+
+        <!-- Total Assets Card (Simplified to match Available Balance for this demo) -->
+        <div
+          class="bg-card p-6 rounded-xl shadow-lg border border-border-subtle"
+        >
+          <h3 class="text-lg font-medium text-text-secondary mb-2">
+            Total Portfolio Value
+          </h3>
+          <p id="totalAssets" class="text-4xl font-bold text-text-primary">
+            $0.00
+          </p>
+          <p class="text-sm text-text-secondary mt-1">Includes all holdings</p>
+        </div>
+
+        <!-- Locked Balance Card (For consistency with original file) -->
+        <div
+          class="bg-card p-6 rounded-xl shadow-lg border border-border-subtle"
+        >
+          <h3 class="text-lg font-medium text-text-secondary mb-2">
+            Locked Funds
+          </h3>
+          <p id="lockedBalance" class="text-4xl font-bold text-text-primary">
+            $0.00
+          </p>
+          <p class="text-sm text-red-400 mt-1">Pending transactions</p>
+        </div>
+      </div>
+
+      <!-- Actions Section (Buy and Deposit) -->
+      <div
+        class="bg-card p-6 rounded-xl shadow-lg border border-border-subtle mb-8"
+      >
+        <h3 class="text-2xl font-bold text-text-primary mb-4">Quick Actions</h3>
+        <div
+          id="actionNotification"
+          class="hidden p-3 rounded-lg text-sm mb-4"
+        ></div>
+
+        <div class="flex flex-col md:flex-row gap-4">
+          <!-- Deposit Form -->
+          <div class="md:w-1/2">
+            <h4 class="text-xl font-semibold text-text-primary mb-2">
+              Deposit Funds
+            </h4>
+            <form id="depositForm" class="flex space-x-2">
+              <input
+                type="number"
+                id="depositAmount"
+                min="0.01"
+                step="0.01"
+                placeholder="Amount to Deposit"
+                required
+                class="w-full bg-background border border-border-subtle rounded-lg text-text-primary p-2 focus:ring-2 focus:ring-primary focus:border-primary"
+              />
+              <button
+                onclick="alert('Contact the Admin to for your secure deposit on WhatsApp +1 978 505 3319.')"
+                type="submit"
+                class="btn-primary flex-shrink-0"
+              >
+                Deposit
+              </button>
+            </form>
+          </div>
+
+          <!-- Buy Form -->
+          <div class="md:w-1/2">
+            <h4 class="text-xl font-semibold text-text-primary mb-2">
+              Buy Crypto
+            </h4>
+            <form id="buyForm" class="flex space-x-2">
+              <input
+                type="number"
+                id="buyAmount"
+                min="0.01"
+                step="0.01"
+                placeholder="Amount to Buy (USD)"
+                required
+                class="w-full bg-background border border-border-subtle rounded-lg text-text-primary p-2 focus:ring-2 focus:ring-primary focus:border-primary"
+              />
+              <button
+                onclick="alert('Contact the Admin to buy your cryptocurrency on WhatsApp +1 978 505 3319.')"
+                type="submit"
+                class="btn-primary flex-shrink-0 bg-indigo-600 hover:bg-indigo-700"
+              >
+                Buy
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- Liquidity Mining Banner -->
+      <section class="mb-8">
+        <div
+          class="card-elevated bg-gradient-to-r from-primary to-secondary relative overflow-hidden"
+        >
+          <div class="relative z-10 flex items-center justify-between">
+            <div>
+              <h3 class="text-2xl font-bold text-white mb-2">
+                LIQUIDITY MINING
+              </h3>
+              <p class="text-white text-lg mb-4">EARN HIGH INCOME</p>
+              <p class="text-white opacity-90 text-sm mb-4">
+                Participate in our liquidity mining program and earn up to 25%
+                APY on your crypto holdings.
+              </p>
+              <button
+                onclick="handleAction('liquidity')"
+                class="bg-white text-primary px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+              >
+                Start Mining
+              </button>
+            </div>
+            <div class="hidden md:flex items-center space-x-4">
+              <img
+                src="https://images.unsplash.com/photo-1628671751505-45df75ceb5fa"
+                alt="Golden Bitcoin coin for liquidity mining promotion"
+                class="w-16 h-16 rounded-full object-cover animate-pulse"
+                onerror="this.src='https://images.unsplash.com/photo-1518546305927-5a555bb7020d?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+              />
+              <img
+                src="https://images.unsplash.com/photo-1634979149813-dbe443a8809b"
+                alt="Ethereum coin for liquidity mining program"
+                class="w-12 h-12 rounded-full object-cover animate-pulse"
+                onerror="this.src='https://images.unsplash.com/photo-1622630998477-20aa696ecb05?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+              />
+              <img
+                src="https://images.unsplash.com/photo-1626163015484-81fc7e3b90d8"
+                alt="USDT Tether coin for high-yield mining"
+                class="w-14 h-14 rounded-full object-cover animate-pulse"
+                onerror="this.src='https://images.pexels.com/photos/730547/pexels-photo-730547.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'; this.onerror=null;"
+              />
+            </div>
+          </div>
+          <!-- Background Pattern -->
+          <div class="absolute inset-0 opacity-10">
+            <svg class="w-full h-full" viewBox="0 0 100 100" fill="none">
+              <defs>
+                <pattern
+                  id="grid"
+                  width="10"
+                  height="10"
+                  patternUnits="userSpaceOnUse"
+                >
+                  <path
+                    d="M 10 0 L 0 0 0 10"
+                    fill="none"
+                    stroke="white"
+                    stroke-width="0.5"
+                  />
+                </pattern>
+              </defs>
+              <rect width="100" height="100" fill="url(#grid)" />
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- Transaction History Section -->
+      <div class="bg-card p-6 rounded-xl shadow-lg border border-border-subtle">
+        <h3 class="text-2xl font-bold text-text-primary mb-4">
+          Transaction History
+        </h3>
+
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-border-subtle">
+            <thead>
+              <tr>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  Date
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  Type
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  Amount
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  Status
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  ID
+                </th>
+              </tr>
+            </thead>
+            <tbody
+              id="transactionTableBody"
+              class="bg-card divide-y divide-border-subtle text-text-primary"
+            >
+              <!-- Transactions will be inserted here by JavaScript -->
+            </tbody>
+          </table>
+          <div id="noTransactions" class="p-4 text-center text-text-secondary">
+            No transactions found.
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      const API_BASE_URL = "http://localhost:4000/api";
+      const token = localStorage.getItem("token");
+      const userId = localStorage.getItem("userId");
+      const userType = localStorage.getItem("userType");
+      const username = localStorage.getItem("username");
+
+      // --- UTILITY FUNCTIONS ---
+
+      // Check authentication status and redirect if necessary
+      function checkAuth() {
+        if (!token || userType !== "user") {
+          window.location.href = "user_login.html";
+          return false;
+        }
+        document.getElementById(
+          "userNameDisplay"
+        ).textContent = `Hello, ${username}`;
+        return true;
+      }
+
+      // Function to show action notification
+      function showActionNotification(message, type = "success") {
+        const box = document.getElementById("actionNotification");
+
+        box.classList.remove(
+          "hidden",
+          "bg-red-900",
+          "text-red-300",
+          "bg-green-900",
+          "text-green-300",
+          "bg-yellow-900",
+          "text-yellow-300"
+        );
+
+        if (type === "success") {
+          box.classList.add("bg-green-900", "text-green-300");
+        } else if (type === "error") {
+          box.classList.add("bg-red-900", "text-red-300");
+        } else if (type === "warning") {
+          box.classList.add("bg-yellow-900", "text-yellow-300");
+        }
+
+        box.textContent = message;
+
+        setTimeout(() => {
+          box.classList.add("hidden");
+        }, 5000);
+      }
+
+      // Format currency
+      const formatter = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      });
+
+      // --- DATA FETCHING & RENDERING ---
+
+      async function fetchUserData() {
+        if (!checkAuth()) return;
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/user/data`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (!response.ok) {
+            // If token is invalid or user not found, force logout
+            if (response.status === 401 || response.status === 404) {
+              logout();
+              return;
+            }
+            throw new Error("Failed to fetch user data");
+          }
+
+          const data = await response.json();
+          renderDashboard(data);
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+          showActionNotification(
+            "Error connecting to the server. Data may be outdated.",
+            "error"
+          );
+        }
+      }
+
+      function renderDashboard(data) {
+        // Update Balances
+        const balance = data.balance || 0.0;
+        document.getElementById("availableBalance").textContent =
+          formatter.format(balance);
+        document.getElementById("totalAssets").textContent =
+          formatter.format(balance); // Simplified
+
+        // Update Transactions
+        const tableBody = document.getElementById("transactionTableBody");
+        const noTransactions = document.getElementById("noTransactions");
+        tableBody.innerHTML = ""; // Clear existing rows
+
+        const transactions = data.transactions || [];
+
+        if (transactions.length === 0) {
+          noTransactions.classList.remove("hidden");
+        } else {
+          noTransactions.classList.add("hidden");
+          transactions.forEach((t) => {
+            const row = tableBody.insertRow();
+            row.className = "hover:bg-gray-800 transition duration-150";
+
+            // Status styling
+            let statusClass = "status-pending";
+            if (t.status === "complete") {
+              statusClass = "status-complete";
+            } else if (t.status === "failed") {
+              statusClass = "status-failed";
+            }
+
+            row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">${new Date(
+                      t.date
+                    ).toLocaleDateString()}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm capitalize">${
+                      t.type
+                    }</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${
+                      t.type === "buy" ? "text-red-400" : "text-green-400"
+                    }">${formatter.format(t.amount)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusClass}">
+                            ${t.status}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-xs text-text-secondary">${t.id.substring(
+                      0,
+                      8
+                    )}...</td>
+                `;
+          });
+        }
+      }
+
+      // --- TRANSACTION HANDLERS ---
+
+      async function handleTransaction(type, amount) {
+        if (!checkAuth()) return;
+
+        const value = parseFloat(amount);
+        if (isNaN(value) || value <= 0) {
+          showActionNotification("Please enter a valid amount.", "error");
+          return;
+        }
+
+        const buttonId = type === "deposit" ? "depositButton" : "buyButton";
+        const formId = type === "deposit" ? "depositForm" : "buyForm";
+        const button = document.querySelector(
+          `#${formId} button[type="submit"]`
+        );
+        const originalText = button.textContent;
+        button.textContent = "Processing...";
+        button.disabled = true;
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/user/transaction`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ type, amount: value }),
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            showActionNotification(
+              `Successfully submitted ${type} for ${formatter.format(
+                value
+              )}. It is now PENDING approval.`,
+              "success"
+            );
+            document.getElementById(type + "Amount").value = ""; // Clear input
+            fetchUserData(); // Refresh history
+          } else {
+            showActionNotification(
+              result.message || `Failed to submit ${type} transaction.`,
+              "error"
+            );
+          }
+        } catch (error) {
+          console.error("Transaction API Error:", error);
+          showActionNotification(
+            "Could not connect to the server or process transaction.",
+            "error"
+          );
+        } finally {
+          button.textContent = originalText;
+          button.disabled = false;
+        }
+      }
+
+      // --- EVENT LISTENERS ---
+      document.getElementById("logoutButton").addEventListener("click", () => {
+        logout();
+      });
+
+      function logout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("userType");
+        localStorage.removeItem("username");
+        window.location.href = "user_login.html";
+      }
+
+      document.getElementById("depositForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const amount = document.getElementById("depositAmount").value;
+        handleTransaction("deposit", amount);
+      });
+
+      document.getElementById("buyForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const amount = document.getElementById("buyAmount").value;
+        handleTransaction("buy", amount);
+      });
+
+      // --- INITIALIZATION ---
+      window.onload = () => {
+        fetchUserData();
+        // Since we are polling for real-time updates, refresh data every 10 seconds
+        setInterval(fetchUserData, 10000);
+      };
+
+      // Handle action buttons
+      function handleAction(action) {
+        switch (action) {
+          case "deposit":
+            showActionModal("Deposit", "Add funds to your account");
+            break;
+          case "withdraw":
+            showActionModal("Withdraw", "Withdraw funds from your account");
+            break;
+          case "transaction":
+            showActionModal(
+              "Transaction History",
+              "View your transaction history"
+            );
+            break;
+          case "pledge":
+            window.location.href = "investment_plans.html";
+            break;
+          case "transfer":
+            showActionModal("Transfer", "Transfer funds to another account");
+            break;
+          case "defi":
+            showActionModal("DeFi Mining", "Participate in DeFi mining pools");
+            break;
+          case "liquidity":
+            showActionModal("Liquidity Mining", "Contact the admin");
+            break;
+        }
+      }
+      // Show action modal
+      function showActionModal(title, description) {
+        alert(`${title}\n\n${description}\n\nOn WhatsApp +1 978 505 3319 !`);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - CryptoVault Pro</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script
+      type="module"
+      src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fcryptovaul9343back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.9"
+    ></script>
+    <script
+      type="module"
+      src="https://static.rocket.new/rocket-shot.js?v=0.0.1"
+    ></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .bg-background {
+        background-color: #0d1117;
+      }
+      .text-primary {
+        color: #007bff;
+      }
+      .border-border-subtle {
+        border-color: #21262d;
+      }
+      .text-text-primary {
+        color: #f0f6fc;
+      }
+      .text-text-secondary {
+        color: #8b949e;
+      }
+      .bg-card {
+        background-color: #161b22;
+      }
+      .shadow-md {
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      }
+      .border-primary {
+        border-color: #007bff;
+      }
+      .nav-tab {
+        @apply flex items-center px-6 py-4 text-sm font-medium text-text-secondary border-b-2 border-transparent hover:text-text-primary hover:border-border-subtle transition-all duration-200;
+      }
+
+      .nav-tab.active {
+        @apply text-primary border-primary;
+      }
+
+      .tab-content {
+        @apply hidden;
+      }
+
+      .tab-content.active {
+        @apply block;
+      }
+      .status-pending {
+        @apply text-yellow-400 bg-yellow-900/50;
+      }
+      .status-complete {
+        @apply text-green-400 bg-green-900/50;
+      }
+      .status-approved {
+        @apply text-green-400 bg-green-900/50;
+      }
+      .status-failed {
+        @apply text-red-400 bg-red-900/50;
+      }
+    </style>
+  </head>
+  <body class="bg-background min-h-screen">
+    <!-- Header Section -->
+    <header class="w-full py-6 px-4 border-b border-border-subtle">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-text-primary">
+          <span class="text-primary">Admin</span> Dashboard
+        </h1>
+        <nav class="space-x-4">
+          <span id="userNameDisplay" class="text-text-secondary"></span>
+          <button
+            id="logoutButton"
+            class="text-red-400 hover:text-red-500 transition duration-150"
+          >
+            Logout
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto p-4 md:p-8">
+      <!-- Tabs Navigation -->
+      <div
+        class="border-b border-border-subtle mb-6 flex space-x-4 overflow-x-auto"
+      >
+        <button class="nav-tab active" data-tab="users">User Management</button>
+        <button class="nav-tab" data-tab="transactions">
+          Transaction Review
+        </button>
+      </div>
+
+      <!-- Tab Content: User Management -->
+      <div id="users" class="tab-content active">
+        <h2 class="text-2xl font-bold text-text-primary mb-6">
+          User Management
+        </h2>
+
+        <div
+          id="userNotification"
+          class="hidden p-3 rounded-lg text-sm mb-4"
+        ></div>
+
+        <!-- Search Bar -->
+        <input
+          type="text"
+          id="userSearch"
+          placeholder="Search users by name or email..."
+          class="w-full bg-card border border-border-subtle rounded-lg text-text-primary p-2 mb-6 focus:ring-2 focus:ring-primary focus:border-primary"
+        />
+
+        <div
+          class="overflow-x-auto bg-card rounded-xl shadow-lg border border-border-subtle"
+        >
+          <table class="min-w-full divide-y divide-border-subtle">
+            <thead>
+              <tr>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  Name (ID)
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  Email
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  Status
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  Balance
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody
+              id="userTableBody"
+              class="divide-y divide-border-subtle text-text-primary"
+            >
+              <!-- User rows will be injected here -->
+            </tbody>
+          </table>
+          <div id="noUsers" class="p-4 text-center text-text-secondary hidden">
+            No users found.
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content: Transaction Review -->
+      <div id="transactions" class="tab-content">
+        <h2 class="text-2xl font-bold text-text-primary mb-6">
+          Transaction Review
+        </h2>
+
+        <div
+          id="transactionNotification"
+          class="hidden p-3 rounded-lg text-sm mb-4"
+        ></div>
+
+        <div
+          class="overflow-x-auto bg-card rounded-xl shadow-lg border border-border-subtle"
+        >
+          <table class="min-w-full divide-y divide-border-subtle">
+            <thead>
+              <tr>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  Date (ID)
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  User
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  Type
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  Amount
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  Status
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
+                >
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody
+              id="transactionTableBody"
+              class="divide-y divide-border-subtle text-text-primary"
+            >
+              <!-- Transaction rows will be injected here -->
+            </tbody>
+          </table>
+          <div
+            id="noPendingTransactions"
+            class="p-4 text-center text-text-secondary hidden"
+          >
+            No pending transactions found.
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal for Balance Update -->
+      <div
+        id="balanceModal"
+        class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center p-4"
+      >
+        <div
+          class="bg-card rounded-xl p-6 w-full max-w-sm shadow-2xl border border-border-subtle"
+        >
+          <h3 class="text-xl font-bold text-text-primary mb-4">
+            Update User Balance
+          </h3>
+          <p class="text-text-secondary mb-4">
+            Editing balance for:
+            <span
+              id="modalUsername"
+              class="font-medium text-text-primary"
+            ></span>
+          </p>
+          <form id="updateBalanceForm" data-user-id="">
+            <label
+              for="newBalance"
+              class="block text-sm font-medium text-text-secondary mb-1"
+              >New Available Balance (USD)</label
+            >
+            <input
+              type="number"
+              id="newBalance"
+              step="0.01"
+              min="0"
+              required
+              class="w-full bg-background border border-border-subtle rounded-lg text-text-primary p-2 mb-4 focus:ring-2 focus:ring-primary focus:border-primary"
+              placeholder="e.g., 5000.00"
+            />
+            <div class="flex justify-end space-x-3">
+              <button
+                type="button"
+                id="cancelBalanceUpdate"
+                class="px-4 py-2 text-text-secondary bg-gray-700 rounded-lg hover:bg-gray-600"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="px-4 py-2 bg-primary text-white font-semibold rounded-lg hover:bg-opacity-90"
+                id="modalUpdateButton"
+              >
+                Update Balance
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      const API_BASE_URL = "http://localhost:4000/api";
+      const token = localStorage.getItem("token");
+      const userType = localStorage.getItem("userType");
+      const username = localStorage.getItem("username");
+
+      let allUsers = [];
+      let allTransactions = [];
+
+      // --- UTILITY FUNCTIONS ---
+      function checkAuth() {
+        if (!token || userType !== "admin") {
+          // Changed relative path to root-relative path
+          window.location.href = "/user_login.html";
+          return false;
+        }
+        document.getElementById(
+          "userNameDisplay"
+        ).textContent = `Hello, Admin (${username})`;
+        return true;
+      }
+
+      const formatter = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      });
+
+      function showNotification(
+        message,
+        type = "success",
+        containerId = "userNotification"
+      ) {
+        const box = document.getElementById(containerId);
+
+        box.classList.remove(
+          "hidden",
+          "bg-red-900",
+          "text-red-300",
+          "bg-green-900",
+          "text-green-300",
+          "bg-yellow-900",
+          "text-yellow-300"
+        );
+
+        if (type === "success") {
+          box.classList.add("bg-green-900", "text-green-300");
+        } else if (type === "error") {
+          box.classList.add("bg-red-900", "text-red-300");
+        } else if (type === "warning") {
+          box.classList.add("bg-yellow-900", "text-yellow-300");
+        }
+
+        box.textContent = message;
+
+        setTimeout(() => {
+          box.classList.add("hidden");
+        }, 5000);
+      }
+
+      // --- DATA FETCHING ---
+      async function fetchAdminData() {
+        if (!checkAuth()) return;
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/admin/data`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          if (!response.ok) {
+            if (response.status === 401 || response.status === 403) {
+              logout();
+              return;
+            }
+            throw new Error("Failed to fetch admin data");
+          }
+
+          const data = await response.json();
+          allUsers = data.users.filter((u) => u.userType !== "admin"); // Hide admins from the user list
+          allTransactions = data.transactions;
+
+          renderUserTable();
+          renderTransactionTable();
+        } catch (error) {
+          console.error("Error fetching admin data:", error);
+          showNotification(
+            "Error connecting to the server. Data refresh failed.",
+            "error",
+            "userNotification"
+          );
+        }
+      }
+
+      // --- RENDERING FUNCTIONS ---
+      function renderUserTable(searchTerm = "") {
+        const tableBody = document.getElementById("userTableBody");
+        const noUsers = document.getElementById("noUsers");
+        tableBody.innerHTML = "";
+        const searchLower = searchTerm.toLowerCase();
+
+        const filteredUsers = allUsers.filter(
+          (u) =>
+            u.username.toLowerCase().includes(searchLower) ||
+            u.email.toLowerCase().includes(searchLower) ||
+            u.id.includes(searchLower)
+        );
+
+        if (filteredUsers.length === 0) {
+          noUsers.classList.remove("hidden");
+        } else {
+          noUsers.classList.add("hidden");
+          filteredUsers.forEach((user) => {
+            const row = tableBody.insertRow();
+            row.className = "hover:bg-gray-800 transition duration-150";
+
+            let statusClass =
+              user.status === "approved" ? "status-approved" : "status-pending";
+
+            row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">${
+                      user.username
+                    } <span class="text-xs text-text-secondary">(${user.id.substring(
+              0,
+              8
+            )}...)</span></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">${
+                      user.email
+                    }</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusClass} capitalize">
+                            ${user.status}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">${formatter.format(
+                      user.balance
+                    )}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm flex space-x-2">
+                        ${
+                          user.status !== "approved"
+                            ? `<button onclick="approveUser('${user.id}')" class="text-green-400 hover:text-green-500 font-medium">Approve</button>`
+                            : ""
+                        }
+                        <button onclick="openBalanceModal('${user.id}', '${
+              user.username
+            }', ${
+              user.balance
+            })" class="text-primary hover:text-opacity-80 font-medium">Edit Balance</button>
+                    </td>
+                `;
+          });
+        }
+      }
+
+      function renderTransactionTable() {
+        const tableBody = document.getElementById("transactionTableBody");
+        const noPending = document.getElementById("noPendingTransactions");
+        tableBody.innerHTML = "";
+
+        // Filter for pending transactions only
+        const pendingTransactions = allTransactions.filter(
+          (t) => t.status === "pending"
+        );
+
+        if (pendingTransactions.length === 0) {
+          noPending.classList.remove("hidden");
+        } else {
+          noPending.classList.add("hidden");
+          pendingTransactions.forEach((t) => {
+            const row = tableBody.insertRow();
+            row.className = "hover:bg-gray-800 transition duration-150";
+
+            const user = allUsers.find((u) => u.id === t.userId);
+            const userName = user ? user.username : "Unknown User";
+
+            let amountText = formatter.format(t.amount);
+            let amountClass =
+              t.type === "deposit" ? "text-green-400" : "text-red-400";
+
+            row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">${new Date(
+                      t.date
+                    ).toLocaleDateString()} <span class="text-xs text-text-secondary">(${t.id.substring(
+              0,
+              8
+            )}...)</span></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">${userName} <span class="text-xs text-text-secondary">(${t.userId.substring(
+              0,
+              8
+            )}...)</span></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm capitalize">${
+                      t.type
+                    }</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${amountClass}">${amountText}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium status-pending">
+                            Pending
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <button onclick="approveTransaction('${
+                          t.id
+                        }')" class="text-green-400 hover:text-green-500 font-medium">Approve</button>
+                    </td>
+                `;
+          });
+        }
+      }
+
+      // --- ACTION HANDLERS ---
+
+      async function approveUser(userId) {
+        if (!checkAuth()) return;
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/admin/approve-user`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ userId }),
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            showNotification(
+              `User ${result.user.username} has been approved.`,
+              "success",
+              "userNotification"
+            );
+            fetchAdminData(); // Refresh data
+          } else {
+            showNotification(
+              result.message || "Failed to approve user.",
+              "error",
+              "userNotification"
+            );
+          }
+        } catch (error) {
+          console.error("Approve User API Error:", error);
+          showNotification(
+            "Could not connect to the server.",
+            "error",
+            "userNotification"
+          );
+        }
+      }
+
+      async function approveTransaction(transactionId) {
+        if (!checkAuth()) return;
+
+        try {
+          const response = await fetch(
+            `${API_BASE_URL}/admin/approve-transaction`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({ transactionId }),
+            }
+          );
+
+          const result = await response.json();
+
+          if (response.ok) {
+            showNotification(
+              `Transaction approved. User balance updated to ${formatter.format(
+                result.user.balance
+              )}.`,
+              "success",
+              "transactionNotification"
+            );
+            fetchAdminData(); // Refresh data
+          } else {
+            showNotification(
+              result.message || "Failed to approve transaction.",
+              "error",
+              "transactionNotification"
+            );
+          }
+        } catch (error) {
+          console.error("Approve Transaction API Error:", error);
+          showNotification(
+            "Could not connect to the server.",
+            "error",
+            "transactionNotification"
+          );
+        }
+      }
+
+      // --- BALANCE MODAL LOGIC ---
+
+      function openBalanceModal(userId, username, currentBalance) {
+        document.getElementById("modalUsername").textContent = username;
+        document.getElementById("updateBalanceForm").dataset.userId = userId;
+        document.getElementById("newBalance").value = currentBalance.toFixed(2);
+        document.getElementById("balanceModal").classList.remove("hidden");
+        document.getElementById("balanceModal").classList.add("flex");
+      }
+
+      function closeBalanceModal() {
+        document.getElementById("balanceModal").classList.add("hidden");
+        document.getElementById("balanceModal").classList.remove("flex");
+      }
+
+      document
+        .getElementById("cancelBalanceUpdate")
+        .addEventListener("click", closeBalanceModal);
+
+      document
+        .getElementById("updateBalanceForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const userId = e.target.dataset.userId;
+          const newBalance = document.getElementById("newBalance").value;
+          const updateButton = document.getElementById("modalUpdateButton");
+          const originalText = updateButton.textContent;
+          updateButton.textContent = "Saving...";
+          updateButton.disabled = true;
+
+          try {
+            const response = await fetch(
+              `${API_BASE_URL}/admin/update-balance`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                  userId,
+                  newBalance: parseFloat(newBalance),
+                }),
+              }
+            );
+
+            const result = await response.json();
+
+            if (response.ok) {
+              showNotification(
+                `Balance for ${
+                  result.user.username
+                } updated to ${formatter.format(result.user.balance)}.`,
+                "success",
+                "userNotification"
+              );
+              closeBalanceModal();
+              fetchAdminData(); // Refresh data
+            } else {
+              showNotification(
+                result.message || "Failed to update balance.",
+                "error",
+                "userNotification"
+              );
+            }
+          } catch (error) {
+            console.error("Update Balance API Error:", error);
+            showNotification(
+              "Could not connect to the server.",
+              "error",
+              "userNotification"
+            );
+          } finally {
+            updateButton.textContent = originalText;
+            updateButton.disabled = false;
+          }
+        });
+
+      // --- EVENT LISTENERS & INITIALIZATION ---
+
+      document.querySelectorAll(".nav-tab").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          document
+            .querySelectorAll(".nav-tab")
+            .forEach((t) => t.classList.remove("active"));
+          document
+            .querySelectorAll(".tab-content")
+            .forEach((c) => c.classList.remove("active"));
+
+          tab.classList.add("active");
+          document.getElementById(tab.dataset.tab).classList.add("active");
+        });
+      });
+
+      document.getElementById("logoutButton").addEventListener("click", () => {
+        logout();
+      });
+
+      function logout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("userType");
+        localStorage.removeItem("username");
+        // Changed relative path to root-relative path
+        window.location.href = "/user_login.html";
+      }
+
+      document.getElementById("userSearch").addEventListener("input", (e) => {
+        renderUserTable(e.target.value);
+      });
+
+      window.onload = () => {
+        fetchAdminData();
+        // Since we are polling for real-time updates, refresh data every 10 seconds
+        setInterval(fetchAdminData, 10000);
+      };
+    </script>
+  </body>
+</html>

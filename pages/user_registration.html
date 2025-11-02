@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Registration - CryptoVault Pro</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS is loaded via CDN for convenience -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom styling for dark mode -->
+    <style>
+      .bg-background {
+        background-color: #1a1a1a;
+      }
+      .text-primary {
+        color: #f7931a;
+      }
+      .btn-primary {
+        background-color: #f7931a;
+      }
+      .ring-primary {
+        --tw-ring-color: #f7931a;
+      }
+      .card {
+        background-color: #2d2d2d;
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+      /* Custom styles from main.css for input fields */
+      .input-field {
+        @apply bg-surface border border-border-subtle rounded-lg px-4 py-3 text-text-primary placeholder-text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200;
+      }
+    </style>
+  </head>
+  <body class="bg-background min-h-screen flex items-center justify-center p-4">
+    <div
+      id="notification"
+      class="fixed top-4 right-4 z-50 transition-transform duration-300 transform translate-x-full"
+    >
+      <!-- Notification content will be injected here -->
+    </div>
+
+    <div class="w-full max-w-md">
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-white mb-2">Create Your Account</h1>
+        <p class="text-text-secondary">
+          Start your crypto investment journey today.
+        </p>
+      </div>
+
+      <form id="registrationForm" class="card p-8 space-y-6">
+        <!-- Username Field -->
+        <div>
+          <label
+            for="username"
+            class="block text-sm font-medium text-white mb-2"
+            >Username</label
+          >
+          <div
+            class="rounded-lg shadow-sm border border-border-subtle transition-all duration-200"
+          >
+            <input
+              type="text"
+              id="username"
+              name="username"
+              required
+              placeholder="e.g., satoshi_nakamoto"
+              class="input-field w-full"
+            />
+          </div>
+        </div>
+
+        <!-- Email Field -->
+        <div>
+          <label for="email" class="block text-sm font-medium text-white mb-2"
+            >Email Address</label
+          >
+          <div
+            class="rounded-lg shadow-sm border border-border-subtle transition-all duration-200"
+          >
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              placeholder="you@example.com"
+              class="input-field w-full"
+            />
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div>
+          <label
+            for="password"
+            class="block text-sm font-medium text-white mb-2"
+            >Password</label
+          >
+          <div
+            class="rounded-lg shadow-sm border border-border-subtle transition-all duration-200"
+          >
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              placeholder="••••••••"
+              class="input-field w-full"
+            />
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          id="registerButton"
+          class="w-full btn-primary text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 hover:shadow-md hover:scale-[1.01] focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
+        >
+          Register Account
+        </button>
+      </form>
+
+      <div class="mt-6 text-center">
+        <p class="text-text-secondary">
+          Already have an account?
+          <a
+            href="user_login.html"
+            class="text-primary font-medium hover:underline transition-colors duration-200"
+            >Log In</a
+          >
+        </p>
+        <p class="text-xs text-red-400 mt-2">
+          Note: New accounts require admin approval before first login.
+        </p>
+      </div>
+    </div>
+
+    <script>
+      // FIX (Task 2): Changed API_HOST to API_BASE_URL and pointed to the /api path
+      const API_BASE_URL = "http://localhost:4000/api";
+
+      // --- Notification System ---
+      function showNotification(message, type = "info") {
+        const container = document.getElementById("notification");
+        const bgColor = {
+          success: "bg-success",
+          error: "bg-error",
+          warning: "bg-warning",
+          info: "bg-primary",
+        }[type];
+        const icon = {
+          success: "✅",
+          error: "❌",
+          warning: "⚠️",
+          info: "ℹ️",
+        }[type];
+
+        container.innerHTML = `
+            <div class="flex items-center ${bgColor} text-white text-sm font-bold px-4 py-3 rounded-lg shadow-lg" role="alert">
+                ${icon}
+                <p class="ml-3">${message}</p>
+            </div>
+        `;
+
+        // Show notification
+        container.classList.remove("translate-x-full");
+        container.classList.add("translate-x-0");
+
+        // Hide notification after 4 seconds
+        setTimeout(() => {
+          container.classList.remove("translate-x-0");
+          container.classList.add("translate-x-full");
+          setTimeout(() => (container.innerHTML = ""), 300); // Clear content after transition
+        }, 4000);
+      }
+
+      // --- Registration Logic ---
+      document
+        .getElementById("registrationForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const form = e.target;
+          const submitButton = document.getElementById("registerButton");
+          const originalText = submitButton.textContent;
+
+          const username = form.username.value.trim();
+          const email = form.email.value.trim();
+          const password = form.password.value.trim();
+
+          // Client-Side Validation
+          if (!username || !email || !password) {
+            showNotification("All fields are required.", "error");
+            return;
+          }
+          if (password.length < 6) {
+            showNotification(
+              "Password must be at least 6 characters.",
+              "error"
+            );
+            return;
+          }
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(email)) {
+            showNotification("Please enter a valid email address.", "error");
+            return;
+          }
+
+          const data = { username, email, password };
+
+          submitButton.textContent = "Registering...";
+          submitButton.disabled = true;
+
+          try {
+            // FIX (Task 2): Changed fetch URL to include /api prefix
+            const response = await fetch(`${API_BASE_URL}/register`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+              // Success: User created, now waiting for approval
+              showNotification(result.message, "success");
+              // Clear the form and redirect to login
+              form.reset();
+              setTimeout(() => {
+                window.location.href = "user_login.html";
+              }, 3000);
+            } else {
+              // Error: e.g., User already exists
+              showNotification(
+                result.message || "Registration failed.",
+                "error"
+              );
+            }
+          } catch (error) {
+            console.error("Registration API Error:", error);
+            showNotification(
+              "Could not connect to the server. Is Node.js running?",
+              "error"
+            );
+          } finally {
+            submitButton.textContent = originalText;
+            submitButton.disabled = false;
+          }
+        });
+
+      // Input field focus effects
+      document.querySelectorAll(".input-field").forEach((field) => {
+        field.addEventListener("focus", function () {
+          this.parentElement.classList.add("ring-2", "ring-primary");
+        });
+
+        field.addEventListener("blur", function () {
+          this.parentElement.classList.remove("ring-2", "ring-primary");
+        });
+      });
+    </script>
+  </body>
+</html>

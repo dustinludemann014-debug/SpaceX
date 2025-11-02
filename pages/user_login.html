@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Login - SpaceX Crypto</title>
+    <!-- We'll keep the link to main.css in case you use it elsewhere -->
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Load Tailwind CSS from CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!--
+      This <style> block contains the custom theme colors and component 
+      styles based on your new design and tailwind.config.js.
+    -->
+    <style>
+      :root {
+        --color-primary: #f7931a;
+        --color-secondary: #ffb366;
+        --color-background: #1a1a1a;
+        --color-surface: #2d2d2d;
+        --color-text-primary: #ffffff;
+        --color-text-secondary: #a3a3a3;
+        --color-success: #22c55e;
+        --color-warning: #f59e0b;
+        --color-error: #ef4444;
+        --color-border-subtle: rgba(255, 255, 255, 0.1);
+      }
+      body {
+        background-color: var(--color-background);
+        font-family: "Inter", sans-serif;
+      }
+      .text-gradient-primary {
+        background: linear-gradient(135deg, #f7931a, #ffb366);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .bg-background {
+        background-color: var(--color-background);
+      }
+      .bg-surface {
+        background-color: var(--color-surface);
+      }
+      .bg-surface-700 {
+        background-color: #404040;
+      }
+      .border-border-subtle {
+        border-color: var(--color-border-subtle);
+      }
+      .text-text-primary {
+        color: var(--color-text-primary);
+      }
+      .text-text-secondary {
+        color: var(--color-text-secondary);
+      }
+      .text-primary {
+        color: var(--color-primary);
+      }
+      .text-secondary {
+        color: var(--color-secondary);
+      }
+      .text-error {
+        color: var(--color-error);
+      }
+      .text-success {
+        color: var(--color-success);
+      }
+      .text-warning {
+        color: var(--color-warning);
+      }
+      .bg-error {
+        background-color: var(--color-error);
+      }
+      .bg-success {
+        background-color: var(--color-success);
+      }
+      .bg-warning {
+        background-color: var(--color-warning);
+      }
+      .bg-primary {
+        background-color: var(--color-primary);
+      }
+      .border-error {
+        border-color: var(--color-error);
+      }
+      .bg-opacity-10 {
+        --tw-bg-opacity: 0.1;
+      }
+      .ring-primary {
+        --tw-ring-color: var(--color-primary);
+      }
+      .text-data {
+        font-family: "JetBrains Mono", monospace;
+      }
+
+      /* Component Styles */
+      .btn-primary {
+        @apply bg-primary text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 hover:shadow-md hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50;
+      }
+      .card-elevated {
+        @apply bg-surface rounded-xl p-6 shadow-md border border-border-subtle transition-all duration-300;
+      }
+      .input-field {
+        @apply bg-surface border border-border-subtle rounded-lg px-4 py-3 text-text-primary placeholder-text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200;
+      }
+    </style>
+  </head>
+  <body class="bg-background min-h-screen">
+    <!-- Header Section -->
+    <header class="w-full py-6 px-4 border-b border-border-subtle">
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <!-- Logo -->
+        <div class="flex items-center space-x-3">
+          <div
+            class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center"
+          >
+            <!-- Simple BIT-style Logo -->
+            <svg
+              class="w-6 h-6 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8v2m0 8v2m0-6h.01M6 12h.01M18 12h.01M7 16h.01M17 16h.01M7 8h.01M17 8h.01M12 2a10 10 0 100 20 10 10 0 000-20z"
+              />
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold text-gradient-primary">SpaceX</h1>
+            <p class="text-xs text-text-secondary">SpaceX crypto</p>
+          </div>
+        </div>
+
+        <!-- Language Selector -->
+        <div class="flex items-center space-x-4">
+          <div class="relative">
+            <select
+              class="bg-surface border border-border-subtle rounded-lg px-3 py-2 text-text-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option value="en">🇺🇸 English</option>
+              <option value="es">🇪🇸 Español</option>
+              <option value="fr">🇫🇷 Français</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex items-center justify-center px-4 py-12">
+      <div class="w-full max-w-md">
+        <!-- Security Badges -->
+        <div class="flex items-center justify-center space-x-4 mb-8">
+          <div
+            class="flex items-center space-x-2 bg-surface px-3 py-2 rounded-lg border border-border-subtle"
+          >
+            <svg
+              class="w-5 h-5 text-text-secondary"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+              />
+            </svg>
+            <span class="text-xs text-text-secondary">SSL Secured</span>
+          </div>
+          <div
+            class="flex items-center space-x-2 bg-surface px-3 py-2 rounded-lg border border-border-subtle"
+          >
+            <svg
+              class="w-5 h-5 text-text-secondary"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+              />
+            </svg>
+            <span class="text-xs text-text-secondary">Crypto Certified</span>
+          </div>
+        </div>
+
+        <!-- Login Form Container -->
+        <div class="card-elevated p-8">
+          <!-- Form Header -->
+          <div class="text-center mb-8">
+            <h2 class="text-3xl font-bold text-text-primary mb-2">
+              Welcome Back
+            </h2>
+            <p class="text-text-secondary">
+              Sign in to your SpaceX Crypto account
+            </p>
+          </div>
+
+          <!-- Login Form -->
+          <form id="loginForm" class="space-y-6">
+            <!-- Email Field -->
+            <div>
+              <label
+                for="email"
+                class="block text-sm font-medium text-text-primary mb-2"
+              >
+                Username or Email
+              </label>
+              <div class="relative">
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  class="input-field w-full pl-12"
+                  placeholder="Enter your username or email"
+                  required
+                />
+                <div
+                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                >
+                  <svg
+                    class="w-5 h-5 text-text-secondary"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Password Field -->
+            <div>
+              <label
+                for="password"
+                class="block text-sm font-medium text-text-primary mb-2"
+              >
+                Password
+              </label>
+              <div class="relative">
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  class="input-field w-full pl-12 pr-12"
+                  placeholder="Enter your password"
+                  required
+                />
+                <div
+                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                >
+                  <svg
+                    class="w-5 h-5 text-text-secondary"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                    />
+                  </svg>
+                </div>
+                <button
+                  type="button"
+                  id="togglePassword"
+                  class="absolute inset-y-0 right-0 pr-3 flex items-center"
+                >
+                  <!-- Eye Icon -->
+                  <svg
+                    id="icon-eye-open"
+                    class="w-5 h-5 text-text-secondary hover:text-text-primary transition-colors"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                    />
+                  </svg>
+                  <!-- Eye Closed Icon -->
+                  <svg
+                    id="icon-eye-closed"
+                    class="w-5 h-5 text-text-secondary hover:text-text-primary transition-colors hidden"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Remember Me & Forgot Password -->
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <input
+                  type="checkbox"
+                  id="remember"
+                  name="remember"
+                  class="w-4 h-4 text-primary bg-surface border-border-subtle rounded focus:ring-primary focus:ring-2"
+                />
+                <label for="remember" class="ml-2 text-sm text-text-secondary">
+                  Remember me
+                </label>
+              </div>
+              <a
+                href="forgot_password.html"
+                class="text-sm text-primary hover:text-secondary transition-colors"
+              >
+                Forgot password?
+              </a>
+            </div>
+
+            <!-- Login Button -->
+            <button
+              type="submit"
+              id="submitButton"
+              class="w-full btn-primary bg-gradient-to-r from-primary to-secondary hover:from-primary-600 hover:to-primary-400 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
+            >
+              <span class="flex items-center justify-center space-x-2">
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                  />
+                </svg>
+                <span>Sign In</span>
+              </span>
+            </button>
+          </form>
+
+          <!-- Registration Link -->
+          <div class="mt-8 text-center">
+            <p class="text-text-secondary">
+              Don't have an account?
+              <a
+                href="user_registration.html"
+                class="text-primary hover:text-secondary font-medium transition-colors"
+              >
+                Create Account
+              </a>
+            </p>
+          </div>
+        </div>
+
+        <!-- Additional Security Info -->
+        <div class="mt-8 text-center">
+          <div
+            class="flex items-center justify-center space-x-6 text-xs text-text-secondary"
+          >
+            <div class="flex items-center space-x-1">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              <span>256-bit Encryption</span>
+            </div>
+            <div class="flex items-center space-x-1">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              <span>2FA Protected</span>
+            </div>
+            <div class="flex items-center space-x-1">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              <span>GDPR Compliant</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full py-6 px-4 border-t border-border-subtle mt-12">
+      <div class="max-w-7xl mx-auto text-center">
+        <p class="text-xs text-text-secondary">
+          © 2024 SpaceX Crypto. All Rights Reserved. |
+          <a
+            href="javascript:void(0)"
+            class="text-primary hover:text-secondary transition-colors"
+            >Privacy Policy</a
+          >
+          |
+          <a
+            href="javascript:void(0)"
+            class="text-primary hover:text-secondary transition-colors"
+            >Terms of Service</a
+          >
+        </p>
+      </div>
+    </footer>
+
+    <!-- Notification Container -->
+    <div
+      id="notification"
+      class="fixed top-4 right-4 z-50 transition-transform duration-300 transform translate-x-full"
+    >
+      <!-- Notification content will be injected here -->
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+      // API URL setup
+      const API_BASE_URL = "http://localhost:4000/api";
+
+      // --- Notification System (Adapted from user_registration.html) ---
+      function showNotification(message, type = "info") {
+        const container = document.getElementById("notification");
+        const bgColor = {
+          success: "bg-success",
+          error: "bg-error",
+          warning: "bg-warning",
+          info: "bg-primary",
+        }[type];
+        const icon = {
+          success: "✅",
+          error: "❌",
+          warning: "⚠️",
+          info: "ℹ️",
+        }[type];
+
+        container.innerHTML = `
+            <div class="flex items-center ${bgColor} text-white text-sm font-bold px-4 py-3 rounded-lg shadow-lg" role="alert">
+                ${icon}
+                <p class="ml-3">${message}</p>
+            </div>
+        `;
+
+        // Show notification
+        container.classList.remove("translate-x-full");
+        container.classList.add("translate-x-0");
+
+        // Hide notification after 4 seconds
+        setTimeout(() => {
+          container.classList.remove("translate-x-0");
+          container.classList.add("translate-x-full");
+          setTimeout(() => (container.innerHTML = ""), 300); // Clear content after transition
+        }, 4000);
+      }
+
+      // --- Toggle password visibility ---
+      document
+        .getElementById("togglePassword")
+        .addEventListener("click", function () {
+          const passwordField = document.getElementById("password");
+          const type =
+            passwordField.getAttribute("type") === "password"
+              ? "text"
+              : "password";
+          passwordField.setAttribute("type", type);
+
+          // Toggle icon
+          document.getElementById("icon-eye-open").classList.toggle("hidden");
+          document.getElementById("icon-eye-closed").classList.toggle("hidden");
+        });
+
+      // --- Form submission handling (FUNCTIONAL) ---
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+          const submitButton = document.getElementById("submitButton");
+          const originalText = submitButton.querySelector("span").textContent;
+
+          submitButton.disabled = true;
+          submitButton.querySelector("span").textContent = "Signing In...";
+
+          try {
+            const response = await fetch(`${API_BASE_URL}/login`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, password }),
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.token) {
+              // Success: Store token and user details
+              localStorage.setItem("token", result.token);
+              localStorage.setItem("userId", result.userId);
+              localStorage.setItem("userType", result.userType);
+              localStorage.setItem("username", result.username);
+              // Store email for profile page
+              localStorage.setItem("email", email);
+
+              showNotification("Login successful! Redirecting...", "success");
+
+              // Redirect based on user type
+              setTimeout(() => {
+                if (result.userType === "admin") {
+                  window.location.href = "admin_dashboard.html";
+                } else {
+                  window.location.href = "user_dashboard.html";
+                }
+              }, 1500);
+            } else {
+              // Error: Invalid credentials or pending approval
+              const type = response.status === 403 ? "warning" : "error";
+              showNotification(result.message || "Login failed.", type);
+              submitButton.disabled = false;
+              submitButton.querySelector("span").textContent = originalText;
+            }
+          } catch (error) {
+            console.error("Login API Error:", error);
+            showNotification(
+              "Could not connect to the server. Is Node.js running?",
+              "error"
+            );
+            submitButton.disabled = false;
+            submitButton.querySelector("span").textContent = originalText;
+          }
+        });
+
+      // --- Input field focus effects ---
+      document.querySelectorAll(".input-field").forEach((field) => {
+        field.addEventListener("focus", function () {
+          this.parentElement.classList.add("ring-2", "ring-primary");
+        });
+
+        field.addEventListener("blur", function () {
+          this.parentElement.classList.remove("ring-2", "ring-primary");
+        });
+      });
+
+      // --- Auto-fill demo credentials ---
+      document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".text-data").forEach((credential) => {
+          credential.addEventListener("click", function () {
+            document.getElementById("email").value = this.dataset.email;
+            document.getElementById("password").value = this.dataset.pass;
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
