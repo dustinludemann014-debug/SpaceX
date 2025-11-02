@@ -148,6 +148,163 @@
           <p class="text-sm text-red-400 mt-1">Pending transactions</p>
         </div>
       </div>
+      <!-- Action Grid Section -->
+      <section class="mb-8">
+        <h3 class="text-xl font-semibold text-text-primary mb-6">
+          Quick Actions
+        </h3>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <!-- Deposit -->
+          <button
+            onclick="handleAction('deposit')"
+            class="card hover:bg-surface-700 transition-all duration-200 hover:scale-105 text-center"
+          >
+            <div
+              class="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-3"
+            >
+              <svg
+                class="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
+              </svg>
+            </div>
+            <p class="text-text-primary font-medium">Deposit</p>
+          </button>
+
+          <!-- Withdraw -->
+          <button
+            onclick="handleAction('withdraw')"
+            class="card hover:bg-surface-700 transition-all duration-200 hover:scale-105 text-center"
+          >
+            <div
+              class="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-3"
+            >
+              <svg
+                class="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M20 12H4m16 0l-4-4m4 4l-4 4"
+                />
+              </svg>
+            </div>
+            <p class="text-text-primary font-medium">Withdraw</p>
+          </button>
+
+          <!-- Transaction -->
+          <button
+            onclick="handleAction('transaction')"
+            class="card hover:bg-surface-700 transition-all duration-200 hover:scale-105 text-center"
+          >
+            <div
+              class="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-3"
+            >
+              <svg
+                class="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                />
+              </svg>
+            </div>
+            <p class="text-text-primary font-medium">Transaction</p>
+          </button>
+
+          <!-- Pledge -->
+          <button
+            onclick="handleAction('pledge')"
+            class="card hover:bg-surface-700 transition-all duration-200 hover:scale-105 text-center"
+          >
+            <div
+              class="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-3"
+            >
+              <svg
+                class="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                />
+              </svg>
+            </div>
+            <p class="text-text-primary font-medium">Pledge</p>
+          </button>
+
+          <!-- Transfer -->
+          <button
+            onclick="handleAction('transfer')"
+            class="card hover:bg-surface-700 transition-all duration-200 hover:scale-105 text-center"
+          >
+            <div
+              class="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-3"
+            >
+              <svg
+                class="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                />
+              </svg>
+            </div>
+            <p class="text-text-primary font-medium">Transfer</p>
+          </button>
+
+          <!-- DeFi Mining -->
+          <button
+            onclick="handleAction('defi')"
+            class="card hover:bg-surface-700 transition-all duration-200 hover:scale-105 text-center"
+          >
+            <div
+              class="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-3"
+            >
+              <svg
+                class="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                />
+              </svg>
+            </div>
+            <p class="text-text-primary font-medium">DeFi Mining</p>
+          </button>
+        </div>
+      </section>
 
       <!-- Actions Section (Buy and Deposit) -->
       <div
