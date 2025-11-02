@@ -10,7 +10,7 @@ const bcrypt = require('bcrypt'); // <-- IMPORT BCRYPT
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 1000;
 const saltRounds = 10; // Standard number of salt rounds for bcrypt
 
 // --- Mongoose/MongoDB Configuration ---
