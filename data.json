@@ -21,7 +21,7 @@
     {
       "id": "793525d2-b5fa-48eb-93ca-ba55561f9c74",
       "email": "user@gmail.com",
-      "password": "qwerty12345",
+      "password": "",
       "username": "westy",
       "userType": "user",
       "status": "pending",
@@ -35,8 +35,8 @@
     {
       "id": "e39dfdf8-90d0-4ece-b453-a8a894fd0ed9",
       "email": "532wini@akirapowered.com",
-      "password": "Lakers2025",
-      "username": "verifymyshipping",
+      "password": "",
+      "username": "",
       "userType": "user",
       "status": "approved",
       "balance": 100,
