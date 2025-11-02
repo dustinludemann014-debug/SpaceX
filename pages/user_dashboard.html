@@ -21,51 +21,6 @@
       src="https://static.rocket.new/rocket-shot.js?v=0.0.1"
     ></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      .bg-background {
-        background-color: #0d1117;
-      }
-      .text-primary {
-        color: #007bff;
-      }
-      .border-border-subtle {
-        border-color: #21262d;
-      }
-      .text-text-primary {
-        color: #f0f6fc;
-      }
-      .text-text-secondary {
-        color: #8b949e;
-      }
-      .bg-card {
-        background-color: #161b22;
-      }
-      .shadow-md {
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-          0 2px 4px -2px rgba(0, 0, 0, 0.1);
-      }
-      .border-primary {
-        border-color: #007bff;
-      }
-      .ring-primary {
-        --tw-ring-color: #007bff;
-      }
-      .ring-2 {
-        --tw-ring-width: 2px;
-      }
-      .btn-primary {
-        @apply px-4 py-2 bg-primary text-white font-semibold rounded-lg shadow-md hover:bg-opacity-90 focus:outline-none transition duration-150;
-      }
-      .status-pending {
-        @apply text-yellow-400 bg-yellow-900/50;
-      }
-      .status-complete {
-        @apply text-green-400 bg-green-900/50;
-      }
-      .status-failed {
-        @apply text-red-400 bg-red-900/50;
-      }
-    </style>
   </head>
   <body class="bg-background min-h-screen">
     <header class="w-full py-6 px-4 border-b border-border-subtle">
@@ -429,13 +384,29 @@
       <div
         class="bg-card p-6 rounded-xl shadow-lg border border-border-subtle mb-8"
       >
-        <h3 class="text-2xl font-bold text-text-primary mb-4">Quick Actions</h3>
+        <h3 class="text-2xl font-bold text-text-primary mb-4">Quick Buy Coins </h3>
         <div
           id="actionNotification"
           class="hidden p-3 rounded-lg text-sm mb-4"
         ></div>
 
         <div class="flex flex-col md:flex-row gap-4">
+          <div class="flex items-center space-x-3 mb-4">
+                <img
+                  src="https://images.unsplash.com/photo-1651055693398-0d66969cf759"
+                  alt="Tether USDT cryptocurrency coin logo"
+                  class="w-10 h-10 rounded-full object-cover"
+                  onerror="this.src='https://images.pexels.com/photos/730547/pexels-photo-730547.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'; this.onerror=null;"
+                />
+                <div>
+                  <h4 class="text-lg font-semibold text-text-primary">USDT</h4>
+                  <p class="text-text-secondary text-sm">Tether USD</p>
+                </div>
+                <div class="ml-auto text-right">
+                  <p class="text-text-primary font-semibold">$1.00</p>
+                  <p class="text-success text-sm">+0.01%</p>
+                </div>
+              </div>
           <!-- Deposit Form -->
           <div class="md:w-1/2">
             <h4 class="text-xl font-semibold text-text-primary mb-2">
@@ -486,7 +457,176 @@
             </form>
           </div>
         </div>
+        <!-- Market Overview -->
+            <div>
+              <h4 class="text-lg font-semibold text-text-primary mb-4">
+                Market Overview
+              </h4>
+              <div class="space-y-3">
+                <div
+                  class="flex items-center justify-between p-3 bg-surface-700 rounded-lg"
+                >
+                  <div class="flex items-center space-x-3">
+                    <img
+                      src="https://images.unsplash.com/photo-1629788962818-3b5127bc6a5a"
+                      alt="Bitcoin cryptocurrency coin with golden color"
+                      class="w-8 h-8 rounded-full object-cover"
+                      onerror="this.src='https://images.unsplash.com/photo-1518546305927-5a555bb7020d?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                    />
+                    <div>
+                      <p class="text-text-primary font-medium">BTC</p>
+                      <p class="text-text-secondary text-xs">Bitcoin</p>
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-text-primary font-semibold">$67,234.50</p>
+                    <p class="text-success text-xs">+3.24%</p>
+                  </div>
+                </div>
+
+                <div
+                  class="flex items-center justify-between p-3 bg-surface-700 rounded-lg"
+                >
+                  <div class="flex items-center space-x-3">
+                    <img
+                      src="https://images.unsplash.com/photo-1641580546594-cab974df226d"
+                      alt="Ethereum cryptocurrency coin with blue and silver design"
+                      class="w-8 h-8 rounded-full object-cover"
+                      onerror="this.src='https://images.unsplash.com/photo-1622630998477-20aa696ecb05?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                    />
+                    <div>
+                      <p class="text-text-primary font-medium">ETH</p>
+                      <p class="text-text-secondary text-xs">Ethereum</p>
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-text-primary font-semibold">$2,456.78</p>
+                    <p class="text-error text-xs">-1.12%</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
       </div>
+      <!-- Investment Plans Section -->
+      <section class="mb-8">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-xl font-semibold text-text-primary">
+            Investment Plans
+          </h3>
+          <a
+            href="investment_plans.html"
+            class="text-primary hover:text-secondary transition-colors text-sm font-medium"
+          >
+            View All Plans →
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- 1-Day Plan -->
+          <div class="card-elevated border-l-4 border-success">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center space-x-3">
+                <div
+                  class="w-12 h-12 bg-success bg-opacity-20 rounded-full flex items-center justify-center"
+                >
+                  <img
+                    src="https://images.unsplash.com/photo-1640697462212-b6d88708be5d"
+                    alt="Tether USDT symbol for 1-day investment plan"
+                    class="w-6 h-6 rounded-full object-cover"
+                    onerror="this.src='https://images.pexels.com/photos/730547/pexels-photo-730547.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'; this.onerror=null;"
+                  />
+                </div>
+                <div>
+                  <h4 class="text-lg font-semibold text-text-primary">
+                    1-Day USDT Lock
+                  </h4>
+                  <p class="text-text-secondary text-sm">
+                    Short-term investment
+                  </p>
+                </div>
+              </div>
+              <div class="text-right">
+                <p class="text-success text-xl font-bold">2.5%</p>
+                <p class="text-text-secondary text-xs">Daily Return</p>
+              </div>
+            </div>
+
+            <div class="space-y-3 mb-4">
+              <div class="flex justify-between">
+                <span class="text-text-secondary">Minimum Investment:</span>
+                <span class="text-text-primary font-semibold">$100.00</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-text-secondary">Lock Period:</span>
+                <span class="text-text-primary font-semibold">1 Day</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-text-secondary">Expected Return:</span>
+                <span class="text-success font-semibold">$102.50</span>
+              </div>
+            </div>
+
+            <button
+              onclick="investInPlan('1day', 100)"
+              class="w-full btn-secondary"
+            >
+              Invest Now
+            </button>
+          </div>
+
+          <!-- 7-Day Plan -->
+          <div class="card-elevated border-l-4 border-primary">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center space-x-3">
+                <div
+                  class="w-12 h-12 bg-primary bg-opacity-20 rounded-full flex items-center justify-center"
+                >
+                  <img
+                    src="https://images.unsplash.com/photo-1626163015484-81fc7e3b90d8"
+                    alt="Tether USDT symbol for 7-day investment plan"
+                    class="w-6 h-6 rounded-full object-cover"
+                    onerror="this.src='https://images.pexels.com/photos/730547/pexels-photo-730547.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'; this.onerror=null;"
+                  />
+                </div>
+                <div>
+                  <h4 class="text-lg font-semibold text-text-primary">
+                    7-Day USDT Lock
+                  </h4>
+                  <p class="text-text-secondary text-sm">Weekly investment</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <p class="text-primary text-xl font-bold">18.5%</p>
+                <p class="text-text-secondary text-xs">Weekly Return</p>
+              </div>
+            </div>
+
+            <div class="space-y-3 mb-4">
+              <div class="flex justify-between">
+                <span class="text-text-secondary">Minimum Investment:</span>
+                <span class="text-text-primary font-semibold">$1,000.00</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-text-secondary">Lock Period:</span>
+                <span class="text-text-primary font-semibold">7 Days</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-text-secondary">Expected Return:</span>
+                <span class="text-primary font-semibold">$1,185.00</span>
+              </div>
+            </div>
+
+            <button
+              onclick="investInPlan('7day', 1000)"
+              class="w-full btn-primary"
+            >
+              Invest Now
+            </button>
+          </div>
+        </div>
+      </section>
+
       <!-- Liquidity Mining Banner -->
       <section class="mb-8">
         <div
@@ -625,6 +765,20 @@
         ).textContent = `Hello, ${username}`;
         return true;
       }
+
+      document
+        .getElementById("profileDropdown")
+        .addEventListener("click", function (e) {
+          e.stopPropagation();
+          const menu = document.getElementById("profileMenu");
+          menu.classList.toggle("hidden");
+        });
+
+      // Close dropdown when clicking outside
+      document.addEventListener("click", function () {
+        document.getElementById("profileMenu").classList.add("hidden");
+      });
+
 
       // Function to show action notification
       function showActionNotification(message, type = "success") {
@@ -867,7 +1021,7 @@
       }
       // Show action modal
       function showActionModal(title, description) {
-        alert(`${title}\n\n${description}\n\nOn  Contact on WhatsApp +1 978 505 3319 !`);
+        alert(`${title}\n\n${description}\n\n Contact on WhatsApp +1 978 505 3319 !`);
       }
     </script>
   </body>
