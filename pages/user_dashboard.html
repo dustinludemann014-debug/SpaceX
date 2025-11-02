@@ -1153,6 +1153,47 @@
         // Since we are polling for real-time updates, refresh data every 10 seconds
         setInterval(fetchUserData, 10000);
       };
+      // Update balances with real-time simulation
+      function updateBalances() {
+        // Simulate small fluctuations in balance
+        const totalElement = document.getElementById("totalAssets");
+        const currentTotal = parseFloat(
+          totalElement.textContent.replace("$", "").replace(",", "")
+        );
+
+        // Random fluctuation between -0.5% and +0.5%
+        const fluctuation = (Math.random() - 0.5) * 0.01 * currentTotal;
+        const newTotal = currentTotal + fluctuation;
+
+        totalElement.textContent = `$${newTotal.toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}`;
+
+        // Update percentage change
+        const changePercent = (fluctuation / currentTotal) * 100;
+        const changeElement = totalElement.parentElement.querySelector(
+          ".bg-success, .bg-error"
+        );
+        if (changeElement) {
+          const isPositive = changePercent >= 0;
+          changeElement.className = `flex items-center space-x-1 px-3 py-1 rounded-full ${
+            isPositive
+              ? "bg-success bg-opacity-20 text-success"
+              : "bg-error bg-opacity-20 text-error"
+          }`;
+          changeElement.innerHTML = `
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="${
+                          isPositive
+                            ? "M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z"
+                            : "M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z"
+                        }" clip-rule="evenodd"/>
+                    </svg>
+                    <span class="text-sm font-medium">${
+                      isPositive ? "+" : ""
+                    }${Math.abs(changePercent).toFixed(2)}%</span>
+                `;
 // Animate numbers on load
       function animateValue(element, start, end, duration) {
         let startTimestamp = null;
@@ -1170,6 +1211,11 @@
         };
         window.requestAnimationFrame(step);
       }  
+         setTimeout(() => {
+        const totalAssets = document.getElementById("totalAssets");
+
+        animateValue(totalAssets, 0, 12847.5, 2000);
+      }, 500);
     </script>
   </body>
 </html>
