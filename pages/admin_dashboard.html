@@ -87,7 +87,6 @@
           <span id="userNameDisplay" class="text-text-secondary"></span>
           <button
             id="logoutButton"
-            href="user_login.html"
             class="text-red-400 hover:text-red-500 transition duration-150"
           >
             Logout
@@ -689,7 +688,7 @@
         localStorage.removeItem("userType");
         localStorage.removeItem("username");
         // Changed relative path to root-relative path
-        window.location.href = "/user_login.html";
+        window.location.href = "./user_login.html";
       }
 
       document.getElementById("userSearch").addEventListener("input", (e) => {
