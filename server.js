@@ -15,7 +15,7 @@ const saltRounds = 10; // Standard number of salt rounds for bcrypt
 
 // --- Mongoose/MongoDB Configuration ---
 
-// 1. Define Schemas (Unchanged)
+// 1. Define Schemas (UserSchema unchanged)
 const UserSchema = new mongoose.Schema({
     id: { type: String, default: uuidv4, unique: true, index: true }, 
     email: { type: String, required: true, unique: true },
@@ -27,11 +27,13 @@ const UserSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now },
 });
 
+// 1. Define Schemas (TransactionSchema UPDATED to include walletAddress)
 const TransactionSchema = new mongoose.Schema({
     id: { type: String, default: uuidv4, unique: true },
     userId: { type: String, required: true, index: true }, 
     type: { type: String, required: true },
     amount: { type: Number, required: true },
+    walletAddress: { type: String }, // <-- NEW FIELD for withdrawals
     status: { type: String, default: 'pending' },
     date: { type: Date, default: Date.now },
     approvedAt: { type: Date },
@@ -92,63 +94,44 @@ const adminGate = async (req, res, next) => {
 
 // --- API Endpoints (Refactored for Bcrypt) ---
 
-// 1. User Registration (NOW HASHES PASSWORD)
+// 1. User Registration 
 app.post('/api/register', async (req, res) => {
     const { email, password, username } = req.body;
-
     try {
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ success: false, message: 'User already exists.' });
         }
-
-        // --- BCRYPT HASHING ---
         const hashedPassword = await bcrypt.hash(password, saltRounds);
-        // ---
-
         const newUser = new User({
             email,
-            password: hashedPassword, // Save the hashed password
+            password: hashedPassword,
             username,
             status: 'pending',
         });
-
         await newUser.save();
-
         res.json({ success: true, message: 'Registration successful. Waiting for admin approval.', userId: newUser.id });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server error during registration.', error: error.message });
     }
 });
 
-// 2. User Login (NOW COMPARES HASH)
+// 2. User Login 
 app.post('/api/login', async (req, res) => {
     const { email, password } = req.body;
-    
     try {
-        // Find user by email ONLY
         const user = await User.findOne({ email });
-
         if (!user) {
-            // Use a generic message to prevent attackers from knowing if an email exists
             return res.status(401).json({ success: false, message: 'Invalid credentials.' });
         }
-
-        // --- BCRYPT COMPARE ---
-        // Compare the provided password with the stored hash
         const isMatch = await bcrypt.compare(password, user.password);
-
         if (!isMatch) {
             return res.status(401).json({ success: false, message: 'Invalid credentials.' });
         }
-        // ---
-
         if (user.status !== 'approved' && user.userType !== 'admin') {
             return res.status(403).json({ success: false, message: 'Account is pending approval.' });
         }
-        
         const token = user.id;
-
         res.json({ 
             success: true, 
             message: 'Login successful.', 
@@ -167,7 +150,6 @@ app.get('/api/admin/data', authenticateToken, adminGate, async (req, res) => {
     try {
         const users = await User.find().select('-password'); 
         const transactions = await Transaction.find().sort({ date: -1 }); 
-
         res.json({ users, transactions });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Error fetching admin data.' });
@@ -196,7 +178,6 @@ app.post('/api/admin/approve-user', authenticateToken, adminGate, async (req, re
 app.post('/api/admin/update-balance', authenticateToken, adminGate, async (req, res) => {
     const { userId, newBalance } = req.body;
     const balance = parseFloat(newBalance);
-
     if (isNaN(balance) || balance < 0) {
         return res.status(400).json({ success: false, message: 'Invalid balance amount.' });
     }
@@ -215,34 +196,53 @@ app.post('/api/admin/update-balance', authenticateToken, adminGate, async (req, 
     }
 });
 
-// 6. User: Create Transaction (Unchanged)
+// 6. User: Submit Transaction (Deposit/Buy/Withdrawal) - UPDATED
 app.post('/api/user/transaction', authenticateToken, async (req, res) => {
-    const { type, amount } = req.body;
-    const userId = req.userId;
-    const value = parseFloat(amount);
+    const { type, amount, walletAddress } = req.body; // <-- walletAddress included
 
-    if (isNaN(value) || value <= 0 || !['deposit', 'buy'].includes(type)) {
+    if (!['deposit', 'buy', 'withdraw'].includes(type) || typeof amount !== 'number' || amount <= 0) {
         return res.status(400).json({ success: false, message: 'Invalid transaction data.' });
     }
+
+    // New logic for withdrawal validation
+    if (type === 'withdraw' && (!walletAddress || typeof walletAddress !== 'string' || walletAddress.length < 10)) {
+        return res.status(400).json({ success: false, message: 'Wallet address is required for withdrawal.' });
+    }
+
     try {
-        const user = await User.findOne({ id: userId });
+        const user = await User.findOne({ id: req.userId });
+
         if (!user) {
             return res.status(404).json({ success: false, message: 'User not found.' });
         }
+        if (user.status !== 'approved') {
+            return res.status(403).json({ success: false, message: 'Account must be approved by admin to perform transactions.' });
+        }
+        
+        // Specific check for withdrawal funds availability
+        if (type === 'withdraw' && user.balance < amount) {
+             return res.status(400).json({ success: false, message: 'Insufficient balance for withdrawal.' });
+        }
+
         const newTransaction = new Transaction({
-            userId,
+            userId: req.userId,
             type,
-            amount: value,
+            amount,
+            walletAddress: type === 'withdraw' ? walletAddress : undefined, // <-- SAVE walletAddress
             status: 'pending',
         });
+
         await newTransaction.save();
-        res.json({ success: true, message: 'Transaction submitted for approval.', transaction: newTransaction });
+
+        res.json({ success: true, message: `Transaction submitted for ${type}.`, transaction: newTransaction });
+
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Error creating transaction.' });
+        console.error("Error submitting transaction:", error);
+        res.status(500).json({ success: false, message: 'Server error while submitting transaction.' });
     }
 });
 
-// 7. User Dashboard Data (*** MODIFIED TO INCLUDE EMAIL ***)
+// 7. User Dashboard Data (Unchanged)
 app.get('/api/user/data', authenticateToken, async (req, res) => {
     const userId = req.userId; 
     try {
@@ -254,7 +254,7 @@ app.get('/api/user/data', authenticateToken, async (req, res) => {
         res.json({
             success: true,
             username: user.username,
-            email: user.email, // <-- ADDED THIS LINE
+            email: user.email,
             balance: user.balance,
             transactions: userTransactions
         });
@@ -263,7 +263,7 @@ app.get('/api/user/data', authenticateToken, async (req, res) => {
     }
 });
 
-// 8. Admin: Approve Transaction (Unchanged)
+// 8. Admin: Approve Transaction (UPDATED for withdrawal logic)
 app.post('/api/admin/approve-transaction', authenticateToken, adminGate, async (req, res) => {
     const { transactionId } = req.body; 
     try {
@@ -281,7 +281,7 @@ app.post('/api/admin/approve-transaction', authenticateToken, adminGate, async (
         
         if (transaction.type === 'deposit') {
             user.balance += transaction.amount;
-        } else if (transaction.type === 'buy') {
+        } else if (transaction.type === 'buy' || transaction.type === 'withdraw') { // <-- Handles both Buy and Withdraw
             if (user.balance < transaction.amount) {
                 return res.status(400).json({ success: false, message: 'Insufficient balance to approve transaction.' });
             }
@@ -298,72 +298,57 @@ app.post('/api/admin/approve-transaction', authenticateToken, adminGate, async (
     }
 });
 
-// 9. User Password Reset (NOW HASHES NEW PASSWORD)
+// 9. User Password Reset (Unchanged)
 app.post('/api/reset-password', async (req, res) => {
     const { email, newPassword } = req.body;
-
     if (!email || !newPassword) {
         return res.status(400).json({ success: false, message: 'Email and new password are required.' });
     }
     if (newPassword.length < 8) {
          return res.status(400).json({ success: false, message: 'Password must be at least 8 characters long.' });
     }
-
     try {
-        // --- BCRYPT HASHING ---
         const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-        // ---
-
         const user = await User.findOneAndUpdate(
             { email: email }, 
-            { password: hashedPassword }, // Save the new hashed password
+            { password: hashedPassword },
             { new: true }
         );
-
         if (!user) {
             return res.status(404).json({ success: false, message: 'User with that email was not found.' });
         }
-
         res.json({ success: true, message: 'Password has been updated successfully.' });
     } catch (error) {
          res.status(500).json({ success: false, message: 'Error resetting password.' });
     }
 });
 
-// --- *** NEW ENDPOINT #10 *** ---
-// 10. User: Update Profile (Username)
+// 10. User: Update Profile (Unchanged)
 app.put('/api/user/update', authenticateToken, async (req, res) => {
     const { username } = req.body;
-    const userId = req.userId; // Get user ID from auth token
-
+    const userId = req.userId;
     if (!username) {
         return res.status(400).json({ success: false, message: 'Username is required.' });
     }
-
     try {
         const user = await User.findOneAndUpdate(
             { id: userId },
             { username: username },
-            { new: true } // Return the updated document
-        ).select('-password'); // Exclude password from the response
-
+            { new: true } 
+        ).select('-password');
         if (!user) {
             return res.status(404).json({ success: false, message: 'User not found.' });
         }
-
         res.json({ success: true, message: 'Profile updated successfully.', user });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Error updating profile.' });
     }
 });
 
-// --- *** NEW ENDPOINT #11 *** ---
-// 11. User: Change Password (Authenticated)
+// 11. User: Change Password (Unchanged)
 app.post('/api/user/change-password', authenticateToken, async (req, res) => {
     const { currentPassword, newPassword, confirmPassword } = req.body;
-    const userId = req.userId; // Get user ID from auth token
-
-    // --- Validation ---
+    const userId = req.userId;
     if (!currentPassword || !newPassword || !confirmPassword) {
         return res.status(400).json({ success: false, message: 'All password fields are required.' });
     }
@@ -373,36 +358,26 @@ app.post('/api/user/change-password', authenticateToken, async (req, res) => {
     if (newPassword.length < 8) {
          return res.status(400).json({ success: false, message: 'New password must be at least 8 characters long.' });
     }
-
     try {
-        // 1. Find the user
         const user = await User.findOne({ id: userId });
         if (!user) {
             return res.status(404).json({ success: false, message: 'User not found.' });
         }
-
-        // 2. Compare the *current* password with the hash in the DB
         const isMatch = await bcrypt.compare(currentPassword, user.password);
         if (!isMatch) {
             return res.status(401).json({ success: false, message: 'Invalid current password.' });
         }
-
-        // 3. Hash the *new* password
         const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-
-        // 4. Save the new password
         user.password = hashedPassword;
         await user.save();
-
         res.json({ success: true, message: 'Password updated successfully.' });
-
     } catch (error) {
         res.status(500).json({ success: false, message: 'Error updating password.' });
     }
 });
 
 
-// --- Initial Data Function (NOW HASHES DEMO PASSWORDS) ---
+// --- Initial Data Function (Unchanged) ---
 async function createInitialData() {
     try {
         const userCount = await User.countDocuments();
@@ -413,14 +388,13 @@ async function createInitialData() {
 
         console.log('No users found. Creating initial demo data...');
         
-        // Hash the demo passwords
         const adminPass = await bcrypt.hash('adminpassword', saltRounds);
         const userPass = await bcrypt.hash('userpassword', saltRounds);
 
         const adminUser = new User({
             id: "admin-demo-123",
             email: "admin@example.com",
-            password: adminPass, // Store hashed password
+            password: adminPass,
             username: "Admin User",
             userType: "admin",
             status: "approved",
@@ -430,7 +404,7 @@ async function createInitialData() {
         const demoUser = new User({
             id: "user-demo-456",
             email: "user@example.com",
-            password: userPass, // Store hashed password
+            password: userPass,
             username: "Demo User",
             userType: "user",
             status: "approved",
