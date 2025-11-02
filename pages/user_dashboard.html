@@ -21,11 +21,20 @@
       src="https://static.rocket.new/rocket-shot.js?v=0.0.1"
     ></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Ensure the notification block is styled correctly */
+      #actionNotification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 100;
+        min-width: 300px;
+      }
+    </style>
   </head>
   <body class="bg-background min-h-screen">
     <header class="w-full py-6 px-4 border-b border-border-subtle">
       <div class="max-w-7xl mx-auto flex items-center justify-between">
-        <!-- Logo -->
         <div class="flex items-center space-x-3">
           <div
             class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center"
@@ -46,9 +55,7 @@
           </div>
         </div>
 
-        <!-- User Profile & Language Selector -->
         <div class="flex items-center space-x-4">
-          <!-- Language Selector -->
           <div class="relative">
             <select
               class="bg-surface border border-border-subtle rounded-lg px-3 py-2 text-text-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -59,7 +66,6 @@
             </select>
           </div>
 
-          <!-- User Profile Dropdown -->
           <div class="relative">
             <button
               id="profileDropdown"
@@ -98,7 +104,6 @@
               </svg>
             </button>
 
-            <!-- Dropdown Menu -->
             <div
               id="profileMenu"
               class="hidden absolute right-0 mt-2 w-48 bg-surface border border-border-subtle rounded-lg shadow-lg z-50"
@@ -160,13 +165,12 @@
       </div>
     </header>
 
-    <!-- Main Content -->
     <main class="max-w-7xl mx-auto p-4 md:p-8">
       <h2 class="text-3xl font-bold text-text-primary mb-6">User Dashboard</h2>
 
-      <!-- Metrics Section -->
+      <div id="actionNotification" class="hidden"></div>
+      
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <!-- Available Balance Card -->
         <div
           class="bg-card p-6 rounded-xl shadow-lg border border-border-subtle"
         >
@@ -177,7 +181,6 @@
             $0.00
           </p>
           <p class="text-sm text-green-400 mt-1 flex items-center">
-            <!-- Icon placeholder -->
             <svg
               class="w-4 h-4 mr-1"
               fill="none"
@@ -196,7 +199,6 @@
           </p>
         </div>
 
-        <!-- Total Assets Card (Simplified to match Available Balance for this demo) -->
         <div
           class="bg-card p-6 rounded-xl shadow-lg border border-border-subtle"
         >
@@ -209,7 +211,6 @@
           <p class="text-sm text-text-secondary mt-1">Includes all holdings</p>
         </div>
 
-        <!-- Locked Balance Card (For consistency with original file) -->
         <div
           class="bg-card p-6 rounded-xl shadow-lg border border-border-subtle"
         >
@@ -222,13 +223,11 @@
           <p class="text-sm text-red-400 mt-1">Pending transactions</p>
         </div>
       </div>
-      <!-- Action Grid Section -->
       <section class="mb-8">
         <h3 class="text-xl font-semibold text-text-primary mb-6">
           Quick Actions
         </h3>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          <!-- Deposit -->
           <button
             onclick="handleAction('deposit')"
             class="card hover:bg-surface-700 transition-all duration-200 hover:scale-105 text-center"
@@ -253,7 +252,6 @@
             <p class="text-text-primary font-medium">Deposit</p>
           </button>
 
-          <!-- Withdraw -->
           <button
             onclick="handleAction('withdraw')"
             class="card hover:bg-surface-700 transition-all duration-200 hover:scale-105 text-center"
@@ -278,7 +276,6 @@
             <p class="text-text-primary font-medium">Withdraw</p>
           </button>
 
-          <!-- Transaction -->
           <button
             onclick="handleAction('transaction')"
             class="card hover:bg-surface-700 transition-all duration-200 hover:scale-105 text-center"
@@ -303,7 +300,6 @@
             <p class="text-text-primary font-medium">Transaction</p>
           </button>
 
-          <!-- Pledge -->
           <button
             onclick="handleAction('pledge')"
             class="card hover:bg-surface-700 transition-all duration-200 hover:scale-105 text-center"
@@ -328,7 +324,6 @@
             <p class="text-text-primary font-medium">Pledge</p>
           </button>
 
-          <!-- Transfer -->
           <button
             onclick="handleAction('transfer')"
             class="card hover:bg-surface-700 transition-all duration-200 hover:scale-105 text-center"
@@ -353,7 +348,6 @@
             <p class="text-text-primary font-medium">Transfer</p>
           </button>
 
-          <!-- DeFi Mining -->
           <button
             onclick="handleAction('defi')"
             class="card hover:bg-surface-700 transition-all duration-200 hover:scale-105 text-center"
@@ -380,59 +374,45 @@
         </div>
       </section>
 
-      <!-- Actions Section (Buy and Deposit) -->
       <div
         class="bg-card p-6 rounded-xl shadow-lg border border-border-subtle mb-8"
+        id="transactionForms"
       >
-        <h3 class="text-2xl font-bold text-text-primary mb-4">Quick Buy Coins </h3>
-        <div
-          id="actionNotification"
-          class="hidden p-3 rounded-lg text-sm mb-4"
-        ></div>
-
-        <div class="flex flex-col md:flex-row gap-4">
-          <div class="flex items-center space-x-3 mb-4">
-                <img
-                  src="https://images.unsplash.com/photo-1651055693398-0d66969cf759"
-                  alt="Tether USDT cryptocurrency coin logo"
-                  class="w-10 h-10 rounded-full object-cover"
-                  onerror="this.src='https://images.pexels.com/photos/730547/pexels-photo-730547.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'; this.onerror=null;"
-                />
-                <div>
-                  <h4 class="text-lg font-semibold text-text-primary">USDT</h4>
-                  <p class="text-text-secondary text-sm">Tether USD</p>
-                </div>
-                <div class="ml-auto text-right">
-                  <p class="text-text-primary font-semibold">$1.00</p>
-                  <p class="text-success text-sm">+0.01%</p>
-                </div>
-              </div>
-          <!-- Deposit Form -->
-          <div class="md:w-1/2">
+        <h3 class="text-2xl font-bold text-text-primary mb-4">
+          Withdrawal & Buy Actions
+        </h3>
+        <div class="flex flex-col md:flex-row gap-6">
+          <div class="md:w-1/2" id="withdrawSection">
             <h4 class="text-xl font-semibold text-text-primary mb-2">
-              Deposit Funds
+              Request Withdrawal
             </h4>
-            <form id="depositForm" class="flex space-x-2">
+            <form id="withdrawForm" class="space-y-4">
               <input
                 type="number"
-                id="depositAmount"
+                id="withdrawAmount"
                 min="0.01"
                 step="0.01"
-                placeholder="Amount to Deposit"
+                placeholder="Amount to Withdraw"
+                required
+                class="w-full bg-background border border-border-subtle rounded-lg text-text-primary p-2 focus:ring-2 focus:ring-primary focus:border-primary"
+              />
+              <input
+                type="text"
+                id="walletAddress"
+                placeholder="Your Crypto Wallet Address (e.g., ERC20, BTC)"
                 required
                 class="w-full bg-background border border-border-subtle rounded-lg text-text-primary p-2 focus:ring-2 focus:ring-primary focus:border-primary"
               />
               <button
-                onclick="alert('Contact the Admin to for your secure deposit on WhatsApp +1 978 505 3319.')"
                 type="submit"
-                class="btn-primary flex-shrink-0"
+                id="withdrawSubmitButton"
+                class="w-full btn-primary flex-shrink-0 bg-red-600 hover:bg-red-700"
               >
-                Deposit
+                Submit Withdrawal Request
               </button>
             </form>
           </div>
 
-          <!-- Buy Form -->
           <div class="md:w-1/2">
             <h4 class="text-xl font-semibold text-text-primary mb-2">
               Buy Crypto
@@ -448,82 +428,72 @@
                 class="w-full bg-background border border-border-subtle rounded-lg text-text-primary p-2 focus:ring-2 focus:ring-primary focus:border-primary"
               />
               <button
-                onclick="alert('Contact the Admin to buy your cryptocurrency on WhatsApp +1 978 505 3319.')"
                 type="submit"
                 class="btn-primary flex-shrink-0 bg-indigo-600 hover:bg-indigo-700"
               >
                 Buy
               </button>
             </form>
-          </div>
-        </div>
-        <!-- Market Overview -->
-            <div>
-              <h4 class="text-lg font-semibold text-text-primary mb-4">
-                Market Overview
-              </h4>
-              <div class="space-y-3">
-                <div
-                  class="flex items-center justify-between p-3 bg-surface-700 rounded-lg"
-                >
-                  <div class="flex items-center space-x-3">
-                    <img
-                      src="https://images.unsplash.com/photo-1629788962818-3b5127bc6a5a"
-                      alt="Bitcoin cryptocurrency coin with golden color"
-                      class="w-8 h-8 rounded-full object-cover"
-                      onerror="this.src='https://images.unsplash.com/photo-1518546305927-5a555bb7020d?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
-                    />
-                    <div>
-                      <p class="text-text-primary font-medium">BTC</p>
-                      <p class="text-text-secondary text-xs">Bitcoin</p>
-                    </div>
-                  </div>
-                  <div class="text-right">
-                    <p class="text-text-primary font-semibold">$67,234.50</p>
-                    <p class="text-success text-xs">+3.24%</p>
-                  </div>
-                </div>
-
-                <div
-                  class="flex items-center justify-between p-3 bg-surface-700 rounded-lg"
-                >
-                  <div class="flex items-center space-x-3">
-                    <img
-                      src="https://images.unsplash.com/photo-1641580546594-cab974df226d"
-                      alt="Ethereum cryptocurrency coin with blue and silver design"
-                      class="w-8 h-8 rounded-full object-cover"
-                      onerror="this.src='https://images.unsplash.com/photo-1622630998477-20aa696ecb05?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
-                    />
-                    <div>
-                      <p class="text-text-primary font-medium">ETH</p>
-                      <p class="text-text-secondary text-xs">Ethereum</p>
-                    </div>
-                  </div>
-                  <div class="text-right">
-                    <p class="text-text-primary font-semibold">$2,456.78</p>
-                    <p class="text-error text-xs">-1.12%</p>
-                  </div>
-                </div>
-              </div>
+            <div class="mt-4 text-sm text-text-secondary">
+                For deposits, please use the "Deposit" quick action button above.
             </div>
           </div>
-      </div>
-      <!-- Investment Plans Section -->
-      <section class="mb-8">
-        <div class="flex items-center justify-between mb-6">
-          <h3 class="text-xl font-semibold text-text-primary">
-            Investment Plans
-          </h3>
-          <a
-            href="investment_plans.html"
-            class="text-primary hover:text-secondary transition-colors text-sm font-medium"
-          >
-            View All Plans →
-          </a>
         </div>
+      </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- 1-Day Plan -->
+      <div>
+        <h4 class="text-lg font-semibold text-text-primary mb-4">
+          Market Overview
+        </h4>
+        <div class="space-y-3">
+          <div
+            class="flex items-center justify-between p-3 bg-surface-700 rounded-lg"
+          >
+            <div class="flex items-center space-x-3">
+              <img
+                src="https://images.unsplash.com/photo-1629788962818-3b5127bc6a5a"
+                alt="Bitcoin cryptocurrency coin with golden color"
+                class="w-8 h-8 rounded-full object-cover"
+                onerror="this.src='https://images.unsplash.com/photo-1518546305927-5a555bb7020d?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+              />
+              <div>
+                <p class="text-text-primary font-medium">BTC</p>
+                <p class="text-text-secondary text-xs">Bitcoin</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-text-primary font-semibold">$67,234.50</p>
+              <p class="text-success text-xs">+3.24%</p>
+            </div>
+          </div>
+          <div
+            class="flex items-center justify-between p-3 bg-surface-700 rounded-lg"
+          >
+            <div class="flex items-center space-x-3">
+              <img
+                src="https://images.unsplash.com/photo-1621570183183-f368f5c093a8"
+                alt="Ethereum cryptocurrency coin with golden color"
+                class="w-8 h-8 rounded-full object-cover"
+                onerror="this.src='https://images.pexels.com/photos/8436582/pexels-photo-8436582.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'; this.onerror=null;"
+              />
+              <div>
+                <p class="text-text-primary font-medium">ETH</p>
+                <p class="text-text-secondary text-xs">Ethereum</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-text-primary font-semibold">$3,450.21</p>
+              <p class="text-error text-xs">-1.55%</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="mb-8 mt-8">
+        <h3 class="text-xl font-semibold text-text-primary mb-6">
+          Investment Plans
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="card-elevated border-l-4 border-success">
             <div class="flex items-center justify-between mb-4">
               <div class="flex items-center space-x-3">
@@ -531,19 +501,17 @@
                   class="w-12 h-12 bg-success bg-opacity-20 rounded-full flex items-center justify-center"
                 >
                   <img
-                    src="https://images.unsplash.com/photo-1640697462212-b6d88708be5d"
-                    alt="Tether USDT symbol for 1-day investment plan"
+                    src="https://images.unsplash.com/photo-1629788962818-3b5127bc6a5a"
+                    alt="Bitcoin cryptocurrency coin for 1-day investment plan"
                     class="w-6 h-6 rounded-full object-cover"
                     onerror="this.src='https://images.pexels.com/photos/730547/pexels-photo-730547.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'; this.onerror=null;"
                   />
                 </div>
                 <div>
                   <h4 class="text-lg font-semibold text-text-primary">
-                    1-Day USDT Lock
+                    1-Day BTC Lock
                   </h4>
-                  <p class="text-text-secondary text-sm">
-                    Short-term investment
-                  </p>
+                  <p class="text-text-secondary text-sm">Daily investment</p>
                 </div>
               </div>
               <div class="text-right">
@@ -551,7 +519,6 @@
                 <p class="text-text-secondary text-xs">Daily Return</p>
               </div>
             </div>
-
             <div class="space-y-3 mb-4">
               <div class="flex justify-between">
                 <span class="text-text-secondary">Minimum Investment:</span>
@@ -566,7 +533,6 @@
                 <span class="text-success font-semibold">$102.50</span>
               </div>
             </div>
-
             <button
               onclick="investInPlan('1day', 100)"
               class="w-full btn-secondary"
@@ -575,7 +541,6 @@
             </button>
           </div>
 
-          <!-- 7-Day Plan -->
           <div class="card-elevated border-l-4 border-primary">
             <div class="flex items-center justify-between mb-4">
               <div class="flex items-center space-x-3">
@@ -601,7 +566,6 @@
                 <p class="text-text-secondary text-xs">Weekly Return</p>
               </div>
             </div>
-
             <div class="space-y-3 mb-4">
               <div class="flex justify-between">
                 <span class="text-text-secondary">Minimum Investment:</span>
@@ -616,7 +580,6 @@
                 <span class="text-primary font-semibold">$1,185.00</span>
               </div>
             </div>
-
             <button
               onclick="investInPlan('7day', 1000)"
               class="w-full btn-primary"
@@ -624,10 +587,62 @@
               Invest Now
             </button>
           </div>
+          <div class="card-elevated border-l-4 border-indigo-500">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center space-x-3">
+                <div
+                  class="w-12 h-12 bg-indigo-500 bg-opacity-20 rounded-full flex items-center justify-center"
+                >
+                  <svg
+                    class="w-6 h-6 text-indigo-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 8c-2.035 0-3.95.836-5.32 2.216m10.64 0c-1.37-1.38-3.285-2.216-5.32-2.216s-3.95.836-5.32 2.216m10.64 0c1.37 1.38 2.216 3.295 2.216 5.32s-.846 3.95-2.216 5.32M7.68 10.216c-1.37 1.38-2.216 3.295-2.216 5.32s.846 3.95 2.216 5.32"
+                    ></path>
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="text-lg font-semibold text-text-primary">
+                    30-Day ETH Lock
+                  </h4>
+                  <p class="text-text-secondary text-sm">Monthly investment</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <p class="text-indigo-400 text-xl font-bold">85%</p>
+                <p class="text-text-secondary text-xs">Monthly Return</p>
+              </div>
+            </div>
+            <div class="space-y-3 mb-4">
+              <div class="flex justify-between">
+                <span class="text-text-secondary">Minimum Investment:</span>
+                <span class="text-text-primary font-semibold">$5,000.00</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-text-secondary">Lock Period:</span>
+                <span class="text-text-primary font-semibold">30 Days</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-text-secondary">Expected Return:</span>
+                <span class="text-indigo-400 font-semibold">$9,250.00</span>
+              </div>
+            </div>
+            <button
+              onclick="investInPlan('30day', 5000)"
+              class="w-full btn-secondary bg-indigo-600 hover:bg-indigo-700 text-white"
+            >
+              Invest Now
+            </button>
+          </div>
         </div>
       </section>
 
-      <!-- Liquidity Mining Banner -->
       <section class="mb-8">
         <div
           class="card-elevated bg-gradient-to-r from-primary to-secondary relative overflow-hidden"
@@ -638,69 +653,33 @@
                 LIQUIDITY MINING
               </h3>
               <p class="text-white text-lg mb-4">EARN HIGH INCOME</p>
-              <p class="text-white opacity-90 text-sm mb-4">
-                Participate in our liquidity mining program and earn up to 25%
-                APY on your crypto holdings.
-              </p>
               <button
                 onclick="handleAction('liquidity')"
-                class="bg-white text-primary px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+                class="bg-white text-primary font-bold py-2 px-4 rounded-lg hover:bg-gray-100 transition-colors"
               >
-                Start Mining
+                Learn More
               </button>
             </div>
-            <div class="hidden md:flex items-center space-x-4">
-              <img
-                src="https://images.unsplash.com/photo-1628671751505-45df75ceb5fa"
-                alt="Golden Bitcoin coin for liquidity mining promotion"
-                class="w-16 h-16 rounded-full object-cover animate-pulse"
-                onerror="this.src='https://images.unsplash.com/photo-1518546305927-5a555bb7020d?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+            <svg
+              class="absolute -top-10 -right-10 w-48 h-48 opacity-20 text-white"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
               />
-              <img
-                src="https://images.unsplash.com/photo-1634979149813-dbe443a8809b"
-                alt="Ethereum coin for liquidity mining program"
-                class="w-12 h-12 rounded-full object-cover animate-pulse"
-                onerror="this.src='https://images.unsplash.com/photo-1622630998477-20aa696ecb05?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
-              />
-              <img
-                src="https://images.unsplash.com/photo-1626163015484-81fc7e3b90d8"
-                alt="USDT Tether coin for high-yield mining"
-                class="w-14 h-14 rounded-full object-cover animate-pulse"
-                onerror="this.src='https://images.pexels.com/photos/730547/pexels-photo-730547.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'; this.onerror=null;"
-              />
-            </div>
-          </div>
-          <!-- Background Pattern -->
-          <div class="absolute inset-0 opacity-10">
-            <svg class="w-full h-full" viewBox="0 0 100 100" fill="none">
-              <defs>
-                <pattern
-                  id="grid"
-                  width="10"
-                  height="10"
-                  patternUnits="userSpaceOnUse"
-                >
-                  <path
-                    d="M 10 0 L 0 0 0 10"
-                    fill="none"
-                    stroke="white"
-                    stroke-width="0.5"
-                  />
-                </pattern>
-              </defs>
-              <rect width="100" height="100" fill="url(#grid)" />
             </svg>
           </div>
         </div>
       </section>
 
-      <!-- Transaction History Section -->
-      <div class="bg-card p-6 rounded-xl shadow-lg border border-border-subtle" id="transactionHistory">
-        <h3 class="text-2xl font-bold text-text-primary mb-4">
+      <div class="mb-8" id="transactionHistory">
+        <h3 class="text-xl font-semibold text-text-primary mb-6">
           Transaction History
         </h3>
-
-        <div class="overflow-x-auto">
+        <div
+          class="overflow-x-auto bg-card rounded-xl shadow-lg border border-border-subtle"
+        >
           <table class="min-w-full divide-y divide-border-subtle">
             <thead>
               <tr>
@@ -735,21 +714,22 @@
               id="transactionTableBody"
               class="bg-card divide-y divide-border-subtle text-text-primary"
             >
-              <!-- Transactions will be inserted here by JavaScript -->
-            </tbody>
+              </tbody>
           </table>
-          <div id="noTransactions" class="p-4 text-center text-text-secondary">
+          <div
+            id="noTransactions"
+            class="p-4 text-center text-text-secondary"
+          >
             No transactions found.
           </div>
         </div>
       </div>
-      <!-- Current Investments -->
+
       <section class="mb-8">
         <h3 class="text-xl font-semibold text-text-primary mb-6">
           Current Investments
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- Active Investment 1 -->
           <div class="card-elevated border-l-4 border-success">
             <div class="flex items-center justify-between mb-4">
               <div>
@@ -766,7 +746,6 @@
                 </span>
               </div>
             </div>
-
             <div class="space-y-3 mb-4">
               <div class="flex justify-between">
                 <span class="text-text-secondary">Investment Amount:</span>
@@ -782,72 +761,69 @@
               </div>
               <div class="flex justify-between">
                 <span class="text-text-secondary">Time Remaining:</span>
-                <span class="text-text-primary font-semibold">6 days 14h</span>
+                <span class="text-text-primary font-semibold"
+                  >6 days 14h</span
+                >
               </div>
             </div>
-
-            <!-- Progress Bar -->
             <div class="mb-4">
-              <div class="flex justify-between text-sm mb-2">
+              <div class="flex justify-between text-sm mb-1">
                 <span class="text-text-secondary">Progress</span>
-                <span class="text-text-primary">14%</span>
+                <span class="text-primary font-semibold">50%</span>
               </div>
-              <div class="w-full bg-surface-700 rounded-full h-2">
+              <div class="w-full bg-border-subtle rounded-full h-2">
                 <div
-                  class="bg-success h-2 rounded-full"
-                  style="width: 14%"
+                  class="bg-primary h-2 rounded-full"
+                  style="width: 50%"
                 ></div>
               </div>
             </div>
           </div>
-
-          <!-- Active Investment 2 -->
-          <div class="card-elevated border-l-4 border-primary">
+          <div class="card-elevated border-l-4 border-yellow-500">
             <div class="flex items-center justify-between mb-4">
               <div>
                 <h4 class="text-lg font-semibold text-text-primary">
-                  1-Day USDT Lock
+                  1-Day BTC Lock
                 </h4>
-                <p class="text-text-secondary text-sm">Started: Oct 30, 2025</p>
+                <p class="text-text-secondary text-sm">Started: Today</p>
               </div>
               <div class="text-right">
                 <span
-                  class="bg-primary bg-opacity-20 text-primary px-3 py-1 rounded-full text-sm font-medium"
+                  class="bg-yellow-500 bg-opacity-20 text-yellow-500 px-3 py-1 rounded-full text-sm font-medium"
                 >
-                  Active
+                  Pending
                 </span>
               </div>
             </div>
-
             <div class="space-y-3 mb-4">
               <div class="flex justify-between">
                 <span class="text-text-secondary">Investment Amount:</span>
-                <span class="text-text-primary font-semibold">$500.00</span>
+                <span class="text-text-primary font-semibold">$100.00</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-text-secondary">Current Profit:</span>
-                <span class="text-success font-semibold">+$8.75</span>
+                <span class="text-success font-semibold">+$0.00</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-text-secondary">Expected Return:</span>
-                <span class="text-primary font-semibold">$512.50</span>
+                <span class="text-success font-semibold">$102.50</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-text-secondary">Time Remaining:</span>
-                <span class="text-text-primary font-semibold">16h 45m</span>
+                <span class="text-text-primary font-semibold"
+                  >23 hours 59m</span
+                >
               </div>
             </div>
-
-            <!-- Progress Bar -->
             <div class="mb-4">
-              <div class="flex justify-between text-sm mb-2">
+              <div class="flex justify-between text-sm mb-1">
                 <span class="text-text-secondary">Progress</span>
-                <span class="text-text-primary">70%</span>
+                <span class="text-yellow-500 font-semibold">0%</span>
               </div>
-              <div class="w-full bg-surface-700 rounded-full h-2">
+              <div class="w-full bg-border-subtle rounded-full h-2">
                 <div
-                  class="bg-primary h-2 rounded-full"
-                  style="width: 70%"
+                  class="bg-yellow-500 h-2 rounded-full"
+                  style="width: 0%"
                 ></div>
               </div>
             </div>
@@ -856,11 +832,14 @@
       </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="w-full py-6 px-4 border-t border-border-subtle">
-      <div class="max-w-7xl mx-auto text-center">
-        <p class="text-xs text-text-secondary">
-          © 2025 SpaceX Crypto. All Rights Reserved. |
+    <footer
+      class="w-full py-6 px-4 border-t border-border-subtle mt-8 bg-card"
+    >
+      <div
+        class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-center md:text-left"
+      >
+        <p class="text-sm text-text-secondary">
+          &copy; 2025 SpaceX Crypto. All Rights Reserved. |
           <a
             href="javascript:void(0)"
             class="text-primary hover:text-secondary transition-colors"
@@ -875,8 +854,6 @@
         </p>
       </div>
     </footer>
-    </main>
-
     <script>
       const API_BASE_URL = "https://spacex-tkks.onrender.com/api";
       const token = localStorage.getItem("token");
@@ -885,16 +862,13 @@
       const username = localStorage.getItem("username");
 
       // --- UTILITY FUNCTIONS ---
-
       // Check authentication status and redirect if necessary
       function checkAuth() {
         if (!token || userType !== "user") {
           window.location.href = "user_login.html";
           return false;
         }
-        document.getElementById(
-          "userNameDisplay"
-        ).textContent = `Hello, ${username}`;
+        document.getElementById("usernameDisplay").textContent = `Hello, ${username}`;
         return true;
       }
 
@@ -911,30 +885,44 @@
         document.getElementById("profileMenu").classList.add("hidden");
       });
 
-
-      // Function to show action notification
+      // Function to show action notification (RE-EDITED FOR COOL STYLING)
       function showActionNotification(message, type = "success") {
         const box = document.getElementById("actionNotification");
-
         box.classList.remove(
           "hidden",
-          "bg-red-900",
-          "text-red-300",
-          "bg-green-900",
-          "text-green-300",
-          "bg-yellow-900",
-          "text-yellow-300"
+          // Remove old dull color classes
+          "bg-red-900", "text-red-300", 
+          "bg-green-900", "text-green-300", 
+          "bg-yellow-900", "text-yellow-300"
         );
+        box.classList.add(
+          "p-4", // Bigger padding
+          "rounded-xl", // Rounded corners
+          "text-lg", // Larger text
+          "font-semibold", // Bolder text
+          "shadow-xl", // Stronger shadow
+          "flex", // Flex layout
+          "items-center", // Vertically center content
+          "space-x-3", // Spacing for icon
+          "transition-all", "duration-300" // Nice transition
+        );
+        
+        let iconHtml = '';
+        let colorClasses = '';
 
         if (type === "success") {
-          box.classList.add("bg-green-900", "text-green-300");
+          colorClasses = "bg-green-700/30 text-green-400 border border-green-600/50";
+          iconHtml = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
         } else if (type === "error") {
-          box.classList.add("bg-red-900", "text-red-300");
+          colorClasses = "bg-red-700/30 text-red-400 border border-red-600/50";
+          iconHtml = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
         } else if (type === "warning") {
-          box.classList.add("bg-yellow-900", "text-yellow-300");
+          colorClasses = "bg-yellow-700/30 text-yellow-400 border border-yellow-600/50";
+          iconHtml = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>';
         }
 
-        box.textContent = message;
+        box.classList.add(...colorClasses.split(' '));
+        box.innerHTML = `${iconHtml} <span>${message}</span>`; // Set HTML with icon and message
 
         setTimeout(() => {
           box.classList.add("hidden");
@@ -948,10 +936,8 @@
       });
 
       // --- DATA FETCHING & RENDERING ---
-
       async function fetchUserData() {
         if (!checkAuth()) return;
-
         try {
           const response = await fetch(`${API_BASE_URL}/user/data`, {
             headers: {
@@ -960,8 +946,7 @@
           });
 
           if (!response.ok) {
-            // If token is invalid or user not found, force logout
-            if (response.status === 401 || response.status === 404) {
+            if (response.status === 401 || response.status === 403) {
               logout();
               return;
             }
@@ -969,30 +954,33 @@
           }
 
           const data = await response.json();
-          renderDashboard(data);
+          const { user, transactions } = data;
+
+          // Update metrics
+          document.getElementById("availableBalance").textContent =
+            formatter.format(user.balance);
+          document.getElementById("totalAssets").textContent =
+            formatter.format(user.balance); // Simplified for this demo
+          
+          // Calculate locked balance (sum of pending withdrawals)
+          const pendingWithdrawals = transactions.filter(t => t.type === 'withdraw' && t.status === 'pending');
+          const lockedWithdrawalAmount = pendingWithdrawals.reduce((sum, t) => sum + t.amount, 0);
+          document.getElementById("lockedBalance").textContent = formatter.format(lockedWithdrawalAmount);
+
+          renderTransactionTable(transactions);
         } catch (error) {
           console.error("Error fetching user data:", error);
-          showActionNotification(
-            "Error connecting to the server. Data may be outdated.",
-            "error"
-          );
+          // Only show error notification if it's not a temporary 401/403
+          if (!error.message.includes("Failed to fetch user data")) {
+             showActionNotification("Error connecting to the server. Data refresh failed.", "error");
+          }
         }
       }
 
-      function renderDashboard(data) {
-        // Update Balances
-        const balance = data.balance || 0.0;
-        document.getElementById("availableBalance").textContent =
-          formatter.format(balance);
-        document.getElementById("totalAssets").textContent =
-          formatter.format(balance); // Simplified
-
-        // Update Transactions
+      function renderTransactionTable(transactions) {
         const tableBody = document.getElementById("transactionTableBody");
         const noTransactions = document.getElementById("noTransactions");
-        tableBody.innerHTML = ""; // Clear existing rows
-
-        const transactions = data.transactions || [];
+        tableBody.innerHTML = "";
 
         if (transactions.length === 0) {
           noTransactions.classList.remove("hidden");
@@ -1002,8 +990,7 @@
             const row = tableBody.insertRow();
             row.className = "hover:bg-gray-800 transition duration-150";
 
-            // Status styling
-            let statusClass = "status-pending";
+            let statusClass = "status-pending"; // Default
             if (t.status === "complete") {
               statusClass = "status-complete";
             } else if (t.status === "failed") {
@@ -1011,48 +998,46 @@
             }
 
             row.innerHTML = `
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">${new Date(
-                      t.date
-                    ).toLocaleDateString()}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm capitalize">${
-                      t.type
-                    }</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${
-                      t.type === "buy" ? "text-red-400" : "text-green-400"
-                    }">${formatter.format(t.amount)}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusClass}">
-                            ${t.status}
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-xs text-text-secondary">${t.id.substring(
-                      0,
-                      8
-                    )}...</td>
-                `;
+              <td class="px-6 py-4 whitespace-nowrap text-sm">${new Date(
+                t.date
+              ).toLocaleDateString()}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm capitalize">${
+                t.type
+              }</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${
+                t.type === "buy" || t.type === "withdraw" ? "text-red-400" : "text-green-400"
+              }">${formatter.format(t.amount)}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusClass}">
+                  ${t.status}
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-xs text-text-secondary">${t.id.substring(
+                0,
+                8
+              )}...</td>
+            `;
           });
         }
       }
 
-      // --- TRANSACTION HANDLERS ---
-
-      async function handleTransaction(type, amount) {
+      // --- TRANSACTION HANDLERS (UPDATED for Wallet Address) ---
+      async function handleTransaction(type, amount, walletAddress = null) {
         if (!checkAuth()) return;
-
         const value = parseFloat(amount);
         if (isNaN(value) || value <= 0) {
           showActionNotification("Please enter a valid amount.", "error");
           return;
         }
 
-        const buttonId = type === "deposit" ? "depositButton" : "buyButton";
-        const formId = type === "deposit" ? "depositForm" : "buyForm";
-        const button = document.querySelector(
-          `#${formId} button[type="submit"]`
-        );
-        const originalText = button.textContent;
-        button.textContent = "Processing...";
-        button.disabled = true;
+        const payload = { type, amount: value };
+        if (type === 'withdraw') {
+          if (!walletAddress) {
+             showActionNotification("Wallet address is required for withdrawal.", "error");
+             return;
+          }
+          payload.walletAddress = walletAddress;
+        }
 
         try {
           const response = await fetch(`${API_BASE_URL}/user/transaction`, {
@@ -1061,43 +1046,94 @@
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({ type, amount: value }),
+            body: JSON.stringify(payload),
           });
 
           const result = await response.json();
 
           if (response.ok) {
-            showActionNotification(
-              `Successfully submitted ${type} for ${formatter.format(
-                value
-              )}. It is now PENDING approval.`,
-              "success"
-            );
-            document.getElementById(type + "Amount").value = ""; // Clear input
-            fetchUserData(); // Refresh history
+            showActionNotification(result.message, "success");
+            fetchUserData(); // Refresh data and balance
           } else {
-            showActionNotification(
-              result.message || `Failed to submit ${type} transaction.`,
-              "error"
-            );
+            showActionNotification(result.message, "error");
           }
         } catch (error) {
-          console.error("Transaction API Error:", error);
-          showActionNotification(
-            "Could not connect to the server or process transaction.",
-            "error"
-          );
+          showActionNotification("An error occurred. Check server connection.", "error");
+        }
+      }
+
+      // --- NEW WITHDRAWAL SUBMIT HANDLER ---
+      document.getElementById("withdrawForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const amount = document.getElementById("withdrawAmount").value;
+        const address = document.getElementById("walletAddress").value.trim();
+        const button = document.getElementById("withdrawSubmitButton");
+        const originalText = button.textContent;
+
+        if (address === "") {
+          showActionNotification("Wallet address cannot be empty.", "warning");
+          return;
+        }
+        
+        button.textContent = "Processing...";
+        button.disabled = true;
+
+        try {
+          // The handleTransaction function will handle the API call and notifications
+          await handleTransaction("withdraw", amount, address);
+          // Clear form only if successful
+          document.getElementById("withdrawAmount").value = '';
+          document.getElementById("walletAddress").value = '';
+
         } finally {
           button.textContent = originalText;
           button.disabled = false;
         }
-      }
-
-      // --- EVENT LISTENERS ---
-      document.getElementById("logoutButton").addEventListener("click", () => {
-        logout();
+      });
+      
+      // --- BUY FORM HANDLER (Now submits transaction instead of just an alert) ---
+      document.getElementById("buyForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const amount = document.getElementById("buyAmount").value;
+        handleTransaction("buy", amount);
       });
 
+      // --- OTHER ACTION HANDLERS ---
+      
+      // Handle action buttons
+      function handleAction(action) {
+        switch (action) {
+          case "deposit":
+            // Keeping the old alert for admin contact as per original file's design for deposit
+            alert('Contact the Admin for your secure deposit on WhatsApp +1 978 505 3319.'); 
+            break;
+          case "withdraw":
+            // SCROLL TO THE NEW WITHDRAW FORM
+            document.getElementById('withdrawSection').scrollIntoView({ behavior: 'smooth' }); 
+            break;
+          case "transaction":
+            document.getElementById('transactionHistory').scrollIntoView({ behavior: 'smooth' });
+            break;
+          case "pledge":
+            window.location.href = "investment_plans.html";
+            break;
+          case "transfer":
+            alert("Transfer funds to another account\n\nContact on WhatsApp +1 978 505 3319 !");
+            break;
+          case "defi":
+            alert("Participate in DeFi mining pools\n\nContact on WhatsApp +1 978 505 3319 !");
+            break;
+          case "liquidity":
+            alert("Liquidity Mining\n\nContact the admin on WhatsApp +1 978 505 3319 !");
+            break;
+        }
+      }
+
+      function investInPlan(planId, minAmount) {
+         // Placeholder function logic.
+         showActionNotification(`Investment in ${planId} plan for minimum ${formatter.format(minAmount)} requested.`, "warning");
+      }
+      
       function logout() {
         localStorage.removeItem("token");
         localStorage.removeItem("userId");
@@ -1106,55 +1142,12 @@
         window.location.href = "user_login.html";
       }
 
-      document.getElementById("depositForm").addEventListener("submit", (e) => {
-        e.preventDefault();
-        const amount = document.getElementById("depositAmount").value;
-        handleTransaction("deposit", amount);
-      });
-
-      document.getElementById("buyForm").addEventListener("submit", (e) => {
-        e.preventDefault();
-        const amount = document.getElementById("buyAmount").value;
-        handleTransaction("buy", amount);
-      });
-
       // --- INITIALIZATION ---
       window.onload = () => {
         fetchUserData();
         // Since we are polling for real-time updates, refresh data every 10 seconds
         setInterval(fetchUserData, 10000);
       };
-
-      // Handle action buttons
-      function handleAction(action) {
-        switch (action) {
-          case "deposit":
-            showActionModal("Deposit", "Add funds to your account");
-            break;
-          case "withdraw":
-            showActionModal("Withdraw", "Withdraw funds from your account");
-            break;
-          case "transaction":
-             document.getElementById('transactionHistory').scrollIntoView({ behavior: 'smooth' });
-            break;
-          case "pledge":
-            window.location.href = "investment_plans.html";
-            break;
-          case "transfer":
-            showActionModal("Transfer", "Transfer funds to another account");
-            break;
-          case "defi":
-            showActionModal("DeFi Mining", "Participate in DeFi mining pools");
-            break;
-          case "liquidity":
-            showActionModal("Liquidity Mining", "Contact the admin");
-            break;
-        }
-      }
-      // Show action modal
-      function showActionModal(title, description) {
-        alert(`${title}\n\n${description}\n\n Contact on WhatsApp +1 978 505 3319 !`);
-      }
     </script>
   </body>
 </html>
